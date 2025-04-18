@@ -49,7 +49,7 @@ jobs:
         with:
           project: CS # JIRA KEY
           issuetype: 하위 작업 # Task, Subtask 아님!
-          summary: "${{env.ISSUE_HEADER}} ${{ github.event.issue.title }}"
+          summary: "${{ github.event.issue.title }}"
           description: "${{ steps.md2jira.outputs.output-text }}"
           fields: |
             {
