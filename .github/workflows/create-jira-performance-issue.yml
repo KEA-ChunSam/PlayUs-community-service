@@ -1,4 +1,4 @@
-name: Create Jira Fix Issue
+name: Create Jira Performance Issue
 on:
   issues:
     types:
@@ -73,11 +73,11 @@ jobs:
           ref: develop
 
       - name: Create branch with Ticket number
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
         run: |
-          ISSUE_TITLE="${{github.event.issue.title}}"
           SAFE_TITLE=$(echo "$ISSUE_TITLE" | sed 's/ /_/g')
-          BRANCH_NAME="${{steps.create.outputs.issue}}_${SAFE_TITLE}"
-          
+          BRANCH_NAME="${{ steps.create.outputs.issue }}_${SAFE_TITLE}"
           git checkout -b "$BRANCH_NAME"
           git push origin "$BRANCH_NAME"
 
