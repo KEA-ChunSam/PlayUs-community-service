@@ -1,4 +1,4 @@
-package com.playus.community_service.swagger;
+package com.playus.communityservice.swagger;
 
 import java.util.List;
 
