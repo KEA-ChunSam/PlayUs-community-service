@@ -7,6 +7,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "post_image")
 public class PostImage {
 
     @Id
@@ -36,8 +37,7 @@ public class PostImage {
                 .build();
     }
 
-    public void update(Post post, File file) {
-        this.post = post;
+    public void update(File file) {
         this.file = file;
     }
 }

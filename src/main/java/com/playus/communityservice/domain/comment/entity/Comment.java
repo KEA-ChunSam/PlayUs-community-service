@@ -1,6 +1,5 @@
 package com.playus.communityservice.domain.comment.entity;
 
-import com.playus.communityservice.domain.comment.entity.Comment;
 import com.playus.communityservice.domain.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,7 +23,7 @@ public class Comment extends BaseTimeEntity {
     private CommentGroup commentGroup;
 
     @Column(name = "comment_order", nullable = false)
-    private Long order;
+    private Long commentOrder;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
@@ -33,33 +32,33 @@ public class Comment extends BaseTimeEntity {
     private boolean activated;
 
     @Builder
-    private Comment(Long userId, CommentGroup commentGroup, Long order, String content, boolean activated) {
+    private Comment(Long userId, CommentGroup commentGroup, Long commentOrder, String content, boolean activated) {
         this.userId = userId;
         this.commentGroup = commentGroup;
-        this.order = order;
+        this.commentOrder = commentOrder;
         this.content = content;
         this.activated = activated;
     }
 
-    public static Comment create(Long userId, CommentGroup commentGroup, Long order, String content) {
+    public static Comment create(Long userId, CommentGroup commentGroup, Long commentOrder, String content) {
         return Comment.builder()
                 .userId(userId)
                 .commentGroup(commentGroup)
-                .order(order)
+                .commentOrder(commentOrder)
                 .content(content)
                 .activated(true)
                 .build();
     }
 
-    public void updateOrder(Long order) {
-        this.order = order;
+    public void updateOrder(Long commentOrder) {
+        this.commentOrder = commentOrder;
     }
 
     public void updateContent(String content) {
         this.content = content;
     }
 
-    public void delete(boolean activated) {
-        this.activated = activated;
+    public void delete() {
+        this.activated = false;
     }
 }
