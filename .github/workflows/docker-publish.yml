@@ -44,8 +44,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/playus-match-service:${{ env.TAG }} .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/playus-community-service:${{ env.TAG }} .
 
       - name: Push Docker image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/playus-match-service:${{ env.TAG }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/playus-community-service:${{ env.TAG }}
