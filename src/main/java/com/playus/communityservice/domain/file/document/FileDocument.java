@@ -1,15 +1,9 @@
 package com.playus.communityservice.domain.file.document;
 
-import com.playus.communityservice.domain.file.entity.File;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

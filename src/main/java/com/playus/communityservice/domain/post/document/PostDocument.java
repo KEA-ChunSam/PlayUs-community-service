@@ -1,16 +1,10 @@
 package com.playus.communityservice.domain.post.document;
 
-import com.playus.communityservice.domain.post.entity.Post;
 import com.playus.communityservice.domain.post.enums.Tag;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
+import jakarta.validation.constraints.*;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -32,7 +26,6 @@ public class PostDocument {
     private Tag tag;
 
     @NotNull
-    @Lob
     private String description;
 
     @NotNull

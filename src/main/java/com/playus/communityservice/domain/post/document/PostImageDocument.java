@@ -1,17 +1,10 @@
 package com.playus.communityservice.domain.post.document;
 
-import com.playus.communityservice.domain.file.entity.File;
-import com.playus.communityservice.domain.post.entity.Post;
-import com.playus.communityservice.domain.post.entity.PostImage;
-import jakarta.persistence.*;
+import com.playus.communityservice.domain.file.document.FileDocument;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -24,22 +17,22 @@ public class PostImageDocument {
     @NotNull
     @DBRef(lazy = true)
     @Field(name = "post_id")
-    private Post post;
+    private PostDocument post;
 
     @NotNull
     @DBRef(lazy = true)
     @Field(name = "file_id")
-    private File file;
+    private FileDocument file;
 
 
     @Builder
-    private PostImageDocument(Long id, Post post, File file) {
+    private PostImageDocument(Long id, PostDocument post, FileDocument file) {
         this.id = id;
         this.post = post;
         this.file = file;
     }
 
-    public static PostImageDocument createForOnlyTest(Long id, Post post, File file) {
+    public static PostImageDocument createForOnlyTest(Long id, PostDocument post, FileDocument file) {
         return PostImageDocument.builder()
                 .id(id)
                 .post(post)

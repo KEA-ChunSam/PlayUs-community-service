@@ -1,15 +1,10 @@
 package com.playus.communityservice.domain.comment.document;
 
-import com.playus.communityservice.domain.post.entity.Post;
-import jakarta.persistence.*;
+import com.playus.communityservice.domain.post.document.PostDocument;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,15 +17,15 @@ public class CommentGroupDocument {
     @NotNull
     @DBRef(lazy = true)
     @Field(name = "post_id")
-    private Post post;
+    private PostDocument post;
 
     @Builder
-    private CommentGroupDocument(Long id, Post post) {
+    private CommentGroupDocument(Long id, PostDocument post) {
         this.id = id;
         this.post = post;
     }
 
-    public static CommentGroupDocument createForOnlyTest(Long id, Post post) {
+    public static CommentGroupDocument createForOnlyTest(Long id, PostDocument post) {
         return CommentGroupDocument.builder()
                 .id(id)
                 .post(post)

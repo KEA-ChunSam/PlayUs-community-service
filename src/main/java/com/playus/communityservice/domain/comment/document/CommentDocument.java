@@ -1,10 +1,9 @@
 package com.playus.communityservice.domain.comment.document;
 
-import com.playus.communityservice.domain.comment.entity.CommentGroup;
 import com.playus.communityservice.domain.common.BaseTimeEntity;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.*;
 
 @Getter
@@ -22,21 +21,20 @@ public class CommentDocument extends BaseTimeEntity {
     @NotNull
     @DBRef(lazy = true)
     @Field(name = "comment_group_id")
-    private CommentGroup commentGroup;
+    private CommentGroupDocument commentGroup;
 
     @NotNull
     @Field(name = "comment_order")
     private Long commentOrder;
 
     @NotNull
-    @Lob
     private String content;
 
     @NotNull
     private boolean activated;
 
     @Builder
-    private CommentDocument(Long id, Long userId, CommentGroup commentGroup, Long commentOrder, String content, boolean activated) {
+    private CommentDocument(Long id, Long userId, CommentGroupDocument commentGroup, Long commentOrder, String content, boolean activated) {
         this.id = id;
         this.userId = userId;
         this.commentGroup = commentGroup;
@@ -45,7 +43,7 @@ public class CommentDocument extends BaseTimeEntity {
         this.activated = activated;
     }
 
-    public static CommentDocument createForOnlyTest(Long id, Long userId, CommentGroup commentGroup, Long commentOrder, String content) {
+    public static CommentDocument createForOnlyTest(Long id, Long userId, CommentGroupDocument commentGroup, Long commentOrder, String content) {
         return CommentDocument.builder()
                 .id(id)
                 .userId(userId)
