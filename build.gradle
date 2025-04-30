@@ -40,6 +40,7 @@ dependencies {
 	implementation 'mysql:mysql-connector-java:8.0.33'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'com.h2database:h2'
 
 	// MSA
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
