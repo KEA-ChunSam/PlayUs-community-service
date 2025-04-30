@@ -4,7 +4,6 @@ import com.playus.communityservice.domain.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -13,7 +12,6 @@ public class File extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="file_id")
     private Long id;
 
     @Column(name = "image_URL", nullable = false)

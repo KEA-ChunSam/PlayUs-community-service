@@ -8,6 +8,11 @@ spring:
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  data:
+    mongodb:
+      read:
+        uri: mongodb://localhost:27017/read_db
+
   jpa:
     show-sql: true
     hibernate:

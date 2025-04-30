@@ -12,7 +12,6 @@ public class CommentGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="comment_group_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
