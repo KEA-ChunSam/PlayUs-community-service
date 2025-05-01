@@ -10,8 +10,7 @@ spring:
 
   data:
     mongodb:
-      read:
-        uri: mongodb://localhost:27017/read_db
+      uri: mongodb://localhost:27017/read_db
 
   jpa:
     show-sql: true

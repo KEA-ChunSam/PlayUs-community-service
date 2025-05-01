@@ -14,7 +14,7 @@ public class MongoConfig {
 
     @Primary
     @Bean(name = "readMongoDbFactory")
-    public MongoDatabaseFactory readMongoDbFactory(@Value("${spring.data.mongodb.read.uri}") String uri) {
+    public MongoDatabaseFactory readMongoDbFactory(@Value("${spring.data.mongodb.uri}") String uri) {
         return new SimpleMongoClientDatabaseFactory(uri);
     }
 
