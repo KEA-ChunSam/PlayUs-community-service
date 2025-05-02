@@ -3,10 +3,14 @@ spring:
     name: community-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/playus
+    url: jdbc:mysql://localhost:3306/PlayUs_community_service
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/read_db
 
   jpa:
     show-sql: true
