@@ -3,14 +3,14 @@ spring:
     name: community-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/PlayUs_community_service
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   data:
     mongodb:
-      uri: mongodb://localhost:27017/read_db
+      uri: ${SPRING_DATA_MONGODB_READ_URI}
 
   jpa:
     show-sql: true
@@ -23,3 +23,15 @@ spring:
         jdbc:
           time_zone: Asia/Seoul
         show_sql: true
+
+sentry:
+  dsn: ${SENTRY_REPOSITORY_DSN}
+  environment: ${SENTRY_ENVIRONMENT}
+  servername: ${SENTRY_SERVERNAME}
+  repository-uri: ${SENTRY_REPOSITORY_URI}
+
+logging:
+  config: classpath:logback-spring.xml
+
+slack:
+  webhook-url: ${SLACK_WEBHOOK_URL}
