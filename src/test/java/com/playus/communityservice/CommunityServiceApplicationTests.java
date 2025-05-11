@@ -3,7 +3,7 @@ package com.playus.communityservice;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = CommunityServiceApplication.class, properties = "spring.profiles.active=test")
+@SpringBootTest(classes = CommunityServiceApplicationTests.class)
 class CommunityServiceApplicationTests {
 
 	@Test
