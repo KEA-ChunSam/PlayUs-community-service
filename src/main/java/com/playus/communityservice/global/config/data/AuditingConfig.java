@@ -1,4 +1,4 @@
-package com.playus.communityservice.domain.config;
+package com.playus.communityservice.global.config.data;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
