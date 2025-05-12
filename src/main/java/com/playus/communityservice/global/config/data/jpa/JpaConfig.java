@@ -1,4 +1,4 @@
-package com.playus.communityservice.domain.config;
+package com.playus.communityservice.global.config.data.jpa;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
