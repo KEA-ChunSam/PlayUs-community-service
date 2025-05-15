@@ -92,7 +92,7 @@ public interface PostControllerSpecification {
                                     name = "삭제 응답 예시",
                                     value = """
                                     {
-                                        "success" : "true",
+                                        "success" : true,
                                         "message" : "게시물이 삭제되었습니다."
                                     }
                                     """
@@ -134,7 +134,7 @@ public interface PostControllerSpecification {
                                     name = "수정 응답 예시",
                                     value = """
                                     {
-                                        "success" : "true",
+                                        "success" : true,
                                         "message" : "게시물이 수정되었습니다."
                                     }
                                     """
