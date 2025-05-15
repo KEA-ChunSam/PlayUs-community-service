@@ -1,16 +1,17 @@
 package com.playus.communityservice.domain.post.service;
 
-import com.playus.communityservice.domain.file.entity.File;
-import com.playus.communityservice.domain.file.repository.write.FileRepository;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateRequest;
+import com.playus.communityservice.domain.post.dto.post_create.PostCreateResponse;
 import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRequest;
+import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteResponse;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateRequest;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateResponse;
 import com.playus.communityservice.domain.post.entity.Post;
-import com.playus.communityservice.domain.post.entity.PostImage;
-import com.playus.communityservice.domain.post.enums.Tag;
-import com.playus.communityservice.domain.post.repository.write.PostImageRepository;
+import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.repository.write.PostRepository;
+import com.playus.communityservice.global.config.jwt.JwtUser;
+import com.playus.communityservice.global.exception.EntityNotFoundException;
+import com.playus.communityservice.global.exception.UnauthorizedAccessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,67 +21,38 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final FileRepository fileRepository;
-    private final PostImageRepository postImageRepository;
 
     @Transactional
-    public void createPost(PostCreateRequest request) {
-        // 기본값 지정
-        Long writerId = 1L; // 나중에 인증 연동 시 대체
-        Tag defaultTag = Tag.LG_TWINS; // 기본 태그 (클라이언트가 안 보내니까 서버에서 결정)
+    public PostCreateResponse createPost(PostCreateRequest request, JwtUser user, TeamTag tag) {
+        Post post = Post.create(user.getId(), request.title(), request.content(), tag, request.jwpDate());
+        postRepository.save(post);
 
-        // Post 생성 및 저장
-        Post post = Post.create(
-                writerId,
-                request.title(),
-                request.message(),
-                defaultTag
-        );
-        post = postRepository.save(post);
-
-        // image 필드가 있으면 PostImage로 연결
-        if (request.image() != null && !request.image().isBlank()) {
-            try {
-                Long fileId = Long.parseLong(request.image());
-                File file = fileRepository.findById(fileId)
-                        .orElseThrow(() -> new IllegalArgumentException("File not found with id = " + fileId));
-                PostImage postImage = PostImage.create(post, file);
-                postImageRepository.save(postImage);
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Image field must be a valid numeric string (file ID)");
-            }
-        }
+        return PostCreateResponse.of(post.getId(), "게시물 생성이 완료되었습니다.");
     }
 
     @Transactional
-    public void deletePost(PostDeleteRequest request) {
+    public PostUpdateResponse updatePost(PostUpdateRequest request, JwtUser user, TeamTag tag) {
         Post post = postRepository.findById(request.postId())
-                .orElseThrow(() -> new IllegalArgumentException("Post not found with id = " + request.postId()));
+                .orElseThrow(() -> new EntityNotFoundException("게시글"));
 
-        if (!post.isActivated()) {
-            throw new IllegalStateException("이미 삭제된 게시글입니다.");
+        if (!post.getWriterId().equals(user.getId())) {
+            throw new UnauthorizedAccessException("게시글");
+        }
+
+        post.updateAll(request.title(), request.content(), TeamTag.DOOSAN_BEARS, false, request.jwpDate());
+        return PostUpdateResponse.fo(true, "게시물이 수정되었습니다.");
+    }
+
+    @Transactional
+    public PostDeleteResponse deletePost(PostDeleteRequest request, JwtUser user) {
+        Post post = postRepository.findById(request.postId())
+                .orElseThrow(() -> new EntityNotFoundException("게시글"));
+
+        if (!post.getWriterId().equals(user.getId())) {
+            throw new UnauthorizedAccessException("게시글");
         }
 
         post.delete();
+        return PostDeleteResponse.of(true, "게시물이 삭제되었습니다.");
     }
-
-    @Transactional
-    public PostUpdateResponse updatePost(PostUpdateRequest request) {
-        Post post = postRepository.findById(request.postId())
-                .orElseThrow(() -> new IllegalArgumentException("Post not found with id = " + request.postId()));
-
-        if (!post.isActivated()) {
-            throw new IllegalStateException("이미 삭제된 게시글은 수정할 수 없습니다.");
-        }
-
-        post.updateAll(
-                request.title(),
-                request.content(),
-                Tag.LG_TWINS, // 임시로 태그는 고정 처리
-                false         // isSecret도 false 고정 처리
-        );
-
-        return PostUpdateResponse.ok();
-    }
-
 }

@@ -1,10 +1,12 @@
 package com.playus.communityservice.domain.post.document;
 
-import com.playus.communityservice.domain.post.enums.Tag;
+import com.playus.communityservice.domain.post.enums.TeamTag;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.*;
+
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -23,7 +25,7 @@ public class PostDocument {
     private String title;
 
     @NotNull
-    private Tag tag;
+    private TeamTag tag;
 
     @NotNull
     private String description;
@@ -35,9 +37,12 @@ public class PostDocument {
     @Field(name = "is_secret")
     private boolean isSecret;
 
+    @Field(name = "jwp_date")
+    private LocalDate jwpDate;
+
 
     @Builder
-    private PostDocument(Long id, String title, String description, Tag tag, Long writerId, boolean activated, boolean isSecret) {
+    private PostDocument(Long id, String title, String description, TeamTag tag, Long writerId, boolean activated, boolean isSecret) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -47,7 +52,7 @@ public class PostDocument {
         this.isSecret = isSecret;
     }
 
-    public static PostDocument createForOnlyTest(Long id, Long writerId, String title, String description, Tag tag) {
+    public static PostDocument createForOnlyTest(Long id, Long writerId, String title, String description, TeamTag tag) {
         return PostDocument.builder()
                 .id(id)
                 .writerId(writerId)

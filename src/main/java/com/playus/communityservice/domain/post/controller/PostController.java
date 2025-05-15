@@ -1,38 +1,50 @@
 package com.playus.communityservice.domain.post.controller;
 
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateRequest;
+import com.playus.communityservice.domain.post.dto.post_create.PostCreateResponse;
 import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRequest;
+import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteResponse;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateRequest;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateResponse;
+import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.service.PostService;
-import com.playus.communityservice.domain.post.specification.PostControllerSpecification;
+import com.playus.communityservice.global.config.jwt.JwtUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/post")
 @RequiredArgsConstructor
-public class PostController implements PostControllerSpecification {
+public class PostController {
 
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<String> createPost(@RequestBody @Valid PostCreateRequest request) {
-        postService.createPost(request);
-        return ResponseEntity.ok("{\"ok\"}");
+    public ResponseEntity<PostCreateResponse> create(@PathVariable TeamTag tag,
+                                                     @Valid @RequestBody PostCreateRequest request,
+                                                     @AuthenticationPrincipal JwtUser user) {
+        PostCreateResponse response = postService.createPost(request, user, tag);
+        URI location = URI.create("/post/" + response.postId());
+        return ResponseEntity.created(location).body(response);
     }
 
     @PatchMapping
-    public ResponseEntity<String> deletePost(@RequestBody @Valid PostDeleteRequest request) {
-        postService.deletePost(request);
-        return ResponseEntity.ok("{}"); // 명세서에 맞게 빈 JSON 반환
+    public ResponseEntity<PostUpdateResponse> update(@PathVariable TeamTag tag,
+                                                     @Valid @RequestBody PostUpdateRequest request,
+                                                     @AuthenticationPrincipal JwtUser user) {
+        PostUpdateResponse response = postService.updatePost(request, user, tag);
+        return ResponseEntity.ok(response);
     }
 
-    @PutMapping
-    public ResponseEntity<PostUpdateResponse> updatePost(@RequestBody @Valid PostUpdateRequest request) {
-        PostUpdateResponse response = postService.updatePost(request);
+    @DeleteMapping
+    public ResponseEntity<PostDeleteResponse> delete(@Valid @RequestBody PostDeleteRequest request,
+                                                     @AuthenticationPrincipal JwtUser user) {
+        PostDeleteResponse response = postService.deletePost(request, user);
         return ResponseEntity.ok(response);
     }
 }
