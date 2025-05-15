@@ -9,11 +9,14 @@ import com.playus.communityservice.domain.post.dto.post_update.PostUpdateRespons
 import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.global.config.jwt.JwtUser;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
@@ -27,6 +30,14 @@ public interface PostControllerSpecification {
     @Operation(
             summary = "게시글 생성",
             description = "게시글을 작성합니다.",
+            security = @SecurityRequirement(name = "AccessCookie"),
+            parameters = @Parameter(
+                    name = "Access",
+                    description = "JWT access token (쿠키)",
+                    in = ParameterIn.COOKIE,
+                    required = true,
+                    example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            ),
             requestBody = @RequestBody(
                     required = true,
                     content = @Content(
