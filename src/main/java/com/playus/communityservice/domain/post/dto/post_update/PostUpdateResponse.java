@@ -7,10 +7,10 @@ public record PostUpdateResponse(
         boolean success,
         String message
 ) {
-    public static PostUpdateResponse fo(boolean success, String message) {
+    public static PostUpdateResponse of(boolean success, String message) {
         return PostUpdateResponse.builder()
-                .success(true)
-                .message("게시물이 수정되었습니다.")
+                .success(success)
+                .message(message)
                 .build();
     }
 }

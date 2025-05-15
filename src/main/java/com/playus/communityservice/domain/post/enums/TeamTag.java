@@ -15,11 +15,11 @@ public enum TeamTag {
     SAMSUNG_LIONS("삼성 라이온즈"),
     KT_WIZ("KT 위즈"),;
 
-    private final String name;
+    private final String teamName;
 
-    public TeamTag fromString(String name){
+    public static TeamTag fromString(String name){
         for (TeamTag teamTag : TeamTag.values()) {
-            if (teamTag.name.equals(name)) {
+            if (teamTag.teamName.equals(name)) {
                 return teamTag;
             }
         }

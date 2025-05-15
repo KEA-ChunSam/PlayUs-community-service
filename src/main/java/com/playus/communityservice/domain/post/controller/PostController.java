@@ -8,6 +8,7 @@ import com.playus.communityservice.domain.post.dto.post_update.PostUpdateRequest
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.service.PostService;
+import com.playus.communityservice.domain.post.specification.PostControllerSpecification;
 import com.playus.communityservice.global.config.jwt.JwtUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,12 @@ import java.net.URI;
 @RestController
 @RequestMapping("/post")
 @RequiredArgsConstructor
-public class PostController {
+public class PostController implements PostControllerSpecification {
 
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<PostCreateResponse> create(@PathVariable TeamTag tag,
+    public ResponseEntity<PostCreateResponse> createPost(@PathVariable TeamTag tag,
                                                      @Valid @RequestBody PostCreateRequest request,
                                                      @AuthenticationPrincipal JwtUser user) {
         PostCreateResponse response = postService.createPost(request, user, tag);
@@ -34,7 +35,7 @@ public class PostController {
     }
 
     @PatchMapping
-    public ResponseEntity<PostUpdateResponse> update(@PathVariable TeamTag tag,
+    public ResponseEntity<PostUpdateResponse> updatePost(@PathVariable TeamTag tag,
                                                      @Valid @RequestBody PostUpdateRequest request,
                                                      @AuthenticationPrincipal JwtUser user) {
         PostUpdateResponse response = postService.updatePost(request, user, tag);
@@ -42,7 +43,7 @@ public class PostController {
     }
 
     @DeleteMapping
-    public ResponseEntity<PostDeleteResponse> delete(@Valid @RequestBody PostDeleteRequest request,
+    public ResponseEntity<PostDeleteResponse> deletePost(@Valid @RequestBody PostDeleteRequest request,
                                                      @AuthenticationPrincipal JwtUser user) {
         PostDeleteResponse response = postService.deletePost(request, user);
         return ResponseEntity.ok(response);

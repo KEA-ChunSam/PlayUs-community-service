@@ -9,8 +9,8 @@ public record PostDeleteResponse(
 ) {
     public static PostDeleteResponse of(boolean success, String message) {
         return PostDeleteResponse.builder()
-                .success(true)
-                .message("게시물이 삭제되었습니다.")
+                .success(success)
+                .message(message)
                 .build();
     }
 }

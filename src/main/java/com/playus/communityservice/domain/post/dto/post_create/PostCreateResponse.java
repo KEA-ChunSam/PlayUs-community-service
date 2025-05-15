@@ -5,13 +5,13 @@ import lombok.Builder;
 @Builder
 public record PostCreateResponse(
         Long postId,
-        String massage
+        String message
 ) {
 
-    public static PostCreateResponse of(Long postId, String massage) {
+    public static PostCreateResponse of(Long postId, String message) {
         return PostCreateResponse.builder()
                 .postId(postId)
-                .massage("게시물 생성이 완료되었습니다.")
+                .message(message)
                 .build();
     }
 }

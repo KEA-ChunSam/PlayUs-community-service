@@ -40,7 +40,7 @@ public class PostService {
         }
 
         post.updateAll(request.title(), request.content(), TeamTag.DOOSAN_BEARS, false, request.jwpDate());
-        return PostUpdateResponse.fo(true, "게시물이 수정되었습니다.");
+        return PostUpdateResponse.of(true, "게시물이 수정되었습니다.");
     }
 
     @Transactional

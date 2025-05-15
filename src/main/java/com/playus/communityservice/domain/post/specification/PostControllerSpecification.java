@@ -6,6 +6,8 @@ import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRequest
 import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteResponse;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateRequest;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateResponse;
+import com.playus.communityservice.domain.post.enums.TeamTag;
+import com.playus.communityservice.global.config.jwt.JwtUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -35,7 +37,7 @@ public interface PostControllerSpecification {
                                     {
                                       "title": "오늘 경기 재밌었어요!",
                                       "image": "1",
-                                      "content": "LG가 이길 줄 알았죠!"
+                                      "content": "LG가 이길 줄 알았죠!",
                                       "jwpDate" : "2025-05-05"
                                     }
                                     """
@@ -45,7 +47,7 @@ public interface PostControllerSpecification {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200", description = "생성 성공",
+                    responseCode = "201", description = "생성 성공",
                     content = @Content(
                             mediaType = APPLICATION_JSON_VALUE,
                             examples = @ExampleObject(
@@ -60,7 +62,7 @@ public interface PostControllerSpecification {
                     )
             )
     })
-    ResponseEntity<PostCreateResponse> createPost(PostCreateRequest request);
+    ResponseEntity<PostCreateResponse> createPost(TeamTag tag, PostCreateRequest request, JwtUser user);
 
     @Tag(name = "Post", description = "게시글 삭제 API")
     @Operation(
@@ -98,7 +100,7 @@ public interface PostControllerSpecification {
                     )
             )
     })
-    ResponseEntity<PostDeleteResponse> deletePost(PostDeleteRequest request);
+    ResponseEntity<PostDeleteResponse> deletePost(PostDeleteRequest request, JwtUser user);
 
     @Tag(name = "Post", description = "게시글 수정 API")
     @Operation(
@@ -115,7 +117,7 @@ public interface PostControllerSpecification {
                                       "title": "오늘 경기 재밌었어요!",
                                       "image": "2",
                                       "content": "긴장하면서 시청했네요."
-                                      "postId": 1
+                                      "postId": 1,
                                       "jwpDate" : "2025-05-01"
                                     }
                                     """
@@ -140,6 +142,6 @@ public interface PostControllerSpecification {
                     )
             )
     })
-    ResponseEntity<PostUpdateResponse> updatePost(PostUpdateRequest request);
+    ResponseEntity<PostUpdateResponse> updatePost(TeamTag tag, PostUpdateRequest request, JwtUser user);
 }
 
