@@ -25,7 +25,7 @@ public class PostController implements PostControllerSpecification {
 
     private final PostService postService;
 
-    @PostMapping
+    @PostMapping("/{tag}")
     public ResponseEntity<PostCreateResponse> createPost(@PathVariable TeamTag tag,
                                                      @Valid @RequestBody PostCreateRequest request,
                                                      @AuthenticationPrincipal JwtUser user) {
@@ -34,7 +34,7 @@ public class PostController implements PostControllerSpecification {
         return ResponseEntity.created(location).body(response);
     }
 
-    @PatchMapping
+    @PatchMapping("/{tag}")
     public ResponseEntity<PostUpdateResponse> updatePost(@PathVariable TeamTag tag,
                                                      @Valid @RequestBody PostUpdateRequest request,
                                                      @AuthenticationPrincipal JwtUser user) {

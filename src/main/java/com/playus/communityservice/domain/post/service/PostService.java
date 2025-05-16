@@ -39,7 +39,7 @@ public class PostService {
             throw new UnauthorizedAccessException("게시글");
         }
 
-        post.updateAll(request.title(), request.content(), TeamTag.DOOSAN_BEARS, false, request.jwpDate());
+        post.updateAll(request.title(), request.content(), tag, false, request.jwpDate());
         return PostUpdateResponse.of(true, "게시물이 수정되었습니다.");
     }
 

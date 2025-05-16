@@ -20,10 +20,10 @@ public class ExceptionAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<String> bindExceptionHandler(BindException e) {
+    public ErrorResponse bindExceptionHandler(BindException e) {
         String errorMessage = e.getAllErrors().get(0).getDefaultMessage();
         log.warn("Validation Error: {}", errorMessage);
-        return ResponseEntity.badRequest().body(errorMessage);
+        return ErrorResponse.badRequestError(errorMessage);
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -56,9 +56,9 @@ public class ExceptionAdvice {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> otherExceptionHandler(Exception e) {
+    public ErrorResponse otherExceptionHandler(Exception e) {
         String errorMessage = e.getMessage();
         log.error("Unexpected Error: {}", errorMessage);
-        return ResponseEntity.internalServerError().body("서버 에러가 발생했습니다! 관리자에게 문의해 주세요!");
+        return ErrorResponse.internalServerError("서버 에러가 발생했습니다! 관리자에게 문의해 주세요!");
     }
 }
