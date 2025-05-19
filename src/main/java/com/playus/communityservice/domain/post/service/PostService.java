@@ -8,6 +8,7 @@ import com.playus.communityservice.domain.post.dto.post_update.PostUpdateRequest
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateResponse;
 import com.playus.communityservice.domain.post.entity.Post;
 import com.playus.communityservice.domain.post.enums.TeamTag;
+import com.playus.communityservice.domain.post.repository.write.PostImageRepository;
 import com.playus.communityservice.domain.post.repository.write.PostRepository;
 import com.playus.communityservice.global.config.jwt.JwtUser;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
@@ -18,11 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PostService {
 
     private final PostRepository postRepository;
+    private final PostImageRepository postImageRepository;
 
-    @Transactional
+
     public PostCreateResponse createPost(PostCreateRequest request, JwtUser user, TeamTag tag) {
         Post post = Post.create(user.getId(), request.title(), request.content(), tag, request.jwpDate());
         postRepository.save(post);
@@ -30,7 +33,7 @@ public class PostService {
         return PostCreateResponse.of(post.getId(), "게시물 생성이 완료되었습니다.");
     }
 
-    @Transactional
+
     public PostUpdateResponse updatePost(PostUpdateRequest request, JwtUser user, TeamTag tag) {
         Post post = postRepository.findById(request.postId())
                 .orElseThrow(() -> new EntityNotFoundException("게시글"));
@@ -43,7 +46,7 @@ public class PostService {
         return PostUpdateResponse.of(true, "게시물이 수정되었습니다.");
     }
 
-    @Transactional
+
     public PostDeleteResponse deletePost(PostDeleteRequest request, JwtUser user) {
         Post post = postRepository.findById(request.postId())
                 .orElseThrow(() -> new EntityNotFoundException("게시글"));

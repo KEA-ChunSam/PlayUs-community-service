@@ -1,12 +1,11 @@
-package com.playus.communityservice.domain.post.specification;
+package com.playus.communityservice.domain.comment.specification;
 
-import com.playus.communityservice.domain.post.dto.post_create.PostCreateRequest;
-import com.playus.communityservice.domain.post.dto.post_create.PostCreateResponse;
-import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRequest;
-import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteResponse;
-import com.playus.communityservice.domain.post.dto.post_update.PostUpdateRequest;
-import com.playus.communityservice.domain.post.dto.post_update.PostUpdateResponse;
-import com.playus.communityservice.domain.post.enums.TeamTag;
+import com.playus.communityservice.domain.comment.dto.comment_create.CommentCreateRequest;
+import com.playus.communityservice.domain.comment.dto.comment_create.CommentCreateResponse;
+import com.playus.communityservice.domain.comment.dto.comment_delete.CommentDeleteRequest;
+import com.playus.communityservice.domain.comment.dto.comment_delete.CommentDeleteResponse;
+import com.playus.communityservice.domain.comment.dto.comment_update.CommentUpdateRequest;
+import com.playus.communityservice.domain.comment.dto.comment_update.CommentUpdateResponse;
 import com.playus.communityservice.global.config.jwt.JwtUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,12 +21,12 @@ import org.springframework.http.ResponseEntity;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-public interface PostControllerSpecification {
+public interface CommentControllerSpecification {
 
-    @Tag(name = "Post", description = "커뮤니티 글 작성  API")
+    @Tag(name = "Comment", description = "커뮤니티 댓글 작성 API")
     @Operation(
-            summary = "커뮤니티 글 생성",
-            description = "커뮤니티 글을 작성합니다.",
+            summary = "커뮤니티 댓글 생성",
+            description = "커뮤니티 댓글을 작성합니다.",
             security = @SecurityRequirement(name = "AccessCookie"),
             parameters = @Parameter(
                     name = "Access",
@@ -44,10 +43,9 @@ public interface PostControllerSpecification {
                                     name = "커뮤니티 글 생성 요청 예시",
                                     value = """
                                     {
-                                      "title": "오늘 경기 재밌었어요!",
+                                      "postId": 1,
                                       "image": "1",
-                                      "content": "LG가 이길 줄 알았죠!",
-                                      "jwpDate" : "2025-05-05"
+                                      "content": "오늘 경기 재미있었어요"
                                     }
                                     """
                             )
@@ -60,34 +58,34 @@ public interface PostControllerSpecification {
                     content = @Content(
                             mediaType = APPLICATION_JSON_VALUE,
                             examples = @ExampleObject(
-                                    name = "커뮤니티 글 생성 응답 예시",
+                                    name = "커뮤니티 댓글 생성 응답 예시",
                                     value = """
-                                    {
-                                      "postId" : 1,
-                                      "message" : "게시글 생성이 완료되었습니다."
-                                    }
-                                    """
+                                            {
+                                                "commentId" : 1,
+                                                "message" : "댓글 작성이 완료되었습니다."
+                                            }
+                                            """
                             )
                     )
             )
     })
-    ResponseEntity<PostCreateResponse> createPost(TeamTag tag, PostCreateRequest request, JwtUser user);
+    ResponseEntity<CommentCreateResponse> createComment(CommentCreateRequest request, JwtUser user);
 
-    @Tag(name = "Post", description = "커뮤니티 글 삭제 API")
+    @Tag(name = "Comment", description = "커뮤니티 댓글 삭제 API")
     @Operation(
-            summary = "커뮤니티 글 삭제",
-            description = "작성자가 커뮤니티 글을 삭제합니다.",
+            summary = "커뮤니티 댓글 삭제",
+            description = "작성자가 커뮤니티 댓글을 삭제합니다.",
             requestBody = @RequestBody(
                     required = true,
                     content = @Content(
                             mediaType = APPLICATION_JSON_VALUE,
                             examples = @ExampleObject(
-                                    name = "커뮤니트 글 삭제 요청 예시",
+                                    name = "커뮤니티 댓글 삭제 요청 예시",
                                     value = """
-                                    {
-                                      "postId": 1
-                                    }
-                                    """
+                                            {
+                                                "commentId" : 1
+                                            }
+                                            """
                             )
                     )
             )
@@ -100,36 +98,33 @@ public interface PostControllerSpecification {
                             examples = @ExampleObject(
                                     name = "삭제 응답 예시",
                                     value = """
-                                    {
-                                        "success" : true,
-                                        "message" : "게시물이 삭제되었습니다."
-                                    }
-                                    """
+                                            {
+                                                "success" : true,
+                                                "message" : "게시물이 삭제되었습니다."
+                                            }
+                                            """
                             )
                     )
             )
     })
-    ResponseEntity<PostDeleteResponse> deletePost(PostDeleteRequest request, JwtUser user);
+    ResponseEntity<CommentDeleteResponse> deleteComment(CommentDeleteRequest request, JwtUser user);
 
-    @Tag(name = "Post", description = "커뮤니티 글 수정 API")
+    @Tag(name = "Comment", description = "커뮤니티 댓글 수정 API")
     @Operation(
-            summary = "커뮤니티 글 수정",
+            summary = "커뮤니티 댓글 수정",
             description = "작성자가 게시글을 수정합니다.",
             requestBody = @RequestBody(
                     required = true,
                     content = @Content(
                             mediaType = APPLICATION_JSON_VALUE,
                             examples = @ExampleObject(
-                                    name = "게시글 수정 요청 예시",
+                                    name = "댓글/답글 수정 요청 예시",
                                     value = """
-                                    {
-                                      "title": "오늘 경기 재밌었어요!",
-                                      "image": "2",
-                                      "content": "긴장하면서 시청했네요."
-                                      "postId": 1,
-                                      "jwpDate" : "2025-05-01"
-                                    }
-                                    """
+                                            {
+                                                "commentId" : 1,
+                                                "content" : "아슬아슬하게 이겼네요!"
+                                            }
+                                            """
                             )
                     )
             )
@@ -142,15 +137,14 @@ public interface PostControllerSpecification {
                             examples = @ExampleObject(
                                     name = "수정 응답 예시",
                                     value = """
-                                    {
-                                        "success" : true,
-                                        "message" : "게시물이 수정되었습니다."
-                                    }
-                                    """
+                                            {
+                                                "success" : true,
+                                                "message" : "댓글이 수정되었습니다."
+                                            }
+                                            """
                             )
                     )
             )
     })
-    ResponseEntity<PostUpdateResponse> updatePost(TeamTag tag, PostUpdateRequest request, JwtUser user);
+    ResponseEntity<CommentUpdateResponse> updateComment(CommentUpdateRequest request, JwtUser user);
 }
-
