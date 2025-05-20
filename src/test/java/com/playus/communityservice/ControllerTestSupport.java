@@ -3,6 +3,7 @@ package com.playus.communityservice;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.playus.communityservice.domain.comment.controller.CommentController;
 import com.playus.communityservice.domain.comment.service.CommentService;
+import com.playus.communityservice.global.config.jwt.JwtUtil;
 import com.playus.communityservice.global.exception.ExceptionAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -32,6 +33,9 @@ public abstract class ControllerTestSupport {
 
     @MockitoBean
     protected CommentService commentService;
+
+    @MockitoBean
+    protected JwtUtil jwtUtil;
 
     @TestConfiguration
     static class TestSecurityConfig {
