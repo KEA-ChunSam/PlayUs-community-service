@@ -118,7 +118,7 @@ class CommentControllerTest extends ControllerTestSupport {
         CommentUpdateRequest request = new CommentUpdateRequest(1L, "수정할 내용");
 
         given(commentService.updateComment(any(), any(JwtUser.class)))
-                .willThrow(new ForbiddenAccessException("댓글 수정 권한이 없습니다."));
+                .willThrow(new ForbiddenAccessException("댓글"));
 
         // when // then
         mockMvc.perform(put("/comment")
@@ -157,7 +157,7 @@ class CommentControllerTest extends ControllerTestSupport {
         CommentDeleteRequest request = new CommentDeleteRequest(1L, 1L);
 
         given(commentService.deleteComment(any(), any(JwtUser.class)))
-                .willThrow(new ForbiddenAccessException("댓글 삭제 권한이 없습니다."));
+                .willThrow(new ForbiddenAccessException("댓글"));
 
         // when // then
         mockMvc.perform(patch("/comment")

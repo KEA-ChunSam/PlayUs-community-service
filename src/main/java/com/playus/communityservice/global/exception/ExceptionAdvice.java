@@ -1,5 +1,6 @@
 package com.playus.communityservice.global.exception;
 
+import com.playus.communityservice.domain.comment.controller.CommentController;
 import com.playus.communityservice.domain.post.controller.PostController;
 import com.playus.communityservice.global.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @RestControllerAdvice(assignableTypes = {
-        PostController.class
+        PostController.class,
+        CommentController.class
 })
 public class ExceptionAdvice {
 
@@ -47,9 +49,9 @@ public class ExceptionAdvice {
     @ExceptionHandler({
             ForbiddenAccessException.class
     })
-    public ErrorResponse handleUnauthorizedAccessException(Exception e) {
+    public ErrorResponse handleForbiddenAccessException(Exception e) {
         String errorMessage = e.getMessage();
-        log.error("Unauthorized Access Error: {}", errorMessage);
+        log.error("Forbidden Access Error: {}", errorMessage);
         return ErrorResponse.forbiddenError(errorMessage);
     }
 
