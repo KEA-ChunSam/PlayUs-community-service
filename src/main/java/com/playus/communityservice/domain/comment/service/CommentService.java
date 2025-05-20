@@ -77,7 +77,15 @@ public class CommentService {
             throw new ForbiddenAccessException("댓글");
         }
 
-        comment.delete();
+        if (comment.getCommentOrder() == 1) {
+            // 부모 댓글이면 해당 그룹의 모든 댓글 비활성화
+            CommentGroup group = comment.getCommentGroup();
+            commentRepository.findAllByCommentGroup(group)
+                    .forEach(Comment::delete);
+        } else {
+            // 자식 댓글은 개별 삭제
+            comment.delete();
+        }
         return CommentDeleteResponse.of(true, "댓글이 삭제되었습니다.");
     }
 }
