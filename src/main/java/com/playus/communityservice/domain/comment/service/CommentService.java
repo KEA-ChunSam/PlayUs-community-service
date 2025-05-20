@@ -49,7 +49,7 @@ public class CommentService {
             order = 2;
         }
 
-        if (request.commentGroupId() == null || request.content().trim().isEmpty()) {
+        if (request.content() == null || request.content().trim().isEmpty()) {
             throw new IllegalArgumentException("댓글 내용은 비어있을 수 없습니다.");
         }
 
@@ -70,6 +70,10 @@ public class CommentService {
 
         if (!comment.getUserId().equals(user.getId())) {
             throw new ForbiddenAccessException("댓글");
+        }
+
+        if (request.content() == null || request.content().trim().isEmpty()) {
+            throw new IllegalArgumentException("댓글 내용은 비어있을 수 없습니다.");
         }
 
         comment.updateContent(request.content());
