@@ -20,16 +20,14 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Map;
-
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public interface PostControllerSpecification {
 
-    @Tag(name = "Post", description = "게시글 생성 API")
+    @Tag(name = "Post", description = "커뮤니티 글 작성  API")
     @Operation(
-            summary = "게시글 생성",
-            description = "게시글을 작성합니다.",
+            summary = "커뮤니티 글 생성",
+            description = "커뮤니티 글을 작성합니다.",
             security = @SecurityRequirement(name = "AccessCookie"),
             parameters = @Parameter(
                     name = "Access",
@@ -43,7 +41,7 @@ public interface PostControllerSpecification {
                     content = @Content(
                             mediaType = APPLICATION_JSON_VALUE,
                             examples = @ExampleObject(
-                                    name = "게시글 생성 요청 예시",
+                                    name = "커뮤니티 글 생성 요청 예시",
                                     value = """
                                     {
                                       "title": "오늘 경기 재밌었어요!",
@@ -62,11 +60,11 @@ public interface PostControllerSpecification {
                     content = @Content(
                             mediaType = APPLICATION_JSON_VALUE,
                             examples = @ExampleObject(
-                                    name = "게시글 생성 응답 예시",
+                                    name = "커뮤니티 글 생성 응답 예시",
                                     value = """
                                     {
                                       "postId" : 1,
-                                      "message" : "게시물 생성이 완료되었습니다."
+                                      "message" : "게시글 생성이 완료되었습니다."
                                     }
                                     """
                             )
@@ -75,16 +73,16 @@ public interface PostControllerSpecification {
     })
     ResponseEntity<PostCreateResponse> createPost(TeamTag tag, PostCreateRequest request, JwtUser user);
 
-    @Tag(name = "Post", description = "게시글 삭제 API")
+    @Tag(name = "Post", description = "커뮤니티 글 삭제 API")
     @Operation(
-            summary = "게시글 삭제",
-            description = "작성자가 게시글을 삭제합니다.",
+            summary = "커뮤니티 글 삭제",
+            description = "작성자가 커뮤니티 글을 삭제합니다.",
             requestBody = @RequestBody(
                     required = true,
                     content = @Content(
                             mediaType = APPLICATION_JSON_VALUE,
                             examples = @ExampleObject(
-                                    name = "게시글 삭제 요청 예시",
+                                    name = "커뮤니티 글 삭제 요청 예시",
                                     value = """
                                     {
                                       "postId": 1
@@ -113,9 +111,9 @@ public interface PostControllerSpecification {
     })
     ResponseEntity<PostDeleteResponse> deletePost(PostDeleteRequest request, JwtUser user);
 
-    @Tag(name = "Post", description = "게시글 수정 API")
+    @Tag(name = "Post", description = "커뮤니티 글 수정 API")
     @Operation(
-            summary = "게시글 수정",
+            summary = "커뮤니티 글 수정",
             description = "작성자가 게시글을 수정합니다.",
             requestBody = @RequestBody(
                     required = true,
