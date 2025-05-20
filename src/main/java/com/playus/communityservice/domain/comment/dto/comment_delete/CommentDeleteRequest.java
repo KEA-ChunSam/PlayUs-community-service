@@ -6,11 +6,15 @@ import lombok.Builder;
 @Builder
 public record CommentDeleteRequest(
     @NotNull(message = "commentId는 null일 수 없습니다!")
-    Long commentId
+    Long commentId,
+
+    @NotNull(message =  "commentGroupID는 null일 수 없습니다.")
+    Long commentGroupId
 ) {
-    public static CommentDeleteRequest of(Long commentId) {
+    public static CommentDeleteRequest of(Long commentId, Long commentGroupId) {
         return CommentDeleteRequest.builder()
                 .commentId(commentId)
+                .commentGroupId(commentGroupId)
                 .build();
     }
 }

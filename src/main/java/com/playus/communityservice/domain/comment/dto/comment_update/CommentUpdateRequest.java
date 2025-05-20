@@ -1,6 +1,5 @@
 package com.playus.communityservice.domain.comment.dto.comment_update;
 
-import com.playus.communityservice.domain.comment.entity.Comment;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

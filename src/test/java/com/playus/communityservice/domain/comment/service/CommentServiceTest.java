@@ -45,15 +45,15 @@ class CommentServiceTest extends IntegrationTestSupport {
         postRepository.deleteAllInBatch();
     }
 
-    @DisplayName("최상위 댓글을 생성할 수 있다")
     @Test
+    @DisplayName("최상위 댓글을 생성할 수 있다")
     void createParentComment() {
         // given
         Long userId = 100L;
         JwtUser jwtUser = new JwtUser(userId, null);
         Post post = saveTestPost(userId);
 
-        CommentCreateRequest request = new CommentCreateRequest(post.getId(), null, "댓글 내용");
+        CommentCreateRequest request = new CommentCreateRequest(post.getId(), null, null,"댓글 내용");
 
         // when
         CommentCreateResponse response = commentService.createComment(request, jwtUser);
@@ -68,8 +68,8 @@ class CommentServiceTest extends IntegrationTestSupport {
         assertThat(comment.getContent()).isEqualTo("댓글 내용");
     }
 
-    @DisplayName("대댓글을 생성할 수 있다")
     @Test
+    @DisplayName("대댓글을 생성할 수 있다")
     void createChildComment() {
         // given
         Long userId = 100L;
@@ -81,7 +81,7 @@ class CommentServiceTest extends IntegrationTestSupport {
                 Comment.create(userId, group, post.getId(), "부모 댓글")
         );
 
-        CommentCreateRequest request = new CommentCreateRequest(post.getId(), parent.getId(), "대댓글");
+        CommentCreateRequest request = new CommentCreateRequest(post.getId(), parent.getId(), group.getId(),"대댓글");
 
         // when
         CommentCreateResponse response = commentService.createComment(request, jwtUser);
@@ -96,8 +96,8 @@ class CommentServiceTest extends IntegrationTestSupport {
         assertThat(child.getContent()).isEqualTo("대댓글");
     }
 
-    @DisplayName("댓글을 수정할 수 있다")
     @Test
+    @DisplayName("댓글을 수정할 수 있다")
     void updateComment() {
         // given
         Long userId = 100L;
@@ -120,8 +120,8 @@ class CommentServiceTest extends IntegrationTestSupport {
         assertThat(updated.getContent()).isEqualTo("수정 후");
     }
 
-    @DisplayName("댓글을 삭제할 수 있다")
     @Test
+    @DisplayName("댓글을 삭제할 수 있다")
     void deleteComment() {
         // given
         Long userId = 100L;
@@ -134,13 +134,13 @@ class CommentServiceTest extends IntegrationTestSupport {
                 Comment.create(userId, group, post.getId(), "삭제할 댓글")
         );
 
-        CommentDeleteRequest request = new CommentDeleteRequest(comment.getId());
+        CommentDeleteRequest request = new CommentDeleteRequest(comment.getId(), group.getId());
 
         // when
         CommentDeleteResponse response = commentService.deleteComment(request, jwtUser);
 
         // then
-        assertThat(response.message()).isEqualTo("ok");
+        assertThat(response.message()).isEqualTo("댓글이 삭제되었습니다.");
         Comment deleted = commentRepository.findById(comment.getId()).orElseThrow();
         assertThat(deleted.isActivated()).isFalse();
     }

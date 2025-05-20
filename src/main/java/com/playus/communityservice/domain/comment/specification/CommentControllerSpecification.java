@@ -17,7 +17,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -40,11 +42,12 @@ public interface CommentControllerSpecification {
                     content = @Content(
                             mediaType = APPLICATION_JSON_VALUE,
                             examples = @ExampleObject(
-                                    name = "커뮤니티 글 생성 요청 예시",
+                                    name = "커뮤니티 댓글 생성 요청 예시",
                                     value = """
                                     {
                                       "postId": 1,
-                                      "image": "1",
+                                      "commentId" : 1,
+                                      "commentGroupId" : 2,
                                       "content": "오늘 경기 재미있었어요"
                                     }
                                     """
@@ -67,9 +70,24 @@ public interface CommentControllerSpecification {
                                             """
                             )
                     )
-            )
+            ),
+            @ApiResponse(
+                    responseCode = "400", description = "댓글의 내용이 비어있을 때",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "code" : 400,
+                                                "statue" : "BAD_REQUEST"
+                                                "message" : "댓글의 내용을 1~100자 이내로 작성해 주세요!"
+                                            }
+                                            """
+                            )
+                    )
+            ),
     })
-    ResponseEntity<CommentCreateResponse> createComment(CommentCreateRequest request, JwtUser user);
+    ResponseEntity<CommentCreateResponse> createComment(@Valid CommentCreateRequest request, JwtUser user);
 
     @Tag(name = "Comment", description = "커뮤니티 댓글 삭제 API")
     @Operation(
@@ -83,7 +101,8 @@ public interface CommentControllerSpecification {
                                     name = "커뮤니티 댓글 삭제 요청 예시",
                                     value = """
                                             {
-                                                "commentId" : 1
+                                                "commentId" : 1,
+                                                "commentGroupId" : 2
                                             }
                                             """
                             )
@@ -105,9 +124,40 @@ public interface CommentControllerSpecification {
                                             """
                             )
                     )
-            )
+            ),
+            @ApiResponse(
+                    responseCode = "404", description = "해당 댓글을 찾을 수 없을 때",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "code" : 404,
+                                                "statue" : "NOT_FOUND"
+                                                "message" : "해당 댓글을 찾을 수 없습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401", description = "해당 댓글의 작성자가 아닐 때",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "code" : 400,
+                                                "statue" : "UNAUTHORIZED"
+                                                "message" : "해당 댓글에 대한 권한이 없습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
     })
-    ResponseEntity<CommentDeleteResponse> deleteComment(CommentDeleteRequest request, JwtUser user);
+    ResponseEntity<CommentDeleteResponse> deleteComment(@Valid CommentDeleteRequest request,
+                                                        JwtUser user);
 
     @Tag(name = "Comment", description = "커뮤니티 댓글 수정 API")
     @Operation(
@@ -144,7 +194,54 @@ public interface CommentControllerSpecification {
                                             """
                             )
                     )
-            )
+            ),
+            @ApiResponse(
+                    responseCode = "404", description = "해당 댓글을 찾을 수 없을 때",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "code" : 404,
+                                                "statue" : "NOT_FOUND"
+                                                "message" : "해당 댓글을 찾을 수 없습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401", description = "해당 댓글의 작성자가 아닐 때",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "code" : 400,
+                                                "statue" : "UNAUTHORIZED"
+                                                "message" : "해당 댓글에 대한 권한이 없습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400", description = "댓글의 내용이 비어있을 때",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "code" : 400,
+                                                "statue" : "BAD_REQUEST"
+                                                "message" : "댓글의 내용을 1~100자 이내로 작성해 주세요!"
+                                            }
+                                            """
+                            )
+                    )
+            ),
+
     })
-    ResponseEntity<CommentUpdateResponse> updateComment(CommentUpdateRequest request, JwtUser user);
+    ResponseEntity<CommentUpdateResponse> updateComment(@Valid CommentUpdateRequest request,
+                                                        JwtUser user);
 }

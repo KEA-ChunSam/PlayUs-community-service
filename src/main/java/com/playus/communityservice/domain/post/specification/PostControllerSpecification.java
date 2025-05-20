@@ -82,7 +82,7 @@ public interface PostControllerSpecification {
                     content = @Content(
                             mediaType = APPLICATION_JSON_VALUE,
                             examples = @ExampleObject(
-                                    name = "커뮤니트 글 삭제 요청 예시",
+                                    name = "커뮤니티 글 삭제 요청 예시",
                                     value = """
                                     {
                                       "postId": 1

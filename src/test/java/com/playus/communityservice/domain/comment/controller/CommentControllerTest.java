@@ -42,7 +42,7 @@ class CommentControllerTest extends ControllerTestSupport {
     @Test
     void createComment() throws Exception {
         // given
-        CommentCreateRequest request = new CommentCreateRequest(1L, 1L, "댓글 내용");
+        CommentCreateRequest request = new CommentCreateRequest(1L, 1L,1L,"댓글 내용");
         CommentCreateResponse response = new CommentCreateResponse(1L,"댓글이 생성되었습니다.");
         given(commentService.createComment(any(), any(JwtUser.class))).willReturn(response);
 
@@ -80,7 +80,7 @@ class CommentControllerTest extends ControllerTestSupport {
     @Test
     void deleteComment() throws Exception {
         // given
-        CommentDeleteRequest request = new CommentDeleteRequest(1L);
+        CommentDeleteRequest request = new CommentDeleteRequest(1L, 1L);
         CommentDeleteResponse response = new CommentDeleteResponse(true,"댓글이 삭제되었습니다.");
         given(commentService.deleteComment(any(), any(JwtUser.class))).willReturn(response);
 
