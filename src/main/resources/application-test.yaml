@@ -1,42 +1,35 @@
 spring:
-  config:
-    import: optional:file:.env[.properties]
-  application:
-    name: community-service
-
-  datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
-  data:
-    mongodb:
-      uri: ${SPRING_DATA_MONGODB_READ_URI}
-
   jpa:
-    show-sql: true
     hibernate:
-      ddl-auto: update
-    database: mysql
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
         jdbc:
           time_zone: Asia/Seoul
         show_sql: true
+    database-platform: org.hibernate.dialect.MySQLDialect
 
   jwt:
     secret: "secretkeysecretkeysecretkeysecretkeysecretkeysecretkeysecretkey"
 
-sentry:
-  dsn: ${SENTRY_REPOSITORY_DSN}
-  environment: ${SENTRY_ENVIRONMENT}
-  servername: ${SENTRY_SERVERNAME}
-  repository-uri: ${SENTRY_REPOSITORY_URI}
-
 logging:
-  config: classpath:logback-spring.xml
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate : DEBUG
+            repository:
+              query : DEBUG
 
-slack:
-  webhook-url: ${SLACK_WEBHOOK_URL}
+    com:
+      mongodb : DEBUG
+
+feign:
+  user:
+    url: http://user-dummy
+
+  match:
+    url: http://match-dummy

@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Configuration;
 
 import io.sentry.Sentry;
 import jakarta.annotation.PostConstruct;
+import org.springframework.context.annotation.Profile;
 
+@Profile("!test")
 @Configuration
 public class SentryConfig {
 

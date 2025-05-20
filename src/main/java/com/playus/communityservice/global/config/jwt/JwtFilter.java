@@ -1,20 +1,19 @@
 package com.playus.communityservice.global.config.jwt;
 
-import com.playus.communityservice.global.config.jwt.JwtUser;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @Slf4j
 @Component
@@ -32,23 +31,31 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain chain)
             throws ServletException, IOException {
 
-        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String token = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("Access".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
 
-        if (header != null && header.startsWith("Bearer ")) {
-            String token = header.substring(7);
+        if (token != null) {
             try {
                 if (!jwtUtil.isExpired(token)) {
                     Long userId = Long.parseLong(jwtUtil.getUserId(token));
                     String role = jwtUtil.getRole(token);
 
                     JwtUser jwtUser = new JwtUser(userId, role);
-                    Authentication auth = new UsernamePasswordAuthenticationToken(
-                            jwtUser, null, jwtUser.getAuthorities()
-                    );
+                    UsernamePasswordAuthenticationToken auth =
+                            new UsernamePasswordAuthenticationToken(jwtUser, null, Collections.emptyList());
+
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             } catch (JwtException | IllegalArgumentException e) {
-                log.debug("JWT 인증 실패: {}", e.getMessage());
+                log.debug("토큰 인증 실패: {}", e.getMessage());
             }
         }
 

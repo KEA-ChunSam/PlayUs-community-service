@@ -141,14 +141,14 @@ public interface CommentControllerSpecification {
                     )
             ),
             @ApiResponse(
-                    responseCode = "401", description = "해당 댓글의 작성자가 아닐 때",
+                    responseCode = "403", description = "해당 댓글의 작성자가 아닐 때",
                     content = @Content(
                             mediaType = APPLICATION_JSON_VALUE,
                             examples = @ExampleObject(
                                     value = """
                                             {
-                                                "code" : 400,
-                                                "statue" : "UNAUTHORIZED"
+                                                "code" : 403,
+                                                "statue" : "FORBIDDEN"
                                                 "message" : "해당 댓글에 대한 권한이 없습니다."
                                             }
                                             """
@@ -211,14 +211,14 @@ public interface CommentControllerSpecification {
                     )
             ),
             @ApiResponse(
-                    responseCode = "401", description = "해당 댓글의 작성자가 아닐 때",
+                    responseCode = "403", description = "해당 댓글의 작성자가 아닐 때",
                     content = @Content(
                             mediaType = APPLICATION_JSON_VALUE,
                             examples = @ExampleObject(
                                     value = """
                                             {
-                                                "code" : 400,
-                                                "statue" : "UNAUTHORIZED"
+                                                "code" : 403,
+                                                "statue" : "FORBIDDEN"
                                                 "message" : "해당 댓글에 대한 권한이 없습니다."
                                             }
                                             """

@@ -14,7 +14,7 @@ import com.playus.communityservice.domain.post.entity.Post;
 import com.playus.communityservice.domain.post.repository.write.PostRepository;
 import com.playus.communityservice.global.config.jwt.JwtUser;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
-import com.playus.communityservice.global.exception.UnauthorizedAccessException;
+import com.playus.communityservice.global.exception.ForbiddenAccessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,7 +62,7 @@ public class CommentService {
                 .orElseThrow(() -> new EntityNotFoundException("댓글"));
 
         if (!comment.getUserId().equals(user.getId())) {
-            throw new UnauthorizedAccessException("댓글");
+            throw new ForbiddenAccessException("댓글");
         }
 
         comment.updateContent(request.content());
@@ -74,7 +74,7 @@ public class CommentService {
                 .orElseThrow(() -> new EntityNotFoundException("댓글"));
 
         if (!comment.getUserId().equals(user.getId())) {
-            throw new UnauthorizedAccessException("댓글");
+            throw new ForbiddenAccessException("댓글");
         }
 
         comment.delete();

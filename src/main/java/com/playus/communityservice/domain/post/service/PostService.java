@@ -12,7 +12,7 @@ import com.playus.communityservice.domain.post.repository.write.PostImageReposit
 import com.playus.communityservice.domain.post.repository.write.PostRepository;
 import com.playus.communityservice.global.config.jwt.JwtUser;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
-import com.playus.communityservice.global.exception.UnauthorizedAccessException;
+import com.playus.communityservice.global.exception.ForbiddenAccessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +39,7 @@ public class PostService {
                 .orElseThrow(() -> new EntityNotFoundException("게시글"));
 
         if (!post.getWriterId().equals(user.getId())) {
-            throw new UnauthorizedAccessException("게시글");
+            throw new ForbiddenAccessException("게시글");
         }
 
         post.updateAll(request.title(), request.content(), tag, false, request.jwpDate());
@@ -52,7 +52,7 @@ public class PostService {
                 .orElseThrow(() -> new EntityNotFoundException("게시글"));
 
         if (!post.getWriterId().equals(user.getId())) {
-            throw new UnauthorizedAccessException("게시글");
+            throw new ForbiddenAccessException("게시글");
         }
 
         post.delete();
