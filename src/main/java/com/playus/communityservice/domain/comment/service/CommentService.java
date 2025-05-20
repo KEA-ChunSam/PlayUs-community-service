@@ -42,14 +42,21 @@ public class CommentService {
         } else {
             Comment parent = commentRepository.findById(request.commentId())
                     .orElseThrow(() -> new EntityNotFoundException("부모 댓글"));
+            if (parent.getCommentOrder() != 1L) {
+                throw new IllegalArgumentException("부모 댓글에만 답글을 작성할 수 있습니다.");
+            }
             commentGroup = parent.getCommentGroup();
             order = 2;
+        }
+
+        if (request.commentGroupId() == null || request.content().trim().isEmpty()) {
+            throw new IllegalArgumentException("댓글 내용은 비어있을 수 없습니다.");
         }
 
         Comment comment = Comment.create(
                 user.getId(),
                 commentGroup,
-                (long) order,
+                order == 1 ? 1L : 2L,
                 request.content()
         );
 
