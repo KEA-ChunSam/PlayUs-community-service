@@ -1,4 +1,4 @@
-package com.playus.communityservice.global.config.jwt;
+package com.playus.communityservice.global.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +12,8 @@ import java.util.Collection;
 public class JwtUser implements UserDetails {
     private final Long userId;
     private final String role;
+    private final int age;
+    private final String gender;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

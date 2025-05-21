@@ -1,4 +1,4 @@
-package com.playus.communityservice.global.config.jwt;
+package com.playus.communityservice.global.jwt;
 
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -47,10 +47,13 @@ public class JwtFilter extends OncePerRequestFilter {
                 if (!jwtUtil.isExpired(token)) {
                     Long userId = Long.parseLong(jwtUtil.getUserId(token));
                     String role = jwtUtil.getRole(token);
+                    int age = jwtUtil.getAge(token);
+                    String gender = jwtUtil.getGender(token);
 
-                    JwtUser jwtUser = new JwtUser(userId, role);
+                    JwtUser jwtUser = new JwtUser(userId, role, age, gender);
                     UsernamePasswordAuthenticationToken auth =
-                            new UsernamePasswordAuthenticationToken(jwtUser, null, Collections.emptyList());
+                            new UsernamePasswordAuthenticationToken(jwtUser, null,
+                                    jwtUser.getAuthorities() != null ? jwtUser.getAuthorities() : Collections.emptyList());
 
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }

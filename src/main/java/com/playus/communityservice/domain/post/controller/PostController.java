@@ -6,10 +6,12 @@ import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRequest
 import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteResponse;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateRequest;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateResponse;
+import com.playus.communityservice.domain.post.dto.presigned.PresignedUrlForSaveImageRequest;
+import com.playus.communityservice.domain.post.dto.presigned.PresignedUrlForSaveImageResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.service.PostService;
 import com.playus.communityservice.domain.post.specification.PostControllerSpecification;
-import com.playus.communityservice.global.config.jwt.JwtUser;
+import com.playus.communityservice.global.jwt.JwtUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -47,5 +49,10 @@ public class PostController implements PostControllerSpecification {
                                                      @AuthenticationPrincipal JwtUser user) {
         PostDeleteResponse response = postService.deletePost(request, user);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/presigned-url")
+    public PresignedUrlForSaveImageResponse generatePresignedUrlForSaveImage(@Valid @RequestBody PresignedUrlForSaveImageRequest request) {
+        return postService.generatePresignedUrlForSaveImage(request);
     }
 }

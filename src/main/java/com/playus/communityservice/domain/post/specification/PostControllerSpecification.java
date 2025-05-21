@@ -7,7 +7,7 @@ import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRespons
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateRequest;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
-import com.playus.communityservice.global.config.jwt.JwtUser;
+import com.playus.communityservice.global.jwt.JwtUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -45,7 +45,7 @@ public interface PostControllerSpecification {
                                     value = """
                                     {
                                       "title": "오늘 경기 재밌었어요!",
-                                      "image": "1",
+                                      "image": ["post.jpg"],
                                       "content": "LG가 이길 줄 알았죠!",
                                       "jwpDate" : "2025-05-05"
                                     }
@@ -69,7 +69,37 @@ public interface PostControllerSpecification {
                                     """
                             )
                     )
-            )
+            ),
+            @ApiResponse(
+                    responseCode = "400", description = "게시글의 제목이 비어있을 때",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "code" : 400,
+                                                "statue" : "BAD_REQUEST"
+                                                "message" : "게시글의 제목이 비어있습니다!"
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400", description = "게시글의 내용이 비어있을 때",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "code" : 400,
+                                                "statue" : "BAD_REQUEST"
+                                                "message" : "게시글의 내용을 1~500자 이내로 작성해 주세요!"
+                                            }
+                                            """
+                            )
+                    )
+            ),
     })
     ResponseEntity<PostCreateResponse> createPost(TeamTag tag, PostCreateRequest request, JwtUser user);
 
@@ -107,7 +137,37 @@ public interface PostControllerSpecification {
                                     """
                             )
                     )
-            )
+            ),
+            @ApiResponse(
+                    responseCode = "404", description = "해당 게시글을 찾을 수 없을 때",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "code" : 404,
+                                                "statue" : "NOT_FOUND"
+                                                "message" : "해당 게시글을 찾을 수 없습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403", description = "해당 게시글의 작성자가 아닐 때",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "code" : 403,
+                                                "statue" : "FORBIDDEN"
+                                                "message" : "해당 게시글에 대한 권한이 없습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
     })
     ResponseEntity<PostDeleteResponse> deletePost(PostDeleteRequest request, JwtUser user);
 
@@ -124,7 +184,7 @@ public interface PostControllerSpecification {
                                     value = """
                                     {
                                       "title": "오늘 경기 재밌었어요!",
-                                      "image": "2",
+                                      "image": ["post.jpg"],
                                       "content": "긴장하면서 시청했네요."
                                       "postId": 1,
                                       "jwpDate" : "2025-05-01"
@@ -149,7 +209,67 @@ public interface PostControllerSpecification {
                                     """
                             )
                     )
-            )
+            ),
+            @ApiResponse(
+                    responseCode = "404", description = "해당 게시글을 찾을 수 없을 때",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "code" : 404,
+                                                "statue" : "NOT_FOUND"
+                                                "message" : "해당 게시글을 찾을 수 없습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403", description = "해당 게시글의 작성자가 아닐 때",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "code" : 403,
+                                                "statue" : "FORBIDDEN"
+                                                "message" : "해당 게시글에 대한 권한이 없습니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400", description = "게시글의 제목이 비어있을 때",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "code" : 400,
+                                                "statue" : "BAD_REQUEST"
+                                                "message" : "게시글의 제목이 비어있습니다!"
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400", description = "게시글의 내용이 비어있을 때",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "code" : 400,
+                                                "statue" : "BAD_REQUEST"
+                                                "message" : "게시글의 내용을 1~500자 이내로 작성해 주세요!"
+                                            }
+                                            """
+                            )
+                    )
+            ),
     })
     ResponseEntity<PostUpdateResponse> updatePost(TeamTag tag, PostUpdateRequest request, JwtUser user);
 }

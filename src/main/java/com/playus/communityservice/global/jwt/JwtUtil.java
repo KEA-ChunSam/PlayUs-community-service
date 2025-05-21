@@ -1,4 +1,4 @@
-package com.playus.communityservice.global.config.jwt;
+package com.playus.communityservice.global.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -24,11 +24,13 @@ public class JwtUtil {
     }
 
     //엑세스토큰
-    public String createAccessToken(String userId, String role) {
+    public String createAccessToken(String userId, String role, int age, String gender) {
         return Jwts.builder()
                 .setId(UUID.randomUUID().toString())
                 .setSubject(userId)
                 .claim("role", role)
+                .claim("age", age)
+                .claim("gender", gender)
                 .claim("type", "access")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_EXPIRE_MS))
@@ -59,6 +61,14 @@ public class JwtUtil {
 
     public String getRole(String token) {
         return extractPayload(token).get("role", String.class);
+    }
+
+    public int getAge(String token) {
+        return extractPayload(token).get("age", Integer.class);
+    }
+
+    public String getGender(String token) {
+        return extractPayload(token).get("gender", String.class);
     }
 
     private Claims extractPayload(String token) {

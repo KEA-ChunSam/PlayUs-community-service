@@ -36,12 +36,15 @@ public class Post extends BaseTimeEntity {
     @Column(nullable = false)
     private boolean activated;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(name = "is_secret", nullable = false)
     private boolean isSecret;
 
 
     @Builder
-    private Post(String title, String description, TeamTag tag, Long writerId, boolean activated, boolean isSecret, LocalDate jwpDate) {
+    private Post(String title, String description, TeamTag tag, Long writerId, boolean activated, boolean isSecret, LocalDate jwpDate, String imageUrl) {
         this.title = title;
         this.description = description;
         this.tag = tag;
@@ -49,9 +52,10 @@ public class Post extends BaseTimeEntity {
         this.activated = activated;
         this.isSecret = isSecret;
         this.jwpDate = jwpDate;
+        this.imageUrl = imageUrl;
     }
 
-    public static Post create(final Long writerId, final String title, final String description, final TeamTag tag, final LocalDate jwpDate) {
+    public static Post create(final Long writerId, final String title, final String description, final TeamTag tag, final LocalDate jwpDate, final String imageUrl) {
         return Post.builder()
                 .writerId(writerId)
                 .title(title)
@@ -60,15 +64,17 @@ public class Post extends BaseTimeEntity {
                 .activated(true)
                 .isSecret(false)
                 .jwpDate(jwpDate)
+                .imageUrl(imageUrl)
                 .build();
     }
 
-    public void updateAll(final String title, final String description, final TeamTag tag, final boolean isSecret, final LocalDate jwpDate) {
+    public void updateAll(final String title, final String description, final TeamTag tag, final boolean isSecret, final LocalDate jwpDate, final String imageUrl) {
         this.title = title;
         this.description = description;
         this.tag = tag;
         this.isSecret = isSecret;
         this.jwpDate = jwpDate;
+        this.imageUrl = imageUrl;
     }
 
     public void delete() {
