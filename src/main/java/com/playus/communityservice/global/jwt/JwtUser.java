@@ -10,8 +10,10 @@ import java.util.Collection;
 @Getter
 @AllArgsConstructor
 public class JwtUser implements UserDetails {
-    private final Long userId;
+    private final String userId;
     private final String role;
+    private final int age;
+    private final String gender;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -36,7 +38,7 @@ public class JwtUser implements UserDetails {
     @Override
     public boolean isEnabled() { return true; }
 
-    public Long getId() {
+    public String getId() {
         return userId;
     }
 }
