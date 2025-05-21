@@ -1,4 +1,4 @@
-package com.playus.communityservice.global.config.jwt;
+package com.playus.communityservice.global.jwt;
 
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;

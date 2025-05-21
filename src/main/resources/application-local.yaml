@@ -1,6 +1,4 @@
 spring:
-  config:
-    import: optional:file:.env[.properties]
   application:
     name: community-service
 
@@ -14,6 +12,9 @@ spring:
     mongodb:
       uri: ${SPRING_DATA_MONGODB_READ_URI}
 
+  jwt:
+    secret: ${JWT_SECRET}
+
   jpa:
     show-sql: true
     hibernate:
@@ -25,8 +26,15 @@ spring:
         jdbc:
           time_zone: Asia/Seoul
         show_sql: true
-  jwt:
-    secret: "secretkeysecretkeysecretkeysecretkeysecretkeysecretkeysecretkey"
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${STORAGE_ACCESS_KEY}
+      secret-key: ${STORAGE_SECRET_KEY}
+    s3:
+      bucket: ${BUCKET_NAME}
+      endpoint: ${BUCKET_ENDPOINT}
 
 sentry:
   dsn: ${SENTRY_REPOSITORY_DSN}

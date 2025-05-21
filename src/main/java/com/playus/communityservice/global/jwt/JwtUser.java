@@ -1,4 +1,4 @@
-package com.playus.communityservice.global.config.jwt;
+package com.playus.communityservice.global.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

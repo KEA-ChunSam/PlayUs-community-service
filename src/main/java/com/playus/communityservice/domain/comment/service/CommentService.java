@@ -12,7 +12,7 @@ import com.playus.communityservice.domain.comment.repository.write.CommentGroupR
 import com.playus.communityservice.domain.comment.repository.write.CommentRepository;
 import com.playus.communityservice.domain.post.entity.Post;
 import com.playus.communityservice.domain.post.repository.write.PostRepository;
-import com.playus.communityservice.global.config.jwt.JwtUser;
+import com.playus.communityservice.global.jwt.JwtUser;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
 import com.playus.communityservice.global.exception.ForbiddenAccessException;
 import lombok.RequiredArgsConstructor;

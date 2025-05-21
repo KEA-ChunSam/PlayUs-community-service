@@ -1,7 +1,7 @@
 package com.playus.communityservice.global.config.security;
 
-import com.playus.communityservice.global.config.jwt.JwtFilter;
-import com.playus.communityservice.global.config.jwt.JwtUtil;
+import com.playus.communityservice.global.jwt.JwtFilter;
+import com.playus.communityservice.global.jwt.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

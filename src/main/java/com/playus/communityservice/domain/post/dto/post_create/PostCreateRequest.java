@@ -12,7 +12,6 @@ public record PostCreateRequest(
         @Size(min= 1, max = 225, message = "제목의 길이를 1~225자 이내로 작성해 주세요!")
         String title,
 
-        @Size(max = 255)
         String image,
 
         @NotBlank(message = "본문이 비어 있습니다!")

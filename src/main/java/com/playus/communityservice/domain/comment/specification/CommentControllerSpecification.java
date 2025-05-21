@@ -6,7 +6,7 @@ import com.playus.communityservice.domain.comment.dto.comment_delete.CommentDele
 import com.playus.communityservice.domain.comment.dto.comment_delete.CommentDeleteResponse;
 import com.playus.communityservice.domain.comment.dto.comment_update.CommentUpdateRequest;
 import com.playus.communityservice.domain.comment.dto.comment_update.CommentUpdateResponse;
-import com.playus.communityservice.global.config.jwt.JwtUser;
+import com.playus.communityservice.global.jwt.JwtUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -19,7 +19,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -240,7 +239,6 @@ public interface CommentControllerSpecification {
                             )
                     )
             ),
-
     })
     ResponseEntity<CommentUpdateResponse> updateComment(@Valid CommentUpdateRequest request,
                                                         JwtUser user);

@@ -8,7 +8,7 @@ import com.playus.communityservice.domain.comment.dto.comment_update.CommentUpda
 import com.playus.communityservice.domain.comment.dto.comment_update.CommentUpdateResponse;
 import com.playus.communityservice.domain.comment.service.CommentService;
 import com.playus.communityservice.domain.comment.specification.CommentControllerSpecification;
-import com.playus.communityservice.global.config.jwt.JwtUser;
+import com.playus.communityservice.global.jwt.JwtUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
