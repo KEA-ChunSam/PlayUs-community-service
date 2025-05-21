@@ -9,5 +9,4 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByCommentGroup(CommentGroup commentGroup);
-    List<CommentGroup> findAllByPost(Post post);
 }
