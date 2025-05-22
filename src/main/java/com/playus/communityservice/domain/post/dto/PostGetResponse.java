@@ -7,6 +7,7 @@ import java.util.List;
 
 @Builder
 public record PostGetResponse(
+        Long postId,
         String title,
         LocalDate date,
         String writerNickname,
@@ -17,6 +18,7 @@ public record PostGetResponse(
         List<CommentDto> comments
 ) {
     public record CommentDto(
+            Long commentId,
             String writerNickname,
             String writerProfileImage,
             boolean isExpert,
@@ -25,6 +27,7 @@ public record PostGetResponse(
     ) {}
 
     public record ReCommentDto(
+            Long reCommentId,
             String writerNickname,
             String writerProfileImage,
             boolean isExpert,

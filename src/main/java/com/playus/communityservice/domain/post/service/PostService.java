@@ -22,6 +22,9 @@ import com.playus.communityservice.global.exception.EntityNotFoundException;
 import com.playus.communityservice.global.exception.ForbiddenAccessException;
 import com.playus.communityservice.global.s3.S3Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -98,12 +101,17 @@ public class PostService {
 
         List<Comment> allComments = commentRepository.findAllByCommentGroup_Post(post);
 
+        if (!post.isActivated()) {
+            throw new EntityNotFoundException("게시글");
+        }
+
         List<PostGetResponse.CommentDto> comments = allComments.stream()
                 .filter(c -> c.getCommentOrder() == 1L)
                 .map(comment -> {
                     List<PostGetResponse.ReCommentDto> reComments = allComments.stream()
                             .filter(reply -> reply.getCommentGroup().equals(comment.getCommentGroup()) && reply.getCommentOrder() > 1L)
                             .map(reply -> new PostGetResponse.ReCommentDto(
+                                    comment.getId(),
                                     getNickname(reply.getUserId()),
                                     getProfileImage(reply.getUserId()),
                                     isExpert(reply.getUserId()),
@@ -112,6 +120,7 @@ public class PostService {
                             .toList();
 
                     return new PostGetResponse.CommentDto(
+                            comment.getId(),
                             getNickname(comment.getUserId()),
                             getProfileImage(comment.getUserId()),
                             isExpert(comment.getUserId()),
@@ -122,6 +131,7 @@ public class PostService {
                 .toList();
 
         return new PostGetResponse(
+                post.getId(),
                 post.getTitle(),
                 post.getJwpDate(),
                 getNickname(post.getWriterId()),
@@ -133,11 +143,14 @@ public class PostService {
         );
     }
 
-    public List<PostListResponse> getPostsByTeam(TeamTag tag) {
-        List<Post> posts = postRepository.findAllByTag(tag);
+    public List<PostListResponse> getPostsByTeam(TeamTag tag, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Post> postPage = postRepository.findAllByTag(tag, pageable);
+        List<Post> posts = postPage.getContent();
 
         return posts.stream()
                 .map(post -> new PostListResponse(
+                        post.getId(),
                         post.getTitle(),
                         post.getJwpDate(),
                         getNickname(post.getWriterId()),

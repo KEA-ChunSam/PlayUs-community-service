@@ -16,6 +16,7 @@ import com.playus.communityservice.domain.post.specification.PostControllerSpeci
 import com.playus.communityservice.global.jwt.JwtUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -67,8 +68,12 @@ public class PostController implements PostControllerSpecification {
     }
 
     @GetMapping("/posts/{teamName}")
-    public ResponseEntity<List<PostListResponse>> getPostsByTeam(@PathVariable("teamName") TeamTag teamName) {
-        List<PostListResponse> response = postService.getPostsByTeam(teamName);
+    public ResponseEntity<List<PostListResponse>> getPostsByTeam(
+            @PathVariable("teamName") TeamTag teamName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        List<PostListResponse> response = postService.getPostsByTeam(teamName, page, size);
         return ResponseEntity.ok(response);
     }
 
