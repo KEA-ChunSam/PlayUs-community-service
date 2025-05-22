@@ -5,6 +5,7 @@ import com.playus.communityservice.domain.post.controller.PostController;
 import com.playus.communityservice.global.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -53,6 +54,16 @@ public class ExceptionAdvice {
         String errorMessage = e.getMessage();
         log.error("Forbidden Access Error: {}", errorMessage);
         return ErrorResponse.forbiddenError(errorMessage);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String paramName = ex.getName(); // 예: "postId"
+        String invalidValue = String.valueOf(ex.getValue()); // 예: "asdf"
+        String message = String.format("'%s' 파라미터에 잘못된 값 '%s'이(가) 들어왔습니다.", paramName, invalidValue);
+        log.warn("Type Mismatch Error: {}", message);
+        return ErrorResponse.badRequestError(message);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

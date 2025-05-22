@@ -47,5 +47,8 @@ sentry:
 logging:
   config: classpath:logback-spring.xml
 
+server:
+  port: 8082
+
 slack:
   webhook-url: ${SLACK_WEBHOOK_URL}
