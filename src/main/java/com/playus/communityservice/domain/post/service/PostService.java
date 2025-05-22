@@ -99,11 +99,11 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("게시글"));
 
-        List<Comment> allComments = commentRepository.findAllByCommentGroup_Post(post);
-
         if (!post.isActivated()) {
             throw new EntityNotFoundException("게시글");
         }
+
+        List<Comment> allComments = commentRepository.findAllByCommentGroup_Post(post);
 
         List<PostGetResponse.CommentDto> comments = allComments.stream()
                 .filter(c -> c.getCommentOrder() == 1L)
@@ -111,7 +111,7 @@ public class PostService {
                     List<PostGetResponse.ReCommentDto> reComments = allComments.stream()
                             .filter(reply -> reply.getCommentGroup().equals(comment.getCommentGroup()) && reply.getCommentOrder() > 1L)
                             .map(reply -> new PostGetResponse.ReCommentDto(
-                                    comment.getId(),
+                                    reply.getId(),
                                     getNickname(reply.getUserId()),
                                     getProfileImage(reply.getUserId()),
                                     isExpert(reply.getUserId()),
