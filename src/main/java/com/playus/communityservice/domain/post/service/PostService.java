@@ -103,6 +103,8 @@ public class PostService {
             throw new EntityNotFoundException("게시글");
         }
 
+        post.increaseView();
+
         List<Comment> allComments = commentRepository.findAllByCommentGroup_Post(post);
 
         List<PostGetResponse.CommentDto> comments = allComments.stream()
