@@ -11,6 +11,7 @@ import com.playus.communityservice.domain.post.dto.post_update.PostUpdateRespons
 import com.playus.communityservice.domain.post.dto.presigned.PresignedUrlForSaveImageRequest;
 import com.playus.communityservice.domain.post.dto.presigned.PresignedUrlForSaveImageResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
+import com.playus.communityservice.domain.post.service.PostReadOnlyService;
 import com.playus.communityservice.domain.post.service.PostService;
 import com.playus.communityservice.domain.post.specification.PostControllerSpecification;
 import com.playus.communityservice.global.jwt.JwtUser;
@@ -30,6 +31,7 @@ import java.util.List;
 public class PostController implements PostControllerSpecification {
 
     private final PostService postService;
+    private final PostReadOnlyService postReadOnlyService;
 
     @PostMapping
     public ResponseEntity<PostCreateResponse> createPost(@PathVariable TeamTag tag,
@@ -63,7 +65,7 @@ public class PostController implements PostControllerSpecification {
     @GetMapping("/{postId}")
     public ResponseEntity<PostGetResponse> getPost(@PathVariable Long postId,
                                                    @AuthenticationPrincipal JwtUser user) {
-        PostGetResponse response = postService.getPost(postId, user);
+        PostGetResponse response = postReadOnlyService.getPost(postId, user);
         return ResponseEntity.ok(response);
     }
 
@@ -73,7 +75,7 @@ public class PostController implements PostControllerSpecification {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        List<PostListResponse> response = postService.getPostsByTeam(teamName, page, size);
+        List<PostListResponse> response = postReadOnlyService.getPostsByTeam(teamName, page, size);
         return ResponseEntity.ok(response);
     }
 

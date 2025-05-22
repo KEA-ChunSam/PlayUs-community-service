@@ -10,17 +10,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(
         basePackages = {
                 "com.playus.communityservice.domain.comment.repository.write",
-                "com.playus.communityservice.domain.file.repository.write",
                 "com.playus.communityservice.domain.post.repository.write"
         },
         excludeFilters = {
                 @ComponentScan.Filter(
                         type = FilterType.REGEX,
                         pattern = "com\\.playus\\.communityservice\\.domain\\.comment\\.repository\\.read\\..*"
-                ),
-                @ComponentScan.Filter(
-                        type = FilterType.REGEX,
-                        pattern = "com\\.playus\\.communityservice\\.domain\\.file\\.repository\\.read\\..*"
                 ),
                 @ComponentScan.Filter(
                         type = FilterType.REGEX,
@@ -31,7 +26,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(
         basePackages = {
                 "com.playus.communityservice.domain.comment.entity",
-                "com.playus.communityservice.domain.file.entity",
                 "com.playus.communityservice.domain.post.entity"
         }
 )
