@@ -1,5 +1,7 @@
 package com.playus.communityservice.domain.post.controller;
 
+import com.playus.communityservice.domain.post.dto.PostGetResponse;
+import com.playus.communityservice.domain.post.dto.PostListResponse;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateRequest;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateResponse;
 import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRequest;
@@ -19,6 +21,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/post")
@@ -27,7 +30,7 @@ public class PostController implements PostControllerSpecification {
 
     private final PostService postService;
 
-    @PostMapping("/{tag}")
+    @PostMapping
     public ResponseEntity<PostCreateResponse> createPost(@PathVariable TeamTag tag,
                                                      @Valid @RequestBody PostCreateRequest request,
                                                      @AuthenticationPrincipal JwtUser user) {
@@ -36,7 +39,7 @@ public class PostController implements PostControllerSpecification {
         return ResponseEntity.created(location).body(response);
     }
 
-    @PatchMapping("/{tag}")
+    @PatchMapping
     public ResponseEntity<PostUpdateResponse> updatePost(@PathVariable TeamTag tag,
                                                      @Valid @RequestBody PostUpdateRequest request,
                                                      @AuthenticationPrincipal JwtUser user) {
@@ -55,4 +58,18 @@ public class PostController implements PostControllerSpecification {
     public PresignedUrlForSaveImageResponse generatePresignedUrlForSaveImage(@Valid @RequestBody PresignedUrlForSaveImageRequest request) {
         return postService.generatePresignedUrlForSaveImage(request);
     }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostGetResponse> getPost(@PathVariable Long postId,
+                                                   @AuthenticationPrincipal JwtUser user) {
+        PostGetResponse response = postService.getPost(postId, user);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/posts/{teamName}")
+    public ResponseEntity<List<PostListResponse>> getPostsByTeam(@PathVariable("teamName") TeamTag teamName) {
+        List<PostListResponse> response = postService.getPostsByTeam(teamName);
+        return ResponseEntity.ok(response);
+    }
+
 }

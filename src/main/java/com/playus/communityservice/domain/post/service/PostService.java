@@ -4,6 +4,8 @@ import com.playus.communityservice.domain.comment.entity.Comment;
 import com.playus.communityservice.domain.comment.entity.CommentGroup;
 import com.playus.communityservice.domain.comment.repository.write.CommentGroupRepository;
 import com.playus.communityservice.domain.comment.repository.write.CommentRepository;
+import com.playus.communityservice.domain.post.dto.PostGetResponse;
+import com.playus.communityservice.domain.post.dto.PostListResponse;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateRequest;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateResponse;
 import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRequest;
@@ -90,4 +92,70 @@ public class PostService {
         return new PresignedUrlForSaveImageResponse(s3Service.generatePresignedUrl(request.imageFileName()));
     }
 
+    public PostGetResponse getPost(Long postId, JwtUser user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("게시글"));
+
+        List<Comment> allComments = commentRepository.findAllByCommentGroup_Post(post);
+
+        List<PostGetResponse.CommentDto> comments = allComments.stream()
+                .filter(c -> c.getCommentOrder() == 1L)
+                .map(comment -> {
+                    List<PostGetResponse.ReCommentDto> reComments = allComments.stream()
+                            .filter(reply -> reply.getCommentGroup().equals(comment.getCommentGroup()) && reply.getCommentOrder() > 1L)
+                            .map(reply -> new PostGetResponse.ReCommentDto(
+                                    getNickname(reply.getUserId()),
+                                    getProfileImage(reply.getUserId()),
+                                    isExpert(reply.getUserId()),
+                                    reply.getContent()
+                            ))
+                            .toList();
+
+                    return new PostGetResponse.CommentDto(
+                            getNickname(comment.getUserId()),
+                            getProfileImage(comment.getUserId()),
+                            isExpert(comment.getUserId()),
+                            comment.getContent(),
+                            reComments
+                    );
+                })
+                .toList();
+
+        return new PostGetResponse(
+                post.getTitle(),
+                post.getJwpDate(),
+                getNickname(post.getWriterId()),
+                getProfileImage(post.getWriterId()),
+                isExpert(post.getWriterId()),
+                post.getImageUrl(),
+                post.getDescription(),
+                comments
+        );
+    }
+
+    public List<PostListResponse> getPostsByTeam(TeamTag tag) {
+        List<Post> posts = postRepository.findAllByTag(tag);
+
+        return posts.stream()
+                .map(post -> new PostListResponse(
+                        post.getTitle(),
+                        post.getJwpDate(),
+                        getNickname(post.getWriterId()),
+                        post.getImageUrl()
+                ))
+                .toList();
+    }
+
+    private String getNickname(Long userId) {
+        return "User#" + userId; // TODO: 유저 서비스 연동
+    }
+
+    private String getProfileImage(Long userId) {
+        return "https://example.com/profile/" + userId + ".png"; // TODO: 유저 서비스 연동
+    }
+
+    private boolean isExpert(Long userId) {
+        return false; // TODO: 유저 서비스 연동
+    }
 }
+
