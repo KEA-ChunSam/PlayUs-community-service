@@ -1,16 +1,15 @@
 package com.playus.communityservice.domain.post.service;
 
-import com.playus.communityservice.domain.comment.entity.Comment;
+import com.playus.communityservice.domain.comment.document.CommentDocument;
 import com.playus.communityservice.domain.comment.repository.read.CommentReadOnlyRepository;
 import com.playus.communityservice.domain.post.document.PostDocument;
 import com.playus.communityservice.domain.post.dto.PostGetResponse;
 import com.playus.communityservice.domain.post.dto.PostListResponse;
-import com.playus.communityservice.domain.post.entity.Post;
 import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.repository.read.PostReadOnlyRepository;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
 import com.playus.communityservice.global.jwt.JwtUser;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class PostReadOnlyService {
 
     private final PostReadOnlyRepository postRepository;
@@ -37,7 +36,7 @@ public class PostReadOnlyService {
 
         post.increaseView();
 
-        List<Comment> allComments = commentRepository.findAllByCommentGroup_Post(post);
+        List<CommentDocument> allComments = commentRepository.findAllByCommentGroup_Post(post);
 
         List<PostGetResponse.CommentDto> comments = allComments.stream()
                 .filter(c -> c.getCommentOrder() == 1L)
@@ -79,10 +78,11 @@ public class PostReadOnlyService {
 
     public List<PostListResponse> getPostsByTeam(TeamTag tag, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Post> postPage = postRepository.findAllByTag(tag, pageable);
-        List<Post> posts = postPage.getContent();
+        Page<PostDocument> postPage = postRepository.findAllByTag(tag, pageable);
+        List<PostDocument> posts = postPage.getContent();
 
         return posts.stream()
+                .filter(PostDocument::isActivated)
                 .map(post -> new PostListResponse(
                         post.getId(),
                         post.getTitle(),

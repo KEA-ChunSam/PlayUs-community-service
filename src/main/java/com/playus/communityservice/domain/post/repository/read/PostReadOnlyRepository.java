@@ -10,6 +10,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface PostReadOnlyRepository extends MongoRepository<PostDocument, Long> {
-    List<Post> findAllByTag(TeamTag tag);
-    Page<Post> findAllByTag(TeamTag tag, Pageable pageable);
+    List<PostDocument> findAllByTag(TeamTag tag);
+    Page<PostDocument> findAllByTag(TeamTag tag, Pageable pageable);
 }
