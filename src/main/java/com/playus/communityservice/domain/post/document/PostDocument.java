@@ -43,9 +43,12 @@ public class PostDocument {
     @Field(name = "image_url")
     private String imageUrl;
 
+    @NotNull
+    private int view;
+
 
     @Builder
-    private PostDocument(Long id, String title, String description, TeamTag tag, Long writerId, boolean activated, boolean isSecret, String imageUrl, LocalDate jwpDate) {
+    private PostDocument(Long id, String title, String description, TeamTag tag, Long writerId, boolean activated, boolean isSecret, String imageUrl, LocalDate jwpDate, int view) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -55,9 +58,10 @@ public class PostDocument {
         this.isSecret = isSecret;
         this.jwpDate = jwpDate;
         this.imageUrl = imageUrl;
+        this.view = view;
     }
 
-    public static PostDocument createForOnlyTest(Long id, Long writerId, String title, String description, TeamTag tag, String imageUrl, LocalDate jwpDate) {
+    public static PostDocument createForOnlyTest(Long id, Long writerId, String title, String description, TeamTag tag, String imageUrl, LocalDate jwpDate, int view) {
         return PostDocument.builder()
                 .id(id)
                 .writerId(writerId)
@@ -68,6 +72,9 @@ public class PostDocument {
                 .isSecret(false)
                 .jwpDate(jwpDate)
                 .imageUrl(imageUrl)
+                .view(view)
                 .build();
     }
+
+    public void increaseView() { this.view++; }
 }

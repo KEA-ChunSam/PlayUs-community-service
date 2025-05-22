@@ -42,9 +42,12 @@ public class Post extends BaseTimeEntity {
     @Column(name = "is_secret", nullable = false)
     private boolean isSecret;
 
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int view;
+
 
     @Builder
-    private Post(String title, String description, TeamTag tag, Long writerId, boolean activated, boolean isSecret, LocalDate jwpDate, String imageUrl) {
+    private Post(String title, String description, TeamTag tag, Long writerId, boolean activated, boolean isSecret, LocalDate jwpDate, String imageUrl, int view) {
         this.title = title;
         this.description = description;
         this.tag = tag;
@@ -53,6 +56,7 @@ public class Post extends BaseTimeEntity {
         this.isSecret = isSecret;
         this.jwpDate = jwpDate;
         this.imageUrl = imageUrl;
+        this.view = view;
     }
 
     public static Post create(final Long writerId, final String title, final String description, final TeamTag tag, final LocalDate jwpDate, final String imageUrl) {
