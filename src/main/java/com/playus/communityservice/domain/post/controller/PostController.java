@@ -35,22 +35,31 @@ public class PostController implements PostControllerSpecification {
     public ResponseEntity<PostCreateResponse> createPost(@PathVariable TeamTag tag,
                                                      @Valid @RequestBody PostCreateRequest request,
                                                      @AuthenticationPrincipal JwtUser user) {
-        PostCreateResponse response = postService.createPost(request, user, tag);
+        PostCreateResponse response = postService.createGeneralPost(request, user, tag);
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{tag}")
+    @PatchMapping("/{tag}/{postId}")
     public ResponseEntity<PostUpdateResponse> updatePost(@PathVariable TeamTag tag,
                                                          @PathVariable Long postId,
                                                          @Valid @RequestBody PostUpdateRequest request,
                                                          @AuthenticationPrincipal JwtUser user) {
-        PostUpdateResponse response = postService.updatePost(request, postId, user, tag);
+        PostUpdateRequest updatedRequest = new PostUpdateRequest(
+                postId,
+                request.title(),
+                request.image(),
+                request.content(),
+                request.twpDate(),
+                request.isSecret()
+        );
+        PostUpdateResponse response = postService.updateGeneralPost(updatedRequest, user, tag);
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping
-    public ResponseEntity<PostDeleteResponse> deletePost(@Valid @RequestBody PostDeleteRequest request,
+    @DeleteMapping("{postId}")
+    public ResponseEntity<PostDeleteResponse> deletePost(@PathVariable Long postId,
                                                      @AuthenticationPrincipal JwtUser user) {
+        PostDeleteRequest request = new PostDeleteRequest(postId);
         PostDeleteResponse response = postService.deletePost(request, user);
         return ResponseEntity.ok(response);
     }

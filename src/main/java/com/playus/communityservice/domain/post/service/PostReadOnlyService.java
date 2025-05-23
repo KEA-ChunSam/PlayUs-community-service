@@ -112,9 +112,9 @@ public class PostReadOnlyService {
                 .toList();
     }
 
-    public List<DiaryListResponse> getMyDiaries(JwtUser user, int page, int size, TeamTag tag) {
+    public List<DiaryListResponse> getMyDiaries(JwtUser user, int page, int size, TeamTag teamName) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<PostDocument> postPage = postRepository.findAllByWriterIdAndTagAndIsSecretTrue(user.getId(), tag, pageable);
+        Page<PostDocument> postPage = postRepository.findAllByWriterIdAndTagAndIsSecretTrue(user.getId(), teamName, pageable);
         List<PostDocument> posts = postPage.getContent();
 
         return posts.stream()

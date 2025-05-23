@@ -13,6 +13,7 @@ import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.service.PostReadOnlyService;
 import com.playus.communityservice.domain.post.service.PostService;
+import com.playus.communityservice.domain.post.specification.LiveMatchDiaryControllerSpecification;
 import com.playus.communityservice.global.jwt.JwtUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/live-match-diary")
 @RequiredArgsConstructor
-public class LiveMatchDiaryController {
+public class LiveMatchDiaryController implements LiveMatchDiaryControllerSpecification {
 
     private final PostService postService;
     private final PostReadOnlyService postReadOnlyService;
@@ -35,7 +36,7 @@ public class LiveMatchDiaryController {
     public ResponseEntity<PostCreateResponse> createPost(@PathVariable TeamTag tag,
                                                          @Valid @RequestBody PostCreateRequest request,
                                                          @AuthenticationPrincipal JwtUser user) {
-        PostCreateResponse response = postService.createPost(request, user, tag);
+        PostCreateResponse response = postService.createDiaryPost(request, user, tag);
         return ResponseEntity.ok(response);
     }
 
@@ -44,7 +45,15 @@ public class LiveMatchDiaryController {
                                                          @PathVariable Long postId,
                                                          @Valid @RequestBody PostUpdateRequest request,
                                                          @AuthenticationPrincipal JwtUser user) {
-        PostUpdateResponse response = postService.updatePost(request, postId, user, tag);
+        PostUpdateRequest updatedRequest = new PostUpdateRequest(
+                postId,
+                request.title(),
+                request.image(),
+                request.content(),
+                request.twpDate(),
+                request.isSecret()
+        );
+        PostUpdateResponse response = postService.updateDiaryPost(updatedRequest, user, tag);
         return ResponseEntity.ok(response);
     }
 
@@ -65,12 +74,13 @@ public class LiveMatchDiaryController {
 
     @GetMapping("/my")
     public ResponseEntity<List<DiaryListResponse>> getMyDiaries(
+            @RequestParam TeamTag teamName,
             @AuthenticationPrincipal JwtUser user,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam TeamTag tag
+            @RequestParam(defaultValue = "10") int size
+
     ) {
-        List<DiaryListResponse> response = postReadOnlyService.getMyDiaries(user, page, size, tag);
+        List<DiaryListResponse> response = postReadOnlyService.getMyDiaries(user, page, size, teamName);
         return ResponseEntity.ok(response);
     }
 }
