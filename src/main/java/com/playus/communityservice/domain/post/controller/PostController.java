@@ -1,7 +1,7 @@
 package com.playus.communityservice.domain.post.controller;
 
-import com.playus.communityservice.domain.post.dto.PostGetResponse;
-import com.playus.communityservice.domain.post.dto.PostListResponse;
+import com.playus.communityservice.domain.post.dto.post_view.PostGetResponse;
+import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateRequest;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateResponse;
 import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRequest;
@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -36,22 +35,31 @@ public class PostController implements PostControllerSpecification {
     public ResponseEntity<PostCreateResponse> createPost(@PathVariable TeamTag tag,
                                                      @Valid @RequestBody PostCreateRequest request,
                                                      @AuthenticationPrincipal JwtUser user) {
-        PostCreateResponse response = postService.createPost(request, user, tag);
-        URI location = URI.create("/post/" + response.postId());
+        PostCreateResponse response = postService.createGeneralPost(request, user, tag);
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{tag}")
+    @PatchMapping("/{tag}/{postId}")
     public ResponseEntity<PostUpdateResponse> updatePost(@PathVariable TeamTag tag,
-                                                     @Valid @RequestBody PostUpdateRequest request,
-                                                     @AuthenticationPrincipal JwtUser user) {
-        PostUpdateResponse response = postService.updatePost(request, user, tag);
+                                                         @PathVariable Long postId,
+                                                         @Valid @RequestBody PostUpdateRequest request,
+                                                         @AuthenticationPrincipal JwtUser user) {
+        PostUpdateRequest updatedRequest = new PostUpdateRequest(
+                postId,
+                request.title(),
+                request.image(),
+                request.content(),
+                request.twpDate(),
+                request.isSecret()
+        );
+        PostUpdateResponse response = postService.updateGeneralPost(updatedRequest, user, tag);
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping
-    public ResponseEntity<PostDeleteResponse> deletePost(@Valid @RequestBody PostDeleteRequest request,
+    @DeleteMapping("{postId}")
+    public ResponseEntity<PostDeleteResponse> deletePost(@PathVariable Long postId,
                                                      @AuthenticationPrincipal JwtUser user) {
+        PostDeleteRequest request = new PostDeleteRequest(postId);
         PostDeleteResponse response = postService.deletePost(request, user);
         return ResponseEntity.ok(response);
     }

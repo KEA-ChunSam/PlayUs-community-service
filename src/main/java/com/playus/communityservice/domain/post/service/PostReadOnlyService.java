@@ -3,8 +3,10 @@ package com.playus.communityservice.domain.post.service;
 import com.playus.communityservice.domain.comment.document.CommentDocument;
 import com.playus.communityservice.domain.comment.repository.read.CommentReadOnlyRepository;
 import com.playus.communityservice.domain.post.document.PostDocument;
-import com.playus.communityservice.domain.post.dto.PostGetResponse;
-import com.playus.communityservice.domain.post.dto.PostListResponse;
+import com.playus.communityservice.domain.post.dto.diary_view.DiaryGetResponse;
+import com.playus.communityservice.domain.post.dto.diary_view.DiaryListResponse;
+import com.playus.communityservice.domain.post.dto.post_view.PostGetResponse;
+import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.repository.read.PostReadOnlyRepository;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
@@ -76,6 +78,23 @@ public class PostReadOnlyService {
         );
     }
 
+    public DiaryGetResponse getMyDiary(Long postId, JwtUser user) {
+        PostDocument post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("직관일지"));
+
+        if (!post.isActivated() || !post.isSecret() || !post.getWriterId().equals(user.getId())) {
+            throw new EntityNotFoundException("직관일지");
+        }
+
+        return new DiaryGetResponse(
+                post.getTitle(),
+                post.getTwpDate(),
+                post.getImageUrl(),
+                post.getDescription()
+        );
+    }
+
+
     public List<PostListResponse> getPostsByTeam(TeamTag tag, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<PostDocument> postPage = postRepository.findAllByTag(tag, pageable);
@@ -89,6 +108,21 @@ public class PostReadOnlyService {
                         post.getTwpDate(),
                         getNickname(post.getWriterId()),
                         post.getImageUrl()
+                ))
+                .toList();
+    }
+
+    public List<DiaryListResponse> getMyDiaries(JwtUser user, int page, int size, TeamTag teamName) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PostDocument> postPage = postRepository.findAllByWriterIdAndTagAndIsSecretTrue(user.getId(), teamName, pageable);
+        List<PostDocument> posts = postPage.getContent();
+
+        return posts.stream()
+                .filter(post -> post.isActivated() && post.isSecret())
+                .map(post -> new DiaryListResponse(
+                        post.getTitle(),
+                        post.getImageUrl(),
+                        post.getTwpDate()
                 ))
                 .toList();
     }

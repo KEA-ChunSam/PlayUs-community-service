@@ -1,4 +1,4 @@
-package com.playus.communityservice.domain.post.dto;
+package com.playus.communityservice.domain.post.dto.post_view;
 
 import java.time.LocalDate;
 

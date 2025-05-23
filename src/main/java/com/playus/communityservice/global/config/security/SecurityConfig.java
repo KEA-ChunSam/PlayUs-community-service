@@ -25,14 +25,26 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final CorsConfigurationSource corsConfigurationSource;
 
+    private static final String [] INTERNAL_PATHS = {
+            "community/api/**",
+    };
+
     private String [] getWhiteList() {
         return new String[] {
+                "/error",
                 "/swagger",
                 "/swagger-ui.html",
                 "/swagger-ui/**",
+                "/webjars/**",
                 "/api-docs",
                 "/api-docs/**",
                 "/v3/api-docs/**",
+                "/oauth2/authorization/kakao",
+                "/login/oauth2/code/kakao",
+                "/oauth2/authorization/naver",
+                "/login/oauth2/code/naver",
+                "/api/v1/auth/reissue",
+                "/api/v1/auth/logout",
         };
     }
 
@@ -43,8 +55,13 @@ public class SecurityConfig {
         http.httpBasic(AbstractHttpConfigurer::disable);
         http.cors((httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource)));
         http.addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+
+        // 인증/인가
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers(getWhiteList()).permitAll()
+                .requestMatchers(getWhiteList())
+                .permitAll()
+                .requestMatchers(INTERNAL_PATHS)
+                .permitAll()
                 .anyRequest().authenticated()
         );
 

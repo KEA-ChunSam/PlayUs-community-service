@@ -25,16 +25,19 @@ public record PostUpdateRequest(
         String content,
 
         @JsonFormat(pattern = "yyyy-MM-dd")
-        LocalDate twpDate
+        LocalDate twpDate,
+
+        boolean isSecret
 ) {
 
-    public static PostUpdateRequest of(Long postId, String title, String image, String content, LocalDate twpDate) {
+    public static PostUpdateRequest of(Long postId, String title, String image, String content, LocalDate twpDate, boolean isSecret) {
         return PostUpdateRequest.builder()
                 .postId(postId)
                 .title(title)
                 .image(image)
                 .content(content)
                 .twpDate(twpDate)
+                .isSecret(isSecret)
                 .build();
     }
 }
