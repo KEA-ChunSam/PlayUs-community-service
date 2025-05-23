@@ -20,7 +20,7 @@ public class LiveMatchDiaryController {
 
     private final PostService postService;
 
-    @PostMapping
+    @PostMapping("/{tag}")
     public ResponseEntity<PostCreateResponse> createPost(@PathVariable TeamTag tag,
                                                          @Valid @RequestBody PostCreateRequest request,
                                                          @AuthenticationPrincipal JwtUser user) {

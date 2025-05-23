@@ -413,18 +413,18 @@ public interface PostControllerSpecification {
                                             	"date":"2025-03-20T00:00:00",
                                             	"writerNickname":"안타날릴",
                                             	"writerProfileImage":["profile.png"],
-                                            	"activated":"true",
+                                            	"activated":true,
                                             	"image":["image.png"],
                                             	"content":"오늘은 LG가 이겨서 너무 행복합니다.",
                                             	"comments":[
                                             		"writerNickname":"난리나리라",
                                             		"writerProfileImage":["profiles.png"],
-                                            		"activated":"true",
+                                            		"activated":true,
                                             		"content":"홈런터질때 정말 짜릿했어요",
                                             		"reComments":[
                                             			"writerNickname":"테스형",
                                             			"writerProfileImage":["profile_11.png"],
-                                            			"activated":"true",
+                                            			"activated":true,
                                             			"content":"인정입니다."
                                             		]
                                             	]

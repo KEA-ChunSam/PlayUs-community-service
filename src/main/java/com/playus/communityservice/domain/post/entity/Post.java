@@ -59,14 +59,14 @@ public class Post extends BaseTimeEntity {
         this.view = view;
     }
 
-    public static Post create(final Long writerId, final String title, final String description, final TeamTag tag, final LocalDate jwpDate, final String imageUrl) {
+    public static Post create(final Long writerId, final String title, final String description, final TeamTag tag, final LocalDate jwpDate, final String imageUrl, boolean isSecret) {
         return Post.builder()
                 .writerId(writerId)
                 .title(title)
                 .description(description)
                 .tag(tag)
                 .activated(true)
-                .isSecret(false)
+                .isSecret(isSecret)
                 .jwpDate(jwpDate)
                 .imageUrl(imageUrl)
                 .build();

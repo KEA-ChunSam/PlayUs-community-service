@@ -51,7 +51,8 @@ public class PostService {
                 request.content(),
                 tag,
                 request.jwpDate(),
-                request.image()
+                request.image(),
+                false
         );
         postRepository.save(post);
         return PostCreateResponse.of(post.getId(), "게시물 생성이 완료되었습니다.");
@@ -68,12 +69,13 @@ public class PostService {
                 request.content(),
                 tag,
                 request.jwpDate(),
-                request.image()
+                request.image(),
+                true
         );
         postRepository.save(diary);
         return PostCreateResponse.of(diary.getId(), "직관일지 생성이 완료되었습니다.");
     }
-    
+
 
     public PostUpdateResponse updatePost(PostUpdateRequest request, JwtUser user, TeamTag tag) {
         Post post = postRepository.findById(request.postId())
