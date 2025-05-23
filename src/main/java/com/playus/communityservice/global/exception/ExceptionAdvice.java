@@ -28,6 +28,14 @@ public class ExceptionAdvice {
         return ErrorResponse.badRequestError(errorMessage);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ErrorResponse handleIllegalArgumentException(IllegalArgumentException e) {
+        String errorMessage = e.getMessage();
+        log.warn("IllegalArgumentException: {}", errorMessage);
+        return ErrorResponse.badRequestError(errorMessage);
+    }
+
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ResponseStatusException.class)
     public ErrorResponse responseStatusExHandler(ResponseStatusException e) {

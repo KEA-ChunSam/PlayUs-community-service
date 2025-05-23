@@ -17,7 +17,6 @@ import com.playus.communityservice.domain.post.specification.PostControllerSpeci
 import com.playus.communityservice.global.jwt.JwtUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +32,7 @@ public class PostController implements PostControllerSpecification {
     private final PostService postService;
     private final PostReadOnlyService postReadOnlyService;
 
-    @PostMapping
+    @PostMapping("/{tag}")
     public ResponseEntity<PostCreateResponse> createPost(@PathVariable TeamTag tag,
                                                      @Valid @RequestBody PostCreateRequest request,
                                                      @AuthenticationPrincipal JwtUser user) {
@@ -42,7 +41,7 @@ public class PostController implements PostControllerSpecification {
         return ResponseEntity.created(location).body(response);
     }
 
-    @PatchMapping
+    @PatchMapping("/{tag}")
     public ResponseEntity<PostUpdateResponse> updatePost(@PathVariable TeamTag tag,
                                                      @Valid @RequestBody PostUpdateRequest request,
                                                      @AuthenticationPrincipal JwtUser user) {

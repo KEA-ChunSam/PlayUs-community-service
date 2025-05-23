@@ -37,12 +37,43 @@ public class PostService {
     private final CommentRepository commentRepository;
 
     public PostCreateResponse createPost(PostCreateRequest request, JwtUser user, TeamTag tag) {
-        Post post = Post.create(user.getId(), request.title(), request.content(), tag, request.jwpDate(), request.image());
-        postRepository.save(post);
+        if (request.isSecret()) {
+            return createDiary(request, user, tag);
+        } else {
+            return createGeneralPost(request, user, tag);
+        }
+    }
 
+    private PostCreateResponse createGeneralPost(PostCreateRequest request, JwtUser user, TeamTag tag) {
+        Post post = Post.create(
+                user.getId(),
+                request.title(),
+                request.content(),
+                tag,
+                request.jwpDate(),
+                request.image()
+        );
+        postRepository.save(post);
         return PostCreateResponse.of(post.getId(), "게시물 생성이 완료되었습니다.");
     }
 
+    private PostCreateResponse createDiary(PostCreateRequest request, JwtUser user, TeamTag tag) {
+        if (request.jwpDate() == null) {
+            throw new IllegalArgumentException("직관일지는 jwpDate가 필수입니다.");
+        }
+
+        Post diary = Post.create(
+                user.getId(),
+                request.title(),
+                request.content(),
+                tag,
+                request.jwpDate(),
+                request.image()
+        );
+        postRepository.save(diary);
+        return PostCreateResponse.of(diary.getId(), "직관일지 생성이 완료되었습니다.");
+    }
+    
 
     public PostUpdateResponse updatePost(PostUpdateRequest request, JwtUser user, TeamTag tag) {
         Post post = postRepository.findById(request.postId())

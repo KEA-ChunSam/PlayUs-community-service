@@ -12,7 +12,7 @@ public record PostGetResponse(
         LocalDate date,
         String writerNickname,
         String writerProfileImage,
-        boolean isExpert,
+        boolean activated,
         String image,
         String content,
         List<CommentDto> comments
@@ -21,7 +21,7 @@ public record PostGetResponse(
             Long commentId,
             String writerNickname,
             String writerProfileImage,
-            boolean isExpert,
+            boolean activated,
             String content,
             List<ReCommentDto> reComments
     ) {}
@@ -30,7 +30,7 @@ public record PostGetResponse(
             Long reCommentId,
             String writerNickname,
             String writerProfileImage,
-            boolean isExpert,
+            boolean activated,
             String content
     ) {}
 }
