@@ -27,8 +27,8 @@ public class Post extends BaseTimeEntity {
     @Column(nullable = false)
     private TeamTag tag;
 
-    @Column(name = "jwp_date")
-    private LocalDate jwpDate;
+    @Column(name = "twp_date")
+    private LocalDate twpDate;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
@@ -47,19 +47,19 @@ public class Post extends BaseTimeEntity {
 
 
     @Builder
-    private Post(String title, String description, TeamTag tag, Long writerId, boolean activated, boolean isSecret, LocalDate jwpDate, String imageUrl, int view) {
+    private Post(String title, String description, TeamTag tag, Long writerId, boolean activated, boolean isSecret, LocalDate twpDate, String imageUrl, int view) {
         this.title = title;
         this.description = description;
         this.tag = tag;
         this.writerId = writerId;
         this.activated = activated;
         this.isSecret = isSecret;
-        this.jwpDate = jwpDate;
+        this.twpDate = twpDate;
         this.imageUrl = imageUrl;
         this.view = view;
     }
 
-    public static Post create(final Long writerId, final String title, final String description, final TeamTag tag, final LocalDate jwpDate, final String imageUrl, boolean isSecret) {
+    public static Post create(final Long writerId, final String title, final String description, final TeamTag tag, final LocalDate twpDate, final String imageUrl, boolean isSecret) {
         return Post.builder()
                 .writerId(writerId)
                 .title(title)
@@ -67,17 +67,17 @@ public class Post extends BaseTimeEntity {
                 .tag(tag)
                 .activated(true)
                 .isSecret(isSecret)
-                .jwpDate(jwpDate)
+                .twpDate(twpDate)
                 .imageUrl(imageUrl)
                 .build();
     }
 
-    public void updateAll(final String title, final String description, final TeamTag tag, final boolean isSecret, final LocalDate jwpDate, final String imageUrl) {
+    public void updateAll(final String title, final String description, final TeamTag tag, final boolean isSecret, final LocalDate twpDate, final String imageUrl) {
         this.title = title;
         this.description = description;
         this.tag = tag;
         this.isSecret = isSecret;
-        this.jwpDate = jwpDate;
+        this.twpDate = twpDate;
         this.imageUrl = imageUrl;
     }
 

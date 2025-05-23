@@ -50,7 +50,7 @@ public class PostService {
                 request.title(),
                 request.content(),
                 tag,
-                request.jwpDate(),
+                request.twpDate(),
                 request.image(),
                 false
         );
@@ -59,8 +59,8 @@ public class PostService {
     }
 
     private PostCreateResponse createDiary(PostCreateRequest request, JwtUser user, TeamTag tag) {
-        if (request.jwpDate() == null) {
-            throw new IllegalArgumentException("직관일지는 jwpDate가 필수입니다.");
+        if (request.twpDate() == null) {
+            throw new IllegalArgumentException("직관일지는 twpDate가 필수입니다.");
         }
 
         Post diary = Post.create(
@@ -68,7 +68,7 @@ public class PostService {
                 request.title(),
                 request.content(),
                 tag,
-                request.jwpDate(),
+                request.twpDate(),
                 request.image(),
                 true
         );
@@ -92,7 +92,7 @@ public class PostService {
             s3Service.deleteImage(fileName);
         }
 
-        post.updateAll(request.title(), request.content(), tag, false, request.jwpDate(), request.image());
+        post.updateAll(request.title(), request.content(), tag, false, request.twpDate(), request.image());
         return PostUpdateResponse.of(true, "게시물이 수정되었습니다.");
     }
 

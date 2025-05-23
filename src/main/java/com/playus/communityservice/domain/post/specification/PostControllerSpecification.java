@@ -57,7 +57,7 @@ public interface PostControllerSpecification {
                                       "title": "오늘 경기 재밌었어요!",
                                       "image": ["post.jpg"],
                                       "content": "LG가 이길 줄 알았죠!",
-                                      "jwpDate" : "2025-05-05"
+                                      "twpDate" : "2025-05-05"
                                     }
                                     """
                             )
@@ -200,7 +200,7 @@ public interface PostControllerSpecification {
                                       "image": ["post.jpg"],
                                       "content": "긴장하면서 시청했네요."
                                       "postId": 1,
-                                      "jwpDate" : "2025-05-01"
+                                      "twpDate" : "2025-05-01"
                                     }
                                     """
                             )
