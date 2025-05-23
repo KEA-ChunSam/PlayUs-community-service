@@ -44,7 +44,7 @@ public class LiveMatchDiaryController {
                                                          @PathVariable Long postId,
                                                          @Valid @RequestBody PostUpdateRequest request,
                                                          @AuthenticationPrincipal JwtUser user) {
-        PostUpdateResponse response = postService.updatePost(request, user, tag);
+        PostUpdateResponse response = postService.updatePost(request, postId, user, tag);
         return ResponseEntity.ok(response);
     }
 

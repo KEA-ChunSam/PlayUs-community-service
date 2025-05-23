@@ -284,6 +284,7 @@ public interface PostControllerSpecification {
             ),
     })
     ResponseEntity<PostUpdateResponse> updatePost(@PathVariable("tag") TeamTag tag,
+                                                  @PathVariable Long postId,
                                                   @Valid @Parameter(description = "게시글 생성 요청", required = true)
                                                   PostUpdateRequest request, JwtUser user);
 

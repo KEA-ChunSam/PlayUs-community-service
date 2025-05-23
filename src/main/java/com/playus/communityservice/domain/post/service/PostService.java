@@ -76,16 +76,16 @@ public class PostService {
         return PostCreateResponse.of(diary.getId(), "직관일지 생성이 완료되었습니다.");
     }
 
-    public PostUpdateResponse updatePost(PostUpdateRequest request, JwtUser user, TeamTag tag) {
+    public PostUpdateResponse updatePost(PostUpdateRequest request, Long postId, JwtUser user, TeamTag tag) {
         if (request.isSecret()) {
-            return updateDiary(request, user, tag);
+            return updateDiary(request,postId, user, tag);
         } else {
-            return updateGeneralPost(request, user, tag);
+            return updateGeneralPost(request,postId, user, tag);
         }
     }
 
 
-    public PostUpdateResponse updateGeneralPost(PostUpdateRequest request, JwtUser user, TeamTag tag) {
+    public PostUpdateResponse updateGeneralPost(PostUpdateRequest request,Long postId, JwtUser user, TeamTag tag) {
         Post post = postRepository.findById(request.postId())
                 .orElseThrow(() -> new EntityNotFoundException("게시글"));
 
@@ -104,7 +104,7 @@ public class PostService {
         return PostUpdateResponse.of(true, "게시물이 수정되었습니다.");
     }
 
-    public PostUpdateResponse updateDiary(PostUpdateRequest request, JwtUser user, TeamTag tag) {
+    public PostUpdateResponse updateDiary(PostUpdateRequest request, Long postId, JwtUser user, TeamTag tag) {
         Post post = postRepository.findById(request.postId())
                 .orElseThrow(() -> new EntityNotFoundException("직관일지"));
 

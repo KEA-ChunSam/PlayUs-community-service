@@ -41,9 +41,10 @@ public class PostController implements PostControllerSpecification {
 
     @PatchMapping("/{tag}")
     public ResponseEntity<PostUpdateResponse> updatePost(@PathVariable TeamTag tag,
-                                                     @Valid @RequestBody PostUpdateRequest request,
-                                                     @AuthenticationPrincipal JwtUser user) {
-        PostUpdateResponse response = postService.updatePost(request, user, tag);
+                                                         @PathVariable Long postId,
+                                                         @Valid @RequestBody PostUpdateRequest request,
+                                                         @AuthenticationPrincipal JwtUser user) {
+        PostUpdateResponse response = postService.updatePost(request, postId, user, tag);
         return ResponseEntity.ok(response);
     }
 
