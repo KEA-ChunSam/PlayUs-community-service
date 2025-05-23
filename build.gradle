@@ -45,6 +45,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
 	// MSA
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
 	// Monitoring
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'

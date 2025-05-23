@@ -12,6 +12,8 @@ import com.playus.communityservice.domain.comment.repository.write.CommentGroupR
 import com.playus.communityservice.domain.comment.repository.write.CommentRepository;
 import com.playus.communityservice.domain.post.entity.Post;
 import com.playus.communityservice.domain.post.repository.write.PostRepository;
+import com.playus.communityservice.global.client.CommentNotificationEvent;
+import com.playus.communityservice.global.client.NotificationClient;
 import com.playus.communityservice.global.jwt.JwtUser;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
 import com.playus.communityservice.global.exception.ForbiddenAccessException;
@@ -27,6 +29,7 @@ public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final CommentGroupRepository commentGroupRepository;
+    private final NotificationClient notificationClient;
 
     public CommentCreateResponse createComment(CommentCreateRequest request, JwtUser user) {
         Post post = postRepository.findById(request.postId())
@@ -61,6 +64,16 @@ public class CommentService {
         );
 
         commentRepository.save(comment);
+
+        CommentNotificationEvent event = CommentNotificationEvent.of(
+                comment.getId(),
+                post.getId(),
+                comment.getUserId(),
+                comment.getContent(),
+                comment.isActivated()
+        );
+        notificationClient.notifyComment(event);
+
         return CommentCreateResponse.of(comment.getId(), "댓글 생성이 완료되었습니다.");
     }
 
