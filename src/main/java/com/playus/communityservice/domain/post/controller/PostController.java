@@ -1,7 +1,7 @@
 package com.playus.communityservice.domain.post.controller;
 
-import com.playus.communityservice.domain.post.dto.PostGetResponse;
-import com.playus.communityservice.domain.post.dto.PostListResponse;
+import com.playus.communityservice.domain.post.dto.post_view.PostGetResponse;
+import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateRequest;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateResponse;
 import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRequest;
@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -37,7 +36,6 @@ public class PostController implements PostControllerSpecification {
                                                      @Valid @RequestBody PostCreateRequest request,
                                                      @AuthenticationPrincipal JwtUser user) {
         PostCreateResponse response = postService.createPost(request, user, tag);
-        URI location = URI.create("/post/" + response.postId());
         return ResponseEntity.ok(response);
     }
 

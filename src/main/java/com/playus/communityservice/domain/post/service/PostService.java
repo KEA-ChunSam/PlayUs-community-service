@@ -76,8 +76,16 @@ public class PostService {
         return PostCreateResponse.of(diary.getId(), "직관일지 생성이 완료되었습니다.");
     }
 
-
     public PostUpdateResponse updatePost(PostUpdateRequest request, JwtUser user, TeamTag tag) {
+        if (request.isSecret()) {
+            return updateDiary(request, user, tag);
+        } else {
+            return updateGeneralPost(request, user, tag);
+        }
+    }
+
+
+    public PostUpdateResponse updateGeneralPost(PostUpdateRequest request, JwtUser user, TeamTag tag) {
         Post post = postRepository.findById(request.postId())
                 .orElseThrow(() -> new EntityNotFoundException("게시글"));
 
@@ -96,8 +104,50 @@ public class PostService {
         return PostUpdateResponse.of(true, "게시물이 수정되었습니다.");
     }
 
+    public PostUpdateResponse updateDiary(PostUpdateRequest request, JwtUser user, TeamTag tag) {
+        Post post = postRepository.findById(request.postId())
+                .orElseThrow(() -> new EntityNotFoundException("직관일지"));
+
+        if (!post.getWriterId().equals(user.getId())) {
+            throw new ForbiddenAccessException("직관일지");
+        }
+
+        if (request.twpDate() == null) {
+            throw new IllegalArgumentException("직관일지는 twpDate가 필수입니다.");
+        }
+
+        String currentImage = post.getImageUrl();
+        if (currentImage != null && !currentImage.isEmpty() &&
+                !currentImage.equals(request.image())) {
+            String fileName = currentImage.substring(currentImage.lastIndexOf("/") + 1);
+            s3Service.deleteImage(fileName);
+        }
+
+        post.updateAll(
+                request.title(),
+                request.content(),
+                tag,
+                true, // isSecret 유지
+                request.twpDate(),
+                request.image()
+        );
+
+        return PostUpdateResponse.of(true, "직관일지가 수정되었습니다.");
+    }
 
     public PostDeleteResponse deletePost(PostDeleteRequest request, JwtUser user) {
+        // DB 조회 후 isSecret 판단
+        Post post = postRepository.findById(request.postId())
+                .orElseThrow(() -> new EntityNotFoundException("게시글"));
+
+        if (post.isSecret()) {
+            return deleteDiary(request, user);
+        } else {
+            return deleteGeneralPost(request, user);
+        }
+    }
+
+    public PostDeleteResponse deleteGeneralPost(PostDeleteRequest request, JwtUser user) {
         Post post = postRepository.findById(request.postId())
                 .orElseThrow(() -> new EntityNotFoundException("게시글"));
 
@@ -118,6 +168,27 @@ public class PostService {
 
         return PostDeleteResponse.of(true, "게시물이 삭제되었습니다.");
     }
+
+    public PostDeleteResponse deleteDiary(PostDeleteRequest request, JwtUser user) {
+        Post post = postRepository.findById(request.postId())
+                .orElseThrow(() -> new EntityNotFoundException("직관일지"));
+
+        if (!post.getWriterId().equals(user.getId())) {
+            throw new ForbiddenAccessException("직관일지");
+        }
+
+        List<CommentGroup> commentGroups = commentGroupRepository.findAllByPost(post);
+        for (CommentGroup group : commentGroups) {
+            List<Comment> comments = commentRepository.findAllByCommentGroup(group);
+            comments.forEach(Comment::delete);
+            commentGroupRepository.delete(group);
+        }
+
+        post.delete();
+
+        return PostDeleteResponse.of(true, "직관일지가 삭제되었습니다.");
+    }
+
 
     public PresignedUrlForSaveImageResponse generatePresignedUrlForSaveImage(PresignedUrlForSaveImageRequest request) {
         return new PresignedUrlForSaveImageResponse(s3Service.generatePresignedUrl(request.imageFileName()));

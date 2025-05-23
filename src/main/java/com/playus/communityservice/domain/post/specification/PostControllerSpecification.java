@@ -1,7 +1,7 @@
 package com.playus.communityservice.domain.post.specification;
 
-import com.playus.communityservice.domain.post.dto.PostGetResponse;
-import com.playus.communityservice.domain.post.dto.PostListResponse;
+import com.playus.communityservice.domain.post.dto.post_view.PostGetResponse;
+import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateRequest;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateResponse;
 import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRequest;
@@ -24,7 +24,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
