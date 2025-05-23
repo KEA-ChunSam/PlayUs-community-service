@@ -25,16 +25,16 @@ public record PostUpdateRequest(
         String content,
 
         @JsonFormat(pattern = "yyyy-MM-dd")
-        LocalDate jwpDate
+        LocalDate twpDate
 ) {
 
-    public static PostUpdateRequest of(Long postId, String title, String image, String content, LocalDate jwpDate) {
+    public static PostUpdateRequest of(Long postId, String title, String image, String content, LocalDate twpDate) {
         return PostUpdateRequest.builder()
                 .postId(postId)
                 .title(title)
                 .image(image)
                 .content(content)
-                .jwpDate(jwpDate)
+                .twpDate(twpDate)
                 .build();
     }
 }

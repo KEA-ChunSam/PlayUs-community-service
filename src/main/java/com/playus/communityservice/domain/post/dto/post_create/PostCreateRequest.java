@@ -19,16 +19,25 @@ public record PostCreateRequest(
         String content,
 
         @JsonFormat(pattern = "yyyy-MM-dd")
-        LocalDate jwpDate
+        LocalDate twpDate,
+
+        boolean isSecret
 
 ) {
 
-    public static PostCreateRequest of(String title, String image , String content, LocalDate jwpDate) {
+    public static PostCreateRequest of(String title, String image , String content, LocalDate twpDate, boolean isSecret) {
         return PostCreateRequest.builder()
                 .title(title)
                 .image(image)
                 .content(content)
-                .jwpDate(jwpDate)
+                .twpDate(twpDate)
+                .isSecret(isSecret)
                 .build();
+    }
+
+    public void validate() {
+        if (isSecret && twpDate == null) {
+            throw new IllegalArgumentException("직관일지의 경우 twpDate는 필수입니다.");
+        }
     }
 }

@@ -38,7 +38,7 @@ public class PostDocument {
     private boolean isSecret;
 
     @Field(name = "jwp_date")
-    private LocalDate jwpDate;
+    private LocalDate twpDate;
 
     @Field(name = "image_url")
     private String imageUrl;
@@ -48,7 +48,7 @@ public class PostDocument {
 
 
     @Builder
-    private PostDocument(Long id, String title, String description, TeamTag tag, Long writerId, boolean activated, boolean isSecret, String imageUrl, LocalDate jwpDate, int view) {
+    private PostDocument(Long id, String title, String description, TeamTag tag, Long writerId, boolean activated, boolean isSecret, String imageUrl, LocalDate twpDate, int view) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -56,12 +56,12 @@ public class PostDocument {
         this.writerId = writerId;
         this.activated = activated;
         this.isSecret = isSecret;
-        this.jwpDate = jwpDate;
+        this.twpDate = twpDate;
         this.imageUrl = imageUrl;
         this.view = view;
     }
 
-    public static PostDocument createForOnlyTest(Long id, Long writerId, String title, String description, TeamTag tag, String imageUrl, LocalDate jwpDate, int view) {
+    public static PostDocument createForOnlyTest(Long id, Long writerId, String title, String description, TeamTag tag, String imageUrl, LocalDate twpDate, int view) {
         return PostDocument.builder()
                 .id(id)
                 .writerId(writerId)
@@ -70,7 +70,7 @@ public class PostDocument {
                 .tag(tag)
                 .activated(true)
                 .isSecret(false)
-                .jwpDate(jwpDate)
+                .twpDate(twpDate)
                 .imageUrl(imageUrl)
                 .view(view)
                 .build();

@@ -66,7 +66,7 @@ public class PostReadOnlyService {
         return new PostGetResponse(
                 post.getId(),
                 post.getTitle(),
-                post.getJwpDate(),
+                post.getTwpDate(),
                 getNickname(post.getWriterId()),
                 getProfileImage(post.getWriterId()),
                 isExpert(post.getWriterId()),
@@ -86,7 +86,7 @@ public class PostReadOnlyService {
                 .map(post -> new PostListResponse(
                         post.getId(),
                         post.getTitle(),
-                        post.getJwpDate(),
+                        post.getTwpDate(),
                         getNickname(post.getWriterId()),
                         post.getImageUrl()
                 ))

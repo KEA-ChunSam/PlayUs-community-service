@@ -37,10 +37,43 @@ public class PostService {
     private final CommentRepository commentRepository;
 
     public PostCreateResponse createPost(PostCreateRequest request, JwtUser user, TeamTag tag) {
-        Post post = Post.create(user.getId(), request.title(), request.content(), tag, request.jwpDate(), request.image());
-        postRepository.save(post);
+        if (request.isSecret()) {
+            return createDiary(request, user, tag);
+        } else {
+            return createGeneralPost(request, user, tag);
+        }
+    }
 
+    private PostCreateResponse createGeneralPost(PostCreateRequest request, JwtUser user, TeamTag tag) {
+        Post post = Post.create(
+                user.getId(),
+                request.title(),
+                request.content(),
+                tag,
+                request.twpDate(),
+                request.image(),
+                false
+        );
+        postRepository.save(post);
         return PostCreateResponse.of(post.getId(), "게시물 생성이 완료되었습니다.");
+    }
+
+    private PostCreateResponse createDiary(PostCreateRequest request, JwtUser user, TeamTag tag) {
+        if (request.twpDate() == null) {
+            throw new IllegalArgumentException("직관일지는 twpDate가 필수입니다.");
+        }
+
+        Post diary = Post.create(
+                user.getId(),
+                request.title(),
+                request.content(),
+                tag,
+                request.twpDate(),
+                request.image(),
+                true
+        );
+        postRepository.save(diary);
+        return PostCreateResponse.of(diary.getId(), "직관일지 생성이 완료되었습니다.");
     }
 
 
@@ -59,7 +92,7 @@ public class PostService {
             s3Service.deleteImage(fileName);
         }
 
-        post.updateAll(request.title(), request.content(), tag, false, request.jwpDate(), request.image());
+        post.updateAll(request.title(), request.content(), tag, false, request.twpDate(), request.image());
         return PostUpdateResponse.of(true, "게시물이 수정되었습니다.");
     }
 
