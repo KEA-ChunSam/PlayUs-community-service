@@ -183,7 +183,7 @@ public interface LiveMatchDiaryControllerSpecification {
                                     {
                                       "title": "비 오는 날에 만끽하는 승리",
                                       "image": ["post.jpg"],
-                                      "content": "우취될까봐 조마조마 했지만, 역시 KIA의 승!"
+                                      "content": "우취될까봐 조마조마 했지만, 역시 KIA의 승!",
                                       "twpDate" : "2025-05-01",
                                       "isSecret": true
                                     }
@@ -289,7 +289,7 @@ public interface LiveMatchDiaryControllerSpecification {
                                     name = "직관일지 조회 응답 예시",
                                     value = """
                                             {
-                                            	"team":"KIA"
+                                            	"team":"KIA",
                                              	"title":"아쉽게 패배한 날",
                                              	"date":"2025-03-20",
                                              	"image":["LG_vs_KIA.png"],
@@ -408,13 +408,13 @@ public interface LiveMatchDiaryControllerSpecification {
                                     value = """
                                         [
                                             {
-                                                "title":"비 오는 날에 만끽하는 승리"
+                                                "title":"비 오는 날에 만끽하는 승리",
                                                 "thumbnail":["post.jpg"],
                                                 "date":"2025-05-01",
                                                 "team":"KIA"
                                             },
                                             {
-                                                "title":"마지막 역전으로 이긴 날"
+                                                "title":"마지막 역전으로 이긴 날",
                                                 "thumbnail":["example.jpg"],
                                                 "date":"2025-03-20",
                                                 "team":"LG"
