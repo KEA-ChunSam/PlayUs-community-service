@@ -114,7 +114,7 @@ public class PostReadOnlyService {
 
     public List<DiaryListResponse> getMyDiaries(JwtUser user, int page, int size, TeamTag tag) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<PostDocument> postPage = postRepository.findAllByWriterId(user.getId(), pageable);
+        Page<PostDocument> postPage = postRepository.findAllByWriterIdAndTagAndIsSecretTrue(user.getId(), tag, pageable);
         List<PostDocument> posts = postPage.getContent();
 
         return posts.stream()

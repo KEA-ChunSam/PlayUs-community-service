@@ -11,5 +11,6 @@ import java.util.List;
 
 public interface PostReadOnlyRepository extends MongoRepository<PostDocument, Long> {
     Page<PostDocument> findAllByTag(TeamTag tag, Pageable pageable);
-    Page<PostDocument> findAllByWriterId(Long writerId, Pageable pageable);
+    Page<PostDocument> findAllByWriterIdAndTagAndIsSecretTrue(Long writerId, TeamTag tag, Pageable pageable);
+
 }

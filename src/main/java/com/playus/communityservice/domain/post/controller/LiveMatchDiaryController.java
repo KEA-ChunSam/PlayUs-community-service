@@ -41,15 +41,17 @@ public class LiveMatchDiaryController {
 
     @PatchMapping("/{tag}/{postId}")
     public ResponseEntity<PostUpdateResponse> updatePost(@PathVariable TeamTag tag,
+                                                         @PathVariable Long postId,
                                                          @Valid @RequestBody PostUpdateRequest request,
                                                          @AuthenticationPrincipal JwtUser user) {
         PostUpdateResponse response = postService.updatePost(request, user, tag);
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("{postId}")
-    public ResponseEntity<PostDeleteResponse> deletePost(@Valid @RequestBody PostDeleteRequest request,
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<PostDeleteResponse> deletePost(@PathVariable Long postId,
                                                          @AuthenticationPrincipal JwtUser user) {
+        PostDeleteRequest request = new PostDeleteRequest(postId);
         PostDeleteResponse response = postService.deletePost(request, user);
         return ResponseEntity.ok(response);
     }
@@ -61,12 +63,12 @@ public class LiveMatchDiaryController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("my")
+    @GetMapping("/my")
     public ResponseEntity<List<DiaryListResponse>> getMyDiaries(
             @AuthenticationPrincipal JwtUser user,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @PathVariable TeamTag tag
+            @RequestParam TeamTag tag
     ) {
         List<DiaryListResponse> response = postReadOnlyService.getMyDiaries(user, page, size, tag);
         return ResponseEntity.ok(response);

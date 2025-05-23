@@ -141,15 +141,13 @@ public class PostService {
                 .orElseThrow(() -> new EntityNotFoundException("게시글"));
 
         if (post.isSecret()) {
-            return deleteDiary(request, user);
+            return deleteDiary(post, user);
         } else {
-            return deleteGeneralPost(request, user);
+            return deleteGeneralPost(post, user);
         }
     }
 
-    public PostDeleteResponse deleteGeneralPost(PostDeleteRequest request, JwtUser user) {
-        Post post = postRepository.findById(request.postId())
-                .orElseThrow(() -> new EntityNotFoundException("게시글"));
+    private PostDeleteResponse deleteGeneralPost(Post post, JwtUser user) {
 
         if (!post.getWriterId().equals(user.getId())) {
             throw new ForbiddenAccessException("게시글");
@@ -169,10 +167,7 @@ public class PostService {
         return PostDeleteResponse.of(true, "게시물이 삭제되었습니다.");
     }
 
-    public PostDeleteResponse deleteDiary(PostDeleteRequest request, JwtUser user) {
-        Post post = postRepository.findById(request.postId())
-                .orElseThrow(() -> new EntityNotFoundException("직관일지"));
-
+    private PostDeleteResponse deleteDiary(Post post, JwtUser user) {
         if (!post.getWriterId().equals(user.getId())) {
             throw new ForbiddenAccessException("직관일지");
         }
