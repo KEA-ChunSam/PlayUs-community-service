@@ -18,9 +18,11 @@ import com.playus.communityservice.global.jwt.JwtUser;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
 import com.playus.communityservice.global.exception.ForbiddenAccessException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -72,7 +74,11 @@ public class CommentService {
                 comment.getContent(),
                 comment.isActivated()
         );
-        notificationClient.notifyComment(event);
+        try {
+            notificationClient.notifyComment(event);
+        } catch (Exception e) {
+            log.warn("댓글 알림 전송 실패: commentId={}, error={}", comment.getId(), e.getMessage());
+        }
 
         return CommentCreateResponse.of(comment.getId(), "댓글 생성이 완료되었습니다.");
     }
