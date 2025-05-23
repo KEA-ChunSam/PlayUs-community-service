@@ -25,7 +25,6 @@ public class LiveMatchDiaryController {
                                                          @Valid @RequestBody PostCreateRequest request,
                                                          @AuthenticationPrincipal JwtUser user) {
         PostCreateResponse response = postService.createPost(request, user, tag);
-        URI location = URI.create("/live-match-diary/" + response.postId());
-        return ResponseEntity.created(location).body(response);
+        return ResponseEntity.ok(response);
     }
 }

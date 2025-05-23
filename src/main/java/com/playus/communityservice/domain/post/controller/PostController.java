@@ -38,7 +38,7 @@ public class PostController implements PostControllerSpecification {
                                                      @AuthenticationPrincipal JwtUser user) {
         PostCreateResponse response = postService.createPost(request, user, tag);
         URI location = URI.create("/post/" + response.postId());
-        return ResponseEntity.created(location).body(response);
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{tag}")
