@@ -71,6 +71,7 @@ public class PostController implements PostControllerSpecification {
     @GetMapping("/posts/{teamName}")
     public ResponseEntity<List<PostListResponse>> getPostsByTeam(
             @PathVariable("teamName") TeamTag teamName,
+            @AuthenticationPrincipal JwtUser user,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {

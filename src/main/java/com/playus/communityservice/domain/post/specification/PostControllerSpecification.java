@@ -417,16 +417,20 @@ public interface PostControllerSpecification {
                                             	"image":["image.png"],
                                             	"content":"오늘은 LG가 이겨서 너무 행복합니다.",
                                             	"comments":[
+                                            		{
                                             		"writerNickname":"난리나리라",
                                             		"writerProfileImage":["profiles.png"],
                                             		"activated":true,
                                             		"content":"홈런터질때 정말 짜릿했어요",
                                             		"reComments":[
+                                            			{
                                             			"writerNickname":"테스형",
                                             			"writerProfileImage":["profile_11.png"],
                                             			"activated":true,
                                             			"content":"인정입니다."
+                                            			}
                                             		]
+                                            		}
                                             	]
                                             }
                                             """
@@ -606,7 +610,7 @@ public interface PostControllerSpecification {
                     )
             )
     })
-    ResponseEntity<List<PostListResponse>> getPostsByTeam(@PathVariable("teamName") TeamTag teamName,
+    ResponseEntity<List<PostListResponse>> getPostsByTeam(@PathVariable("teamName") TeamTag teamName, JwtUser user,
                                                           @RequestParam(defaultValue = "0") int page,
                                                           @RequestParam(defaultValue = "10") int size);
 }
