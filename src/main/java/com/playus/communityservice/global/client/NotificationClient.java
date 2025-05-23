@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(
-        name = "userFeignClient",
+        name = "notificationClient",
         url = "${feign.user.url}",
         path = "/user/api"
 )

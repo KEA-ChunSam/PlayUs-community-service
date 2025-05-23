@@ -14,6 +14,7 @@ import com.playus.communityservice.domain.post.entity.Post;
 import com.playus.communityservice.domain.post.repository.write.PostRepository;
 import com.playus.communityservice.global.client.CommentNotificationEvent;
 import com.playus.communityservice.global.client.NotificationClient;
+import com.playus.communityservice.global.client.UserNotificationClient;
 import com.playus.communityservice.global.jwt.JwtUser;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
 import com.playus.communityservice.global.exception.ForbiddenAccessException;
@@ -32,6 +33,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentGroupRepository commentGroupRepository;
     private final NotificationClient notificationClient;
+    private final UserNotificationClient userNotificationClient;
 
     public CommentCreateResponse createComment(CommentCreateRequest request, JwtUser user) {
         Post post = postRepository.findById(request.postId())
@@ -116,6 +118,14 @@ public class CommentService {
             // 자식 댓글은 개별 삭제
             comment.delete();
         }
+
+        // 알림 삭제 요청 (실패해도 댓글 비활성화에 영향 없음)
+        try {
+            userNotificationClient.deleteNotificationsByCommentId(comment.getId());
+        } catch (Exception e) {
+            log.warn("알림 삭제 실패: commentId={}, error={}", comment.getId(), e.getMessage());
+        }
+
         return CommentDeleteResponse.of(true, "댓글이 삭제되었습니다.");
     }
 }
