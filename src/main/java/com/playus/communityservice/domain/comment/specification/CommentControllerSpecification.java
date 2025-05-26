@@ -64,7 +64,7 @@ public interface CommentControllerSpecification {
                                     value = """
                                             {
                                                 "commentId" : 3,
-                                                "commentGroupId" : 2
+                                                "commentGroupId" : 2,
                                                 "message" : "댓글 작성이 완료되었습니다."
                                             }
                                             """
