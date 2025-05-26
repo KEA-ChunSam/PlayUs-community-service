@@ -112,17 +112,19 @@ public class PostReadOnlyService {
                 .toList();
     }
 
-    public List<DiaryListResponse> getMyDiaries(JwtUser user, int page, int size, TeamTag teamName) {
+    public List<DiaryListResponse> getMyDiaries(JwtUser user, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<PostDocument> postPage = postRepository.findAllByWriterIdAndTagAndIsSecretTrue(user.getId(), teamName, pageable);
+        Page<PostDocument> postPage = postRepository.findAllByWriterIdAndIsSecretTrue(user.getId(), pageable);
         List<PostDocument> posts = postPage.getContent();
 
         return posts.stream()
                 .filter(post -> post.isActivated() && post.isSecret())
                 .map(post -> new DiaryListResponse(
+                        post.getId(),
                         post.getTitle(),
                         post.getImageUrl(),
-                        post.getTwpDate()
+                        post.getTwpDate(),
+                        post.getTag()
                 ))
                 .toList();
     }

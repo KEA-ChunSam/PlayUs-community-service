@@ -56,7 +56,7 @@ public interface LiveMatchDiaryControllerSpecification {
                                     value = """
                                     {
                                       "title": "LG가 이긴 날",
-                                      "image": ["post.jpg"],
+                                      "image": "post.jpg",
                                       "content": "연장까지 가서 정말 숨죽이고 지켜봤던 날이었다.",
                                       "twpDate" : "2025-05-05"
                                     }
@@ -182,7 +182,7 @@ public interface LiveMatchDiaryControllerSpecification {
                                     value = """
                                     {
                                       "title": "비 오는 날에 만끽하는 승리",
-                                      "image": ["post.jpg"],
+                                      "image": "post.jpg",
                                       "content": "우취될까봐 조마조마 했지만, 역시 KIA의 승!",
                                       "twpDate" : "2025-05-01",
                                       "isSecret": true
@@ -292,7 +292,7 @@ public interface LiveMatchDiaryControllerSpecification {
                                             	"team":"KIA",
                                              	"title":"아쉽게 패배한 날",
                                              	"date":"2025-03-20",
-                                             	"image":["LG_vs_KIA.png"],
+                                             	"image":"LG_vs_KIA.png",
                                              	"content":"마지막에 1점 차이로 역전을 당한 날..."
                                             }
                                             """
@@ -409,13 +409,13 @@ public interface LiveMatchDiaryControllerSpecification {
                                         [
                                             {
                                                 "title":"비 오는 날에 만끽하는 승리",
-                                                "thumbnail":["post.jpg"],
+                                                "thumbnail":"post.jpg",
                                                 "date":"2025-05-01",
                                                 "team":"KIA"
                                             },
                                             {
                                                 "title":"마지막 역전으로 이긴 날",
-                                                "thumbnail":["example.jpg"],
+                                                "thumbnail":"example.jpg",
                                                 "date":"2025-03-20",
                                                 "team":"LG"
                                             }
@@ -470,7 +470,7 @@ public interface LiveMatchDiaryControllerSpecification {
                     )
             )
     })
-    ResponseEntity<List<DiaryListResponse>> getMyDiaries(@PathVariable("teamName") TeamTag teamName, JwtUser user,
+    ResponseEntity<List<DiaryListResponse>> getMyDiaries(JwtUser user,
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size);
 }

@@ -54,7 +54,7 @@ public interface PostControllerSpecification {
                                     value = """
                                     {
                                       "title": "오늘 경기 재밌었어요!",
-                                      "image": ["post.jpg"],
+                                      "image": "post.jpg",
                                       "content": "LG가 이길 줄 알았죠!",
                                       "twpDate" : "2025-05-05"
                                     }
@@ -195,7 +195,7 @@ public interface PostControllerSpecification {
                                     value = """
                                     {
                                       "title": "오늘 경기 재밌었어요!",
-                                      "image": ["post.jpg"],
+                                      "image": "post.jpg",
                                       "content": "긴장하면서 시청했네요."
                                       "twpDate" : "2025-05-01",
                                       "isSecret": false
@@ -413,18 +413,18 @@ public interface PostControllerSpecification {
                                             	"writerNickname":"안타날릴",
                                             	"writerProfileImage":["profile.png"],
                                             	"activated":true,
-                                            	"image":["image.png"],
+                                            	"image":"image.png",
                                             	"content":"오늘은 LG가 이겨서 너무 행복합니다.",
                                             	"comments":[
                                             		{
                                             		"writerNickname":"난리나리라",
-                                            		"writerProfileImage":["profiles.png"],
+                                            		"writerProfileImage":"profiles.png",
                                             		"activated":true,
                                             		"content":"홈런터질때 정말 짜릿했어요",
                                             		"reComments":[
                                             			{
                                             			"writerNickname":"테스형",
-                                            			"writerProfileImage":["profile_11.png"],
+                                            			"writerProfileImage":"profile_11.png",
                                             			"activated":true,
                                             			"content":"인정입니다."
                                             			}
@@ -549,14 +549,14 @@ public interface PostControllerSpecification {
                                                 "title": "오늘 경기 어땠나요?",
                                                 "writerNickname": "LG팬",
                                                 "createdDate": "2025-05-20",
-                                                "image": ["LG.png"]
+                                                "image": "LG.png"
                                             },
                                             {
                                                 "postId": 2,
                                                 "title": "직관팟 모집",
                                                 "writerNickname": "야구사랑",
                                                 "createdDate": "2025-05-19",
-                                                "image": ["boll.jpg"]
+                                                "image": "boll.jpg"
                                             }
                                         ]
                                         """

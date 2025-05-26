@@ -8,8 +8,6 @@ import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRequest
 import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteResponse;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateRequest;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateResponse;
-import com.playus.communityservice.domain.post.dto.post_view.PostGetResponse;
-import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.service.PostReadOnlyService;
 import com.playus.communityservice.domain.post.service.PostService;
@@ -21,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -74,13 +71,12 @@ public class LiveMatchDiaryController implements LiveMatchDiaryControllerSpecifi
 
     @GetMapping("/my")
     public ResponseEntity<List<DiaryListResponse>> getMyDiaries(
-            @RequestParam TeamTag teamName,
             @AuthenticationPrincipal JwtUser user,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
 
     ) {
-        List<DiaryListResponse> response = postReadOnlyService.getMyDiaries(user, page, size, teamName);
+        List<DiaryListResponse> response = postReadOnlyService.getMyDiaries(user, page, size);
         return ResponseEntity.ok(response);
     }
 }

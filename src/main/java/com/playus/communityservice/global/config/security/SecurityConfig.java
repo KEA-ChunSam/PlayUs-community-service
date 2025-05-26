@@ -26,7 +26,8 @@ public class SecurityConfig {
     private final CorsConfigurationSource corsConfigurationSource;
 
     private static final String [] INTERNAL_PATHS = {
-            "community/api/**",
+            // "/post/**",
+            "/posts/**",
     };
 
     private String [] getWhiteList() {
