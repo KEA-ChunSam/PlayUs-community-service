@@ -41,6 +41,7 @@ public class SecurityConfig {
                 "/v3/api-docs/**",
                 "/post/**",
                 "/posts/**",
+                "/live-match-diary/**"
         };
     }
 
