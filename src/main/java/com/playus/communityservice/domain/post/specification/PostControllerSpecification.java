@@ -4,14 +4,13 @@ import com.playus.communityservice.domain.post.dto.post_view.PostGetResponse;
 import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateRequest;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateResponse;
-import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRequest;
 import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteResponse;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateRequest;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateResponse;
 import com.playus.communityservice.domain.post.dto.presigned.PresignedUrlForSaveImageRequest;
 import com.playus.communityservice.domain.post.dto.presigned.PresignedUrlForSaveImageResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
-import com.playus.communityservice.global.jwt.JwtUser;
+import com.playus.communityservice.domain.common.security.JwtUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -24,6 +23,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -54,9 +54,10 @@ public interface PostControllerSpecification {
                                     value = """
                                     {
                                       "title": "오늘 경기 재밌었어요!",
-                                      "image": ["post.jpg"],
+                                      "image": "post.jpg",
                                       "content": "LG가 이길 줄 알았죠!",
-                                      "twpDate" : "2025-05-05"
+                                      "twpDate" : "2025-05-05",
+                                      "isSecret" : false
                                     }
                                     """
                             )
@@ -194,8 +195,9 @@ public interface PostControllerSpecification {
                                     name = "게시글 수정 요청 예시",
                                     value = """
                                     {
+                                      "postId": 1,
                                       "title": "오늘 경기 재밌었어요!",
-                                      "image": ["post.jpg"],
+                                      "image": "post.jpg",
                                       "content": "긴장하면서 시청했네요."
                                       "twpDate" : "2025-05-01",
                                       "isSecret": false
@@ -282,6 +284,7 @@ public interface PostControllerSpecification {
                     )
             ),
     })
+    @PatchMapping("/post/{tag}/{postId}")
     ResponseEntity<PostUpdateResponse> updatePost(@PathVariable("tag") TeamTag tag,
                                                   @PathVariable("postId") Long postId,
                                                   @Valid @Parameter(description = "게시글 생성 요청", required = true)
@@ -413,18 +416,18 @@ public interface PostControllerSpecification {
                                             	"writerNickname":"안타날릴",
                                             	"writerProfileImage":["profile.png"],
                                             	"activated":true,
-                                            	"image":["image.png"],
+                                            	"image":"image.png",
                                             	"content":"오늘은 LG가 이겨서 너무 행복합니다.",
                                             	"comments":[
                                             		{
                                             		"writerNickname":"난리나리라",
-                                            		"writerProfileImage":["profiles.png"],
+                                            		"writerProfileImage":"profiles.png",
                                             		"activated":true,
                                             		"content":"홈런터질때 정말 짜릿했어요",
                                             		"reComments":[
                                             			{
                                             			"writerNickname":"테스형",
-                                            			"writerProfileImage":["profile_11.png"],
+                                            			"writerProfileImage":"profile_11.png",
                                             			"activated":true,
                                             			"content":"인정입니다."
                                             			}
@@ -549,14 +552,14 @@ public interface PostControllerSpecification {
                                                 "title": "오늘 경기 어땠나요?",
                                                 "writerNickname": "LG팬",
                                                 "createdDate": "2025-05-20",
-                                                "image": ["LG.png"]
+                                                "image": "LG.png"
                                             },
                                             {
                                                 "postId": 2,
                                                 "title": "직관팟 모집",
                                                 "writerNickname": "야구사랑",
                                                 "createdDate": "2025-05-19",
-                                                "image": ["boll.jpg"]
+                                                "image": "boll.jpg"
                                             }
                                         ]
                                         """

@@ -8,20 +8,17 @@ import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRequest
 import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteResponse;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateRequest;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateResponse;
-import com.playus.communityservice.domain.post.dto.post_view.PostGetResponse;
-import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.service.PostReadOnlyService;
 import com.playus.communityservice.domain.post.service.PostService;
 import com.playus.communityservice.domain.post.specification.LiveMatchDiaryControllerSpecification;
-import com.playus.communityservice.global.jwt.JwtUser;
+import com.playus.communityservice.domain.common.security.JwtUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -65,8 +62,9 @@ public class LiveMatchDiaryController implements LiveMatchDiaryControllerSpecifi
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{postId}")
-    public ResponseEntity<DiaryGetResponse> getMyDiary(@PathVariable Long postId,
+    @GetMapping("/{tag}/{postId}")
+    public ResponseEntity<DiaryGetResponse> getMyDiary(@PathVariable TeamTag tag,
+                                                       @PathVariable Long postId,
                                                        @AuthenticationPrincipal JwtUser user) {
         DiaryGetResponse response = postReadOnlyService.getMyDiary(postId, user);
         return ResponseEntity.ok(response);
@@ -74,13 +72,12 @@ public class LiveMatchDiaryController implements LiveMatchDiaryControllerSpecifi
 
     @GetMapping("/my")
     public ResponseEntity<List<DiaryListResponse>> getMyDiaries(
-            @RequestParam TeamTag teamName,
             @AuthenticationPrincipal JwtUser user,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
 
     ) {
-        List<DiaryListResponse> response = postReadOnlyService.getMyDiaries(user, page, size, teamName);
+        List<DiaryListResponse> response = postReadOnlyService.getMyDiaries(user, page, size);
         return ResponseEntity.ok(response);
     }
 }

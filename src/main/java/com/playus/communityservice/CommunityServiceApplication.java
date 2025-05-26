@@ -1,14 +1,20 @@
 package com.playus.communityservice;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@EnableFeignClients(basePackages = "com.playus.communityservice.global.client")
-@SpringBootApplication(exclude = {
-		org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration.class,
-		org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration.class
-})
+@SecurityScheme(
+		name      = "AccessCookie",
+		type      = SecuritySchemeType.APIKEY,
+		in        = SecuritySchemeIn.COOKIE,
+		paramName = "Access"
+)
+@EnableFeignClients
+@SpringBootApplication
 public class CommunityServiceApplication {
 
 	public static void main(String[] args) {

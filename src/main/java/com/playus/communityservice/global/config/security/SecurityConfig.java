@@ -39,38 +39,34 @@ public class SecurityConfig {
                 "/api-docs",
                 "/api-docs/**",
                 "/v3/api-docs/**",
-                "/oauth2/authorization/kakao",
-                "/login/oauth2/code/kakao",
-                "/oauth2/authorization/naver",
-                "/login/oauth2/code/naver",
-                "/api/v1/auth/reissue",
-                "/api/v1/auth/logout",
+                "/post/**",
+                "/posts/**",
         };
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable);
-        http.formLogin(AbstractHttpConfigurer::disable);
-        http.httpBasic(AbstractHttpConfigurer::disable);
-        http.cors((httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource)));
-        http.addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        http.csrf(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
 
-        // 인증/인가
-        http.authorizeHttpRequests(auth -> auth
-                .requestMatchers(getWhiteList())
-                .permitAll()
-                .requestMatchers(INTERNAL_PATHS)
-                .permitAll()
-                .anyRequest().authenticated()
-        );
+                // JWT 필터를 UsernamePasswordAuthenticationFilter 앞에 등록
+                .addFilterBefore(
+                        new JwtFilter(jwtUtil),
+                        UsernamePasswordAuthenticationFilter.class
+                )
 
-        // 세션 관리: Stateless
-        http.sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        );
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+
+                // 인증/인가
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(getWhiteList())
+                        .permitAll()
+                        .anyRequest().authenticated()
+                )
+
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
-
     }
 }

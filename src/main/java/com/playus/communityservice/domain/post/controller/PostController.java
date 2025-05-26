@@ -14,7 +14,7 @@ import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.service.PostReadOnlyService;
 import com.playus.communityservice.domain.post.service.PostService;
 import com.playus.communityservice.domain.post.specification.PostControllerSpecification;
-import com.playus.communityservice.global.jwt.JwtUser;
+import com.playus.communityservice.domain.common.security.JwtUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

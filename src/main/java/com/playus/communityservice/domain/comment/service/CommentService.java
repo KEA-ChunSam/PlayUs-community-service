@@ -15,7 +15,7 @@ import com.playus.communityservice.domain.post.repository.write.PostRepository;
 import com.playus.communityservice.global.client.CommentNotificationEvent;
 import com.playus.communityservice.global.client.NotificationClient;
 import com.playus.communityservice.global.client.UserNotificationClient;
-import com.playus.communityservice.global.jwt.JwtUser;
+import com.playus.communityservice.domain.common.security.JwtUser;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
 import com.playus.communityservice.global.exception.ForbiddenAccessException;
 import lombok.RequiredArgsConstructor;
@@ -42,12 +42,12 @@ public class CommentService {
         CommentGroup commentGroup;
         int order;
 
-        if (request.commentId() == null) {
+        if (request.commentGroupId() == null) {
             commentGroup = CommentGroup.create(post);
             commentGroupRepository.save(commentGroup);
             order = 1;
         } else {
-            Comment parent = commentRepository.findById(request.commentId())
+            Comment parent = commentRepository.findById(request.commentGroupId())
                     .orElseThrow(() -> new EntityNotFoundException("부모 댓글"));
             if (parent.getCommentOrder() != 1L) {
                 throw new IllegalArgumentException("부모 댓글에만 답글을 작성할 수 있습니다.");
@@ -82,7 +82,7 @@ public class CommentService {
             log.warn("댓글 알림 전송 실패: commentId={}, error={}", comment.getId(), e.getMessage());
         }
 
-        return CommentCreateResponse.of(comment.getId(), "댓글 생성이 완료되었습니다.");
+        return CommentCreateResponse.of(comment.getId(),comment.getCommentGroup().getId(), "댓글 생성이 완료되었습니다.");
     }
 
     public CommentUpdateResponse updateComment(CommentUpdateRequest request, JwtUser user) {

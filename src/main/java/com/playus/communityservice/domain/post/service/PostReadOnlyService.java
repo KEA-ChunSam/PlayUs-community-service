@@ -10,7 +10,7 @@ import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.repository.read.PostReadOnlyRepository;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
-import com.playus.communityservice.global.jwt.JwtUser;
+import com.playus.communityservice.domain.common.security.JwtUser;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -112,17 +112,19 @@ public class PostReadOnlyService {
                 .toList();
     }
 
-    public List<DiaryListResponse> getMyDiaries(JwtUser user, int page, int size, TeamTag teamName) {
+    public List<DiaryListResponse> getMyDiaries(JwtUser user, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<PostDocument> postPage = postRepository.findAllByWriterIdAndTagAndIsSecretTrue(user.getId(), teamName, pageable);
+        Page<PostDocument> postPage = postRepository.findAllByWriterIdAndIsSecretTrue(user.getId(), pageable);
         List<PostDocument> posts = postPage.getContent();
 
         return posts.stream()
                 .filter(post -> post.isActivated() && post.isSecret())
                 .map(post -> new DiaryListResponse(
+                        post.getId(),
                         post.getTitle(),
                         post.getImageUrl(),
-                        post.getTwpDate()
+                        post.getTwpDate(),
+                        post.getTag()
                 ))
                 .toList();
     }

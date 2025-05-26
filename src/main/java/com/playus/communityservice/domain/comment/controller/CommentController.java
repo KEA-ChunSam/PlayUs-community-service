@@ -8,7 +8,7 @@ import com.playus.communityservice.domain.comment.dto.comment_update.CommentUpda
 import com.playus.communityservice.domain.comment.dto.comment_update.CommentUpdateResponse;
 import com.playus.communityservice.domain.comment.service.CommentService;
 import com.playus.communityservice.domain.comment.specification.CommentControllerSpecification;
-import com.playus.communityservice.global.jwt.JwtUser;
+import com.playus.communityservice.domain.common.security.JwtUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,15 +29,17 @@ public class CommentController implements CommentControllerSpecification {
         return ResponseEntity.status(201).body(response);
     }
 
-    @PutMapping
+    @PutMapping("/{commentId}")
     public ResponseEntity<CommentUpdateResponse> updateComment(@Valid @RequestBody CommentUpdateRequest request,
+                                                               @PathVariable Long commentId,
                                                                @AuthenticationPrincipal JwtUser user) {
         CommentUpdateResponse response = commentService.updateComment(request, user);
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping
+    @PatchMapping("/{commentId}")
     public ResponseEntity<CommentDeleteResponse> deleteComment(@Valid @RequestBody CommentDeleteRequest request,
+                                                               @PathVariable Long commentId,
                                                                @AuthenticationPrincipal JwtUser user) {
         CommentDeleteResponse response = commentService.deleteComment(request, user);
         return ResponseEntity.ok(response);

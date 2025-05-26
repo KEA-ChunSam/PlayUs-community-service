@@ -23,21 +23,25 @@ public class SwaggerConfig {
 
 	@Bean
 	public OpenAPI openApi() {
-		String jwt = "JWT";
-		SecurityRequirement securityRequirement = new SecurityRequirement().addList("JWT");
-		Components components = new Components().addSecuritySchemes(jwt, new SecurityScheme()
-			.name(jwt)
-			.type(SecurityScheme.Type.HTTP)
-			.scheme("bearer")
-			.bearerFormat("JWT")
-		);
+		// Cookie 기반 인증 (Access 토큰)
+		String cookieAuth = "AccessCookie";
+		SecurityRequirement cookieRequirement = new SecurityRequirement().addList(cookieAuth);
+		SecurityScheme cookieScheme = new SecurityScheme()
+				.name("Access")
+				.type(SecurityScheme.Type.APIKEY)
+				.in(SecurityScheme.In.COOKIE);
 
+		// 서버 기본 URL
 		Server server = new Server();
 		server.setUrl("/");
 
 		return new OpenAPI()
-			.servers(List.of(server))
-			.addSecurityItem(securityRequirement)
-			.components(components);
+				.servers(List.of(server))
+
+				// 보안 요구사항 순서대로 등록
+				.addSecurityItem(cookieRequirement)
+				// 컴포넌트에 스키마 등록
+				.components(new Components()
+						.addSecuritySchemes(cookieAuth, cookieScheme));
 	}
 }
