@@ -12,13 +12,18 @@ import com.playus.communityservice.domain.comment.repository.write.CommentGroupR
 import com.playus.communityservice.domain.comment.repository.write.CommentRepository;
 import com.playus.communityservice.domain.post.entity.Post;
 import com.playus.communityservice.domain.post.repository.write.PostRepository;
+import com.playus.communityservice.global.client.CommentNotificationEvent;
+import com.playus.communityservice.global.client.NotificationClient;
+import com.playus.communityservice.global.client.UserNotificationClient;
 import com.playus.communityservice.global.jwt.JwtUser;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
 import com.playus.communityservice.global.exception.ForbiddenAccessException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -27,6 +32,8 @@ public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final CommentGroupRepository commentGroupRepository;
+    private final NotificationClient notificationClient;
+    private final UserNotificationClient userNotificationClient;
 
     public CommentCreateResponse createComment(CommentCreateRequest request, JwtUser user) {
         Post post = postRepository.findById(request.postId())
@@ -61,6 +68,20 @@ public class CommentService {
         );
 
         commentRepository.save(comment);
+
+        CommentNotificationEvent event = CommentNotificationEvent.of(
+                comment.getId(),
+                post.getId(),
+                comment.getUserId(),
+                comment.getContent(),
+                comment.isActivated()
+        );
+        try {
+            notificationClient.notifyComment(event);
+        } catch (Exception e) {
+            log.warn("댓글 알림 전송 실패: commentId={}, error={}", comment.getId(), e.getMessage());
+        }
+
         return CommentCreateResponse.of(comment.getId(), "댓글 생성이 완료되었습니다.");
     }
 
@@ -97,6 +118,14 @@ public class CommentService {
             // 자식 댓글은 개별 삭제
             comment.delete();
         }
+
+        // 알림 삭제 요청 (실패해도 댓글 비활성화에 영향 없음)
+        try {
+            userNotificationClient.deleteNotificationsByCommentId(comment.getId());
+        } catch (Exception e) {
+            log.warn("알림 삭제 실패: commentId={}, error={}", comment.getId(), e.getMessage());
+        }
+
         return CommentDeleteResponse.of(true, "댓글이 삭제되었습니다.");
     }
 }
