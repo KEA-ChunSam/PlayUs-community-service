@@ -4,14 +4,13 @@ import com.playus.communityservice.domain.post.dto.post_view.PostGetResponse;
 import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateRequest;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateResponse;
-import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRequest;
 import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteResponse;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateRequest;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateResponse;
 import com.playus.communityservice.domain.post.dto.presigned.PresignedUrlForSaveImageRequest;
 import com.playus.communityservice.domain.post.dto.presigned.PresignedUrlForSaveImageResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
-import com.playus.communityservice.global.jwt.JwtUser;
+import com.playus.communityservice.domain.common.security.JwtUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -24,6 +23,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -56,7 +56,8 @@ public interface PostControllerSpecification {
                                       "title": "오늘 경기 재밌었어요!",
                                       "image": "post.jpg",
                                       "content": "LG가 이길 줄 알았죠!",
-                                      "twpDate" : "2025-05-05"
+                                      "twpDate" : "2025-05-05",
+                                      "isSecret" : false
                                     }
                                     """
                             )
@@ -194,6 +195,7 @@ public interface PostControllerSpecification {
                                     name = "게시글 수정 요청 예시",
                                     value = """
                                     {
+                                      "postId": 1,
                                       "title": "오늘 경기 재밌었어요!",
                                       "image": "post.jpg",
                                       "content": "긴장하면서 시청했네요."
@@ -282,6 +284,7 @@ public interface PostControllerSpecification {
                     )
             ),
     })
+    @PatchMapping("/post/{tag}/{postId}")
     ResponseEntity<PostUpdateResponse> updatePost(@PathVariable("tag") TeamTag tag,
                                                   @PathVariable("postId") Long postId,
                                                   @Valid @Parameter(description = "게시글 생성 요청", required = true)

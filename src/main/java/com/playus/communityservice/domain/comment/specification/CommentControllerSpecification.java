@@ -6,7 +6,7 @@ import com.playus.communityservice.domain.comment.dto.comment_delete.CommentDele
 import com.playus.communityservice.domain.comment.dto.comment_delete.CommentDeleteResponse;
 import com.playus.communityservice.domain.comment.dto.comment_update.CommentUpdateRequest;
 import com.playus.communityservice.domain.comment.dto.comment_update.CommentUpdateResponse;
-import com.playus.communityservice.global.jwt.JwtUser;
+import com.playus.communityservice.domain.common.security.JwtUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -45,7 +46,6 @@ public interface CommentControllerSpecification {
                                     value = """
                                     {
                                       "postId": 1,
-                                      "commentId" : 1,
                                       "commentGroupId" : 2,
                                       "content": "오늘 경기 재미있었어요"
                                     }
@@ -63,7 +63,8 @@ public interface CommentControllerSpecification {
                                     name = "커뮤니티 댓글 생성 응답 예시",
                                     value = """
                                             {
-                                                "commentId" : 1,
+                                                "commentId" : 3,
+                                                "commentGroupId" : 2
                                                 "message" : "댓글 작성이 완료되었습니다."
                                             }
                                             """
@@ -156,6 +157,7 @@ public interface CommentControllerSpecification {
             ),
     })
     ResponseEntity<CommentDeleteResponse> deleteComment(@Valid CommentDeleteRequest request,
+                                                        @PathVariable("commentId") Long commentId,
                                                         JwtUser user);
 
     @Tag(name = "Comment", description = "커뮤니티 댓글 수정 API")
@@ -171,6 +173,7 @@ public interface CommentControllerSpecification {
                                     value = """
                                             {
                                                 "commentId" : 1,
+                                                "commentGroupId" : 2,
                                                 "content" : "아슬아슬하게 이겼네요!"
                                             }
                                             """
@@ -241,5 +244,6 @@ public interface CommentControllerSpecification {
             ),
     })
     ResponseEntity<CommentUpdateResponse> updateComment(@Valid CommentUpdateRequest request,
+                                                        @PathVariable("commentId") Long commentId,
                                                         JwtUser user);
 }

@@ -2,18 +2,13 @@ package com.playus.communityservice.domain.post.specification;
 
 import com.playus.communityservice.domain.post.dto.diary_view.DiaryGetResponse;
 import com.playus.communityservice.domain.post.dto.diary_view.DiaryListResponse;
-import com.playus.communityservice.domain.post.dto.post_view.PostGetResponse;
-import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateRequest;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateResponse;
-import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteRequest;
 import com.playus.communityservice.domain.post.dto.post_delete.PostDeleteResponse;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateRequest;
 import com.playus.communityservice.domain.post.dto.post_update.PostUpdateResponse;
-import com.playus.communityservice.domain.post.dto.presigned.PresignedUrlForSaveImageRequest;
-import com.playus.communityservice.domain.post.dto.presigned.PresignedUrlForSaveImageResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
-import com.playus.communityservice.global.jwt.JwtUser;
+import com.playus.communityservice.domain.common.security.JwtUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -58,7 +53,8 @@ public interface LiveMatchDiaryControllerSpecification {
                                       "title": "LG가 이긴 날",
                                       "image": "post.jpg",
                                       "content": "연장까지 가서 정말 숨죽이고 지켜봤던 날이었다.",
-                                      "twpDate" : "2025-05-05"
+                                      "twpDate" : "2025-05-05",
+                                      "isSecret": true
                                     }
                                     """
                             )
@@ -181,6 +177,7 @@ public interface LiveMatchDiaryControllerSpecification {
                                     name = "직관일지 수정 요청 예시",
                                     value = """
                                     {
+                                      "postId": 1,
                                       "title": "비 오는 날에 만끽하는 승리",
                                       "image": "post.jpg",
                                       "content": "우취될까봐 조마조마 했지만, 역시 KIA의 승!",
@@ -360,7 +357,8 @@ public interface LiveMatchDiaryControllerSpecification {
                     )
             )
     })
-    ResponseEntity<DiaryGetResponse> getMyDiary(@PathVariable("postId") Long postId,
+    ResponseEntity<DiaryGetResponse> getMyDiary(@PathVariable("tag") TeamTag tag,
+                                                @PathVariable("postId") Long postId,
                                                 JwtUser user);
 
     @Tag(name = "Get", description = "나의 직관일지 목록 조회 API")

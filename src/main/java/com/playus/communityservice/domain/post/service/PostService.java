@@ -1,7 +1,6 @@
 package com.playus.communityservice.domain.post.service;
 
 import com.playus.communityservice.domain.comment.entity.Comment;
-import com.playus.communityservice.domain.comment.entity.CommentGroup;
 import com.playus.communityservice.domain.comment.repository.write.CommentGroupRepository;
 import com.playus.communityservice.domain.comment.repository.write.CommentRepository;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateRequest;
@@ -15,15 +14,13 @@ import com.playus.communityservice.domain.post.dto.presigned.PresignedUrlForSave
 import com.playus.communityservice.domain.post.entity.Post;
 import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.repository.write.PostRepository;
-import com.playus.communityservice.global.jwt.JwtUser;
+import com.playus.communityservice.domain.common.security.JwtUser;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
 import com.playus.communityservice.global.exception.ForbiddenAccessException;
 import com.playus.communityservice.global.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +50,7 @@ public class PostService {
         return createPostInternal(request, user, tag, true);
     }
 
-    private PostCreateResponse createPostInternal(PostCreateRequest request, JwtUser user, TeamTag tag, boolean expectedIsSecret) {
+    private PostCreateResponse createPostInternal(PostCreateRequest request, JwtUser user, TeamTag tag, boolean isSecret) {
         Post post = Post.create(
                 user.getId(),
                 request.title(),
@@ -61,11 +58,11 @@ public class PostService {
                 tag,
                 request.twpDate(),
                 request.image(),
-                expectedIsSecret
+                isSecret
         );
         postRepository.save(post);
 
-        String message = expectedIsSecret ? "직관일지 생성이 완료되었습니다." : "게시물 생성이 완료되었습니다.";
+        String message = isSecret ? "직관일지 생성이 완료되었습니다." : "게시물 생성이 완료되었습니다.";
         return PostCreateResponse.of(post.getId(), message);
     }
 
@@ -81,20 +78,17 @@ public class PostService {
     }
 
     // 공통 로직 메서드
-    private PostUpdateResponse updatePostInternal(PostUpdateRequest request, JwtUser user, TeamTag tag, boolean expectedIsSecret) {
+    private PostUpdateResponse updatePostInternal(PostUpdateRequest request, JwtUser user, TeamTag tag, boolean isSecret) {
 
         Post post = postRepository.findById(request.postId())
-                .orElseThrow(() -> new EntityNotFoundException(expectedIsSecret ? "직관일지" : "게시글"));
+                .orElseThrow(() -> new EntityNotFoundException(isSecret ? "직관일지" : "게시글"));
 
-        if (post.isSecret() != expectedIsSecret) {
-            throw new IllegalArgumentException("잘못된 요청입니다. 엔드포인트를 확인해 주세요.");
-        }
 
         if (!post.getWriterId().equals(user.getId())) {
-            throw new ForbiddenAccessException(expectedIsSecret ? "직관일지" : "게시글");
+            throw new ForbiddenAccessException(isSecret ? "직관일지" : "게시글");
         }
 
-        if (expectedIsSecret && request.twpDate() == null) {
+        if (isSecret && request.twpDate() == null) {
             throw new IllegalArgumentException("직관일지는 twpDate가 필수입니다.");
         }
 
@@ -108,12 +102,12 @@ public class PostService {
                 request.title(),
                 request.content(),
                 tag,
-                expectedIsSecret,
+                isSecret,
                 request.twpDate(),
                 request.image()
         );
 
-        return PostUpdateResponse.of(true, (expectedIsSecret ? "직관일지" : "게시글") + "이(가) 수정되었습니다.");
+        return PostUpdateResponse.of(true, (isSecret ? "직관일지" : "게시글") + "이(가) 수정되었습니다.");
     }
 
 
