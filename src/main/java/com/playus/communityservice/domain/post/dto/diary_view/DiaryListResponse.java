@@ -9,5 +9,5 @@ public record DiaryListResponse(
         String title,
         String thumbnail,
         LocalDate date,
-        TeamTag TeamName
+        TeamTag teamName
 ) {}
