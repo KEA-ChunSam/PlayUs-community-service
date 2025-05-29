@@ -500,7 +500,8 @@ public interface PostControllerSpecification {
                     )
             )
     })
-    ResponseEntity<PostGetResponse> getPost(@PathVariable("postId") Long postId,
+    ResponseEntity<PostGetResponse> getPost(@PathVariable("teamName") TeamTag teamName,
+                                            @PathVariable("postId") Long postId,
                                             JwtUser user);
 
     @Tag(name = "Get", description = "커뮤니티 글 목록 조회 API")

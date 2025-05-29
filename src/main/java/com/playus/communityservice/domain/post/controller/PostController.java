@@ -69,8 +69,9 @@ public class PostController implements PostControllerSpecification {
         return postService.generatePresignedUrlForSaveImage(request);
     }
 
-    @GetMapping("/{postId}")
-    public ResponseEntity<PostGetResponse> getPost(@PathVariable Long postId,
+    @GetMapping("/{tag}/{postId}")
+    public ResponseEntity<PostGetResponse> getPost(@PathVariable TeamTag tag,
+                                                   @PathVariable Long postId,
                                                    @AuthenticationPrincipal JwtUser user) {
         PostGetResponse response = postReadOnlyService.getPost(postId, user);
         return ResponseEntity.ok(response);
