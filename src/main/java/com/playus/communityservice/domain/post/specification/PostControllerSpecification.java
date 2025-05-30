@@ -500,7 +500,7 @@ public interface PostControllerSpecification {
                     )
             )
     })
-    ResponseEntity<PostGetResponse> getPost(@PathVariable("teamName") TeamTag teamName,
+    ResponseEntity<PostGetResponse> getPost(@PathVariable("tag") TeamTag tag,
                                             @PathVariable("postId") Long postId,
                                             JwtUser user);
 

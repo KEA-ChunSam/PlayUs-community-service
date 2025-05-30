@@ -97,7 +97,7 @@ public class PostReadOnlyService {
 
     public List<PostListResponse> getPostsByTeam(TeamTag tag, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<PostDocument> postPage = postRepository.findAllByTag(tag, pageable);
+        Page<PostDocument> postPage = postRepository.findAllByTagAndIsSecretFalse(tag, pageable);
         List<PostDocument> posts = postPage.getContent();
 
         return posts.stream()

@@ -13,7 +13,6 @@ import com.playus.communityservice.domain.comment.repository.write.CommentReposi
 import com.playus.communityservice.domain.post.entity.Post;
 import com.playus.communityservice.domain.post.repository.write.PostRepository;
 import com.playus.communityservice.global.client.CommentNotificationEvent;
-import com.playus.communityservice.global.client.NotificationClient;
 import com.playus.communityservice.global.client.UserNotificationClient;
 import com.playus.communityservice.domain.common.security.JwtUser;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
@@ -32,7 +31,6 @@ public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final CommentGroupRepository commentGroupRepository;
-    private final NotificationClient notificationClient;
     private final UserNotificationClient userNotificationClient;
 
     public CommentCreateResponse createComment(CommentCreateRequest request, JwtUser user) {
@@ -77,7 +75,7 @@ public class CommentService {
                 comment.isActivated()
         );
         try {
-            notificationClient.notifyComment(event);
+            userNotificationClient.notifyComment(event);
         } catch (Exception e) {
             log.warn("댓글 알림 전송 실패: commentId={}, error={}", comment.getId(), e.getMessage());
         }
