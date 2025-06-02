@@ -56,7 +56,7 @@ public class PostController implements PostControllerSpecification {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("{postId}")
+    @PatchMapping("/{postId}")
     public ResponseEntity<PostDeleteResponse> deletePost(@PathVariable Long postId,
                                                      @AuthenticationPrincipal JwtUser user) {
         PostDeleteRequest request = new PostDeleteRequest(postId);
