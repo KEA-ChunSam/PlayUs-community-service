@@ -15,7 +15,7 @@ spring:
     # OCI 프록시 환경 최적화 HikariCP 설정
     hikari:
       connection-timeout: 60000          # OCI 네트워크 지연 고려 60초
-      idle-timeout: 120000               # OCI 프록시가 빨리 끊으므로 1분
+      idle-timeout: 120000               # OCI 프록시가 빨리 끊으므로 2분
       max-lifetime: 300000               # OCI 프록시 정책 고려 5분
       keepalive-time: 60000
       maximum-pool-size: 5               # 작은 풀 크기 (OCI 동시 연결 제한)
