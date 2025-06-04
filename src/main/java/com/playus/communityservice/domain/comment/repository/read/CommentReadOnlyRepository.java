@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface CommentReadOnlyRepository extends MongoRepository<CommentDocument, Long> {
-    List<CommentDocument> findAllByCommentGroup_Post(PostDocument post);
+    List<CommentDocument> findAllByCommentGroup_Post_Id(Long postId);
 }

@@ -38,7 +38,7 @@ public class PostReadOnlyService {
 
         post.increaseView();
 
-        List<CommentDocument> allComments = commentRepository.findAllByCommentGroup_Post(post);
+        List<CommentDocument> allComments = commentRepository.findAllByCommentGroup_Post_Id(post.getId());
 
         List<PostGetResponse.CommentDto> comments = allComments.stream()
                 .filter(c -> c.getCommentOrder() == 1L)
