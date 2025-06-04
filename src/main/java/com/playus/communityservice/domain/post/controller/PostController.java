@@ -86,4 +86,10 @@ public class PostController implements PostControllerSpecification {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/writer/{writerId}")
+    public ResponseEntity<List<PostListResponse>> getPostsByWriter(@PathVariable Long writerId) {
+        List<PostListResponse> response = postReadOnlyService.getPostsByWriter(writerId);
+        return ResponseEntity.ok(response);
+    }
+
 }

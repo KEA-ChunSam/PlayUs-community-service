@@ -395,20 +395,6 @@ public interface LiveMatchDiaryControllerSpecification {
                             in = ParameterIn.PATH,
                             required = true,
                             example = "LG"
-                    ),
-                    @Parameter(
-                            name = "page",
-                            description = "페이지 번호 (0부터 시작)",
-                            in = ParameterIn.QUERY,
-                            required = false,
-                            example = "0"
-                    ),
-                    @Parameter(
-                            name = "size",
-                            description = "페이지 크기 (기본 10개)",
-                            in = ParameterIn.QUERY,
-                            required = false,
-                            example = "10"
                     )
             }
     )

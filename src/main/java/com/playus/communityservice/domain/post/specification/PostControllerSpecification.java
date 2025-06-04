@@ -1,5 +1,6 @@
 package com.playus.communityservice.domain.post.specification;
 
+import com.playus.communityservice.domain.post.dto.diary_view.DiaryGetResponse;
 import com.playus.communityservice.domain.post.dto.post_view.PostGetResponse;
 import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.dto.post_create.PostCreateRequest;
@@ -538,20 +539,6 @@ public interface PostControllerSpecification {
                             in = ParameterIn.PATH,
                             required = true,
                             example = "LG"
-                    ),
-                    @Parameter(
-                            name = "page",
-                            description = "페이지 번호 (0부터 시작)",
-                            in = ParameterIn.QUERY,
-                            required = false,
-                            example = "0"
-                    ),
-                    @Parameter(
-                            name = "size",
-                            description = "페이지 크기 (기본 10개)",
-                            in = ParameterIn.QUERY,
-                            required = false,
-                            example = "10"
                     )
             }
     )
@@ -631,6 +618,94 @@ public interface PostControllerSpecification {
     })
     ResponseEntity<List<PostListResponse>> getPostsByTeam(@PathVariable("teamName") TeamTag teamName,
                                                           JwtUser user);
+
+    @Tag(name = "Get", description = "다른 유저 게시글 조회")
+    @Operation(
+            summary = "다른 유저 게시글 조회",
+            description = "특정 유저가 작성한 게시글의 목록을 조회합니다.",
+            parameters = {
+                    @Parameter(
+                            name = "Access",
+                            description = "JWT Access Token (쿠키)",
+                            in = ParameterIn.COOKIE,
+                            required = true,
+                            example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    ),
+                    @Parameter(
+                            name = "writerId",
+                            in = ParameterIn.PATH,
+                            description = "유저 ID",
+                            required = true,
+                            example = "1"
+                    )
+            }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200", description = "조회 성공",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    name = "다른 유저 게시글 목록 조회 응답 예시",
+                                    value = """
+                                            {
+                                            	"postId" : 1,
+                                            	"title" : "오늘은 직관은 아니지만..."
+                                            	"twpDate" : "2025-06-03",
+                                            	"nickname" : "KSH"
+                                            	"image" : "KSH.png"
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400", description = "postID가 1 미만일 경우 발생",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "code": 400,
+                                              "status": "BAD_REQUEST",
+                                              "message": "postID는 1 이상이여야 합니다!"
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401", description = "인증 실패",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "code": 401,
+                                              "status": "UNAUTHORIZED",
+                                              "message": "유효하지 않은 토큰입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500", description = "서버 내부 오류",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "code": 500,
+                                              "status": "INTERNAL_SERVER_ERROR",
+                                              "message": "서버 내부 오류가 발생했습니다. 관리자에게 문의해 주세요."
+                                            }
+                                            """
+                            )
+                    )
+            )
+    })
+    ResponseEntity<List<PostListResponse>> getPostsByWriter(@PathVariable("writerId") Long writerId);
 }
 
 

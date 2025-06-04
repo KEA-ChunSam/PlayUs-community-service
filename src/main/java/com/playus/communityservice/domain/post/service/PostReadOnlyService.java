@@ -127,6 +127,21 @@ public class PostReadOnlyService {
                 .toList();
     }
 
+    public List<PostListResponse> getPostsByWriter(Long writerId) {
+        List<PostDocument> posts = postRepository.findAllByWriterIdAndIsSecretFalse(writerId);
+
+        return posts.stream()
+                .filter(PostDocument::isActivated)
+                .map(post -> new PostListResponse(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getTwpDate(),
+                        getNickname(post.getWriterId()),
+                        post.getImageUrl()
+                ))
+                .toList();
+    }
+
 
     private String getNickname(Long userId) {
         return "User#" + userId; // TODO: 유저 서비스 연동
