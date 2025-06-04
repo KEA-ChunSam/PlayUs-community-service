@@ -119,13 +119,21 @@ public interface PostControllerSpecification {
     @Operation(
             summary = "커뮤니티 글 삭제",
             description = "작성자가 커뮤니티 글을 삭제합니다.",
-            parameters = @Parameter(
+            parameters = {
+                    @Parameter(
+                            name = "Access",
+                            description = "JWT access token (쿠키)",
+                            in = ParameterIn.COOKIE,
+                            required = true,
+                            example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    ),
+                    @Parameter(
                     name = "postId",
                     in = ParameterIn.PATH,
                     required = true,
                     description = "삭제할 게시글 ID",
                     example = "1"
-            )
+            )}
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -180,13 +188,21 @@ public interface PostControllerSpecification {
     @Operation(
             summary = "커뮤니티 글 수정",
             description = "작성자가 게시글을 수정합니다.",
-            parameters = @Parameter(
+            parameters = {
+                    @Parameter(
+                            name = "Access",
+                            description = "JWT access token (쿠키)",
+                            in = ParameterIn.COOKIE,
+                            required = true,
+                            example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    ),
+                    @Parameter(
                     name = "postId",
                     in = ParameterIn.PATH,
                     required = true,
                     description = "수정할 게시글 ID",
                     example = "1"
-            ),
+            )},
             requestBody = @RequestBody(
                     required = true,
                     content = @Content(
