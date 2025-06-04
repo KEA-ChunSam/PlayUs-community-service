@@ -648,19 +648,21 @@ public interface PostControllerSpecification {
                             examples = @ExampleObject(
                                     name = "다른 유저 게시글 목록 조회 응답 예시",
                                     value = """
-                                            {
-                                            	"postId" : 1,
-                                            	"title" : "오늘은 직관은 아니지만..."
-                                            	"twpDate" : "2025-06-03",
-                                            	"nickname" : "KSH"
-                                            	"image" : "KSH.png"
-                                            }
+                                            [
+                                                {
+                                            	    "postId" : 1,
+                                            	    "title" : "오늘은 직관은 아니지만..."
+                                            	    "twpDate" : "2025-06-03",
+                                            	    "nickname" : "KSH"
+                                            	    "image" : "KSH.png"
+                                                }
+                                            ]
                                             """
                             )
                     )
             ),
             @ApiResponse(
-                    responseCode = "400", description = "postID가 1 미만일 경우 발생",
+                    responseCode = "400", description = "writerID가 1 미만일 경우 발생",
                     content = @Content(
                             mediaType = APPLICATION_JSON_VALUE,
                             examples = @ExampleObject(
@@ -668,7 +670,7 @@ public interface PostControllerSpecification {
                                             {
                                               "code": 400,
                                               "status": "BAD_REQUEST",
-                                              "message": "postID는 1 이상이여야 합니다!"
+                                              "message": "writerID는 1 이상이여야 합니다!"
                                             }
                                             """
                             )
@@ -705,7 +707,8 @@ public interface PostControllerSpecification {
                     )
             )
     })
-    ResponseEntity<List<PostListResponse>> getPostsByWriter(@PathVariable("writerId") Long writerId);
+    ResponseEntity<List<PostListResponse>> getPostsByWriter(@PathVariable("writerId") Long writerId,
+                                                            JwtUser user);
 }
 
 
