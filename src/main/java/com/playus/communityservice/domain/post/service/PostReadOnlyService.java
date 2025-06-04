@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 
 @Service
@@ -128,6 +129,10 @@ public class PostReadOnlyService {
     }
 
     public List<PostListResponse> getPostsByWriter(Long writerId) {
+        if (writerId == null || writerId <= 0) {
+            throw new InvalidParameterException("유효하지 않은 작성자 ID입니다.");
+        }
+
         List<PostDocument> posts = postRepository.findAllByWriterIdAndIsSecretFalse(writerId);
 
         return posts.stream()
