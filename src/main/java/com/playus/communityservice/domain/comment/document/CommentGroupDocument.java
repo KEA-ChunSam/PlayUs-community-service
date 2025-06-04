@@ -17,20 +17,19 @@ public class CommentGroupDocument {
     private Long id;
 
     @NotNull
-    @DBRef(lazy = true)
     @Field(name = "post_id")
-    private PostDocument post;
+    private Long postId;
 
     @Builder
-    private CommentGroupDocument(Long id, PostDocument post) {
+    private CommentGroupDocument(Long id, Long postId) {
         this.id = id;
-        this.post = post;
+        this.postId = postId;
     }
 
-    public static CommentGroupDocument createForOnlyTest(Long id, PostDocument post) {
+    public static CommentGroupDocument createForOnlyTest(Long id, Long postId) {
         return CommentGroupDocument.builder()
                 .id(id)
-                .post(post)
+                .postId(postId)
                 .build();
     }
     @Override

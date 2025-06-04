@@ -39,7 +39,7 @@ public class PostDocument {
     @Field(name = "is_secret")
     private boolean isSecret;
 
-    @Field(name = "jwp_date")
+    @Field(name = "twp_date")
     private LocalDate twpDate;
 
     @Field(name = "image_url")

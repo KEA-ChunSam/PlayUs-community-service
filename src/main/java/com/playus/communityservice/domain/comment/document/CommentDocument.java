@@ -19,9 +19,8 @@ public class CommentDocument extends BaseTimeEntity {
     private Long userId;
 
     @NotNull
-    @DBRef(lazy = true)
     @Field(name = "comment_group_id")
-    private CommentGroupDocument commentGroup;
+    private Long commentGroupId;
 
     @NotNull
     @Field(name = "comment_order")
@@ -34,20 +33,20 @@ public class CommentDocument extends BaseTimeEntity {
     private boolean activated;
 
     @Builder
-    private CommentDocument(Long id, Long userId, CommentGroupDocument commentGroup, Long commentOrder, String content, boolean activated) {
+    private CommentDocument(Long id, Long userId, Long commentGroupId, Long commentOrder, String content, boolean activated) {
         this.id = id;
         this.userId = userId;
-        this.commentGroup = commentGroup;
+        this.commentGroupId = commentGroupId;
         this.commentOrder = commentOrder;
         this.content = content;
         this.activated = activated;
     }
 
-    public static CommentDocument createForOnlyTest(Long id, Long userId, CommentGroupDocument commentGroup, Long commentOrder, String content) {
+    public static CommentDocument createForOnlyTest(Long id, Long userId, Long commentGroupId, Long commentOrder, String content) {
         return CommentDocument.builder()
                 .id(id)
                 .userId(userId)
-                .commentGroup(commentGroup)
+                .commentGroupId(commentGroupId)
                 .commentOrder(commentOrder)
                 .content(content)
                 .activated(true)

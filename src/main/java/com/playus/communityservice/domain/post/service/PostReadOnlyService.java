@@ -1,7 +1,11 @@
 package com.playus.communityservice.domain.post.service;
 
 import com.playus.communityservice.domain.comment.document.CommentDocument;
+import com.playus.communityservice.domain.comment.document.CommentGroupDocument;
+import com.playus.communityservice.domain.comment.entity.CommentGroup;
+import com.playus.communityservice.domain.comment.repository.read.CommentGroupReadOnlyRepository;
 import com.playus.communityservice.domain.comment.repository.read.CommentReadOnlyRepository;
+import com.playus.communityservice.domain.comment.repository.write.CommentGroupRepository;
 import com.playus.communityservice.domain.post.document.PostDocument;
 import com.playus.communityservice.domain.post.dto.diary_view.DiaryGetResponse;
 import com.playus.communityservice.domain.post.dto.diary_view.DiaryListResponse;
@@ -29,6 +33,7 @@ public class PostReadOnlyService {
 
     private final PostReadOnlyRepository postRepository;
     private final CommentReadOnlyRepository commentRepository;
+    private final CommentGroupReadOnlyRepository commentGroupRepository;
 
     public PostGetResponse getPost(Long postId, JwtUser user) {
         PostDocument post = postRepository.findById(postId)
@@ -40,13 +45,22 @@ public class PostReadOnlyService {
 
         post.increaseView();
 
-        List<CommentDocument> allComments = commentRepository.findAllByCommentGroup_Post_Id(post.getId());
+        List<CommentGroupDocument> groups = commentGroupRepository.findAllByPostId(postId); // 엔티티 직접
+        System.out.println("Group count = " + groups.size());
+
+        List<Long> groupIds = groups.stream()
+                .map(CommentGroupDocument::getId)
+                .toList();
+
+        List<CommentDocument> allComments = commentRepository.findAllByCommentGroupIdIn(groupIds); // 객체 리스트로 조회
+        System.out.println("Comment count = " + allComments.size());
+
 
         List<PostGetResponse.CommentDto> comments = allComments.stream()
                 .filter(c -> c.getCommentOrder() == 1L)
                 .map(comment -> {
                     List<PostGetResponse.ReCommentDto> reComments = allComments.stream()
-                            .filter(reply -> reply.getCommentGroup().getId().equals(comment.getCommentGroup().getId())
+                            .filter(reply -> reply.getCommentGroupId().equals(comment.getCommentGroupId())
                                     && reply.getCommentOrder() > 1L)
                             .map(reply -> new PostGetResponse.ReCommentDto(
                                     reply.getId(),
