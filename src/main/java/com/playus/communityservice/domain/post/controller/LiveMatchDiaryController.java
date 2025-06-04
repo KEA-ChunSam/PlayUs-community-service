@@ -37,7 +37,7 @@ public class LiveMatchDiaryController implements LiveMatchDiaryControllerSpecifi
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{tag}/{postId}")
+    @PutMapping("/{tag}/{postId}")
     public ResponseEntity<PostUpdateResponse> updatePost(@PathVariable TeamTag tag,
                                                          @PathVariable Long postId,
                                                          @Valid @RequestBody PostUpdateRequest request,
@@ -54,7 +54,7 @@ public class LiveMatchDiaryController implements LiveMatchDiaryControllerSpecifi
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{postId}")
+    @PatchMapping("/{postId}")
     public ResponseEntity<PostDeleteResponse> deletePost(@PathVariable Long postId,
                                                          @AuthenticationPrincipal JwtUser user) {
         PostDeleteRequest request = new PostDeleteRequest(postId);
