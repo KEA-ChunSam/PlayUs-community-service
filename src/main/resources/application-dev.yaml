@@ -1,3 +1,6 @@
+server:
+  forward-headers-strategy: framework  # ALB HTTPS 헤더 인식
+
 spring:
   application:
     name: community-service
@@ -5,29 +8,52 @@ spring:
     import: optional:file:.env[.properties]
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
+    url: ${SPRING_DATASOURCE_URL}?useSSL=false&socketTimeout=60000&connectTimeout=60000
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    # OCI 프록시 환경 최적화 HikariCP 설정
+    hikari:
+      connection-timeout: 60000          # OCI 네트워크 지연 고려 60초
+      idle-timeout: 120000               # OCI 프록시가 빨리 끊으므로 2분
+      max-lifetime: 300000               # OCI 프록시 정책 고려 5분
+      keepalive-time: 60000
+      maximum-pool-size: 5               # 작은 풀 크기 (OCI 동시 연결 제한)
+      minimum-idle: 1                    # 최소한만 유지
+      validation-timeout: 10000          # 네트워크 지연 고려 10초
+      leak-detection-threshold: 30000    # 30초로 단축
+      connection-test-query: "SELECT 1"  # 연결 검증 쿼리
+      auto-commit: false
 
   data:
     mongodb:
-      uri: ${SPRING_DATA_MONGODB_READ_URI}
+      uri: ${SPRING_DATA_MONGODB_READ_URI}&connectTimeoutMS=30000&socketTimeoutMS=60000&serverSelectionTimeoutMS=10000&maxIdleTimeMS=60000
 
   jwt:
     secret: ${JWT_SECRET}
 
   jpa:
-    show-sql: true
+    database: mysql
     hibernate:
       ddl-auto: update
-    database: mysql
+    show-sql: false
+    open-in-view: false  # 성능 개선을 위해 추가
     properties:
-      hibernate:
-        format_sql: true
-        jdbc:
-          time_zone: Asia/Seoul
-        show_sql: true
+      hibernate.format_sql: false
+      hibernate.show_sql: false
+      hibernate.jdbc.time_zone: Asia/Seoul
+
+      hibernate.jdbc.batch_size: 10     # 배치 활성화
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      hibernate.jdbc.batch_versioned_data: true
+
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+
+      hibernate.jdbc.fetch_size: 50
+      hibernate.default_batch_fetch_size: 16
 
 cloud:
   aws:
@@ -37,22 +63,6 @@ cloud:
     s3:
       bucket: ${BUCKET_NAME}
       endpoint: ${BUCKET_ENDPOINT}
-
-sentry:
-  dsn: ${SENTRY_REPOSITORY_DSN}
-  environment: ${SENTRY_ENVIRONMENT}
-  servername: ${SENTRY_SERVERNAME}
-  repository-uri: ${SENTRY_REPOSITORY_URI}
-
-slack:
-  webhook-url: ${SLACK_WEBHOOK_URL}
-
-logging:
-  config: classpath:logback-spring.xml
-
-feign:
-  user:
-    url: ${FEIGN_USER_URL}
 
 management:
   endpoints:
@@ -66,3 +76,71 @@ management:
   endpoint:
     health:
       show-details: never
+
+sentry:
+  dsn: ${SENTRY_REPOSITORY_DSN}
+  environment: ${SENTRY_ENVIRONMENT}
+  servername: ${SENTRY_SERVERNAME}
+  repository-uri: ${SENTRY_REPOSITORY_URI}
+
+logging:
+  config: classpath:logback-spring.xml
+
+slack:
+  webhook-url: ${SLACK_WEBHOOK_URL}
+
+feign:
+  user:
+    url: ${FEIGN_USER_URL}
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        failure-rate-threshold: 50
+        slow-call-rate-threshold: 70
+        slow-call-duration-threshold: 10s
+        permitted-number-of-calls-in-half-open-state: 3
+        max-wait-duration-in-half-open-state: 0s
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        wait-duration-in-open-state: 15s
+    instances:
+      circuit:
+        base-config: default
+
+  # OCI 환경 Retry 설정 추가
+  retry:
+    configs:
+      default:
+        max-attempts: 5    # OCI 환경에서 재시도 증가
+        wait-duration: 1s
+        exponential-backoff-multiplier: 2  # 지수 증가
+        retry-exceptions:
+          - java.sql.SQLException
+          - com.mysql.cj.jdbc.exceptions.CommunicationsException
+          - java.net.SocketTimeoutException
+          - java.net.ConnectException
+          - org.springframework.dao.TransientDataAccessException
+    instances:
+      database:
+        base-config: default
+
+  bulkhead:
+    configs:
+      default:
+        max-concurrent-calls: 10
+        max-wait-duration: 5s
+    instances:
+      database:
+        base-config: default
+        max-concurrent-calls: 5
+
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 60s
+    instances:
+      feign:
+        base-config: default
