@@ -430,7 +430,7 @@ public interface PostControllerSpecification {
                                             	"title":"오늘의 승리는 LG",
                                             	"date":"2025-03-20T00:00:00",
                                             	"writerNickname":"안타날릴",
-                                            	"writerProfileImage":["profile.png"],
+                                            	"writerProfileImage":"profile.png",
                                             	"activated":true,
                                             	"image":"image.png",
                                             	"content":"오늘은 LG가 이겨서 너무 행복합니다.",
@@ -629,9 +629,8 @@ public interface PostControllerSpecification {
                     )
             )
     })
-    ResponseEntity<List<PostListResponse>> getPostsByTeam(@PathVariable("teamName") TeamTag teamName, JwtUser user,
-                                                          @RequestParam(defaultValue = "0") int page,
-                                                          @RequestParam(defaultValue = "10") int size);
+    ResponseEntity<List<PostListResponse>> getPostsByTeam(@PathVariable("teamName") TeamTag teamName,
+                                                          JwtUser user);
 }
 
 

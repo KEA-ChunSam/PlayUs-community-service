@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface PostReadOnlyRepository extends MongoRepository<PostDocument, Long> {
-    Page<PostDocument> findAllByTagAndIsSecretFalse(TeamTag tag, Pageable pageable);
-    Page<PostDocument> findAllByWriterIdAndIsSecretTrue(Long writerId, Pageable pageable);
+    List<PostDocument> findAllByTagAndIsSecretFalse(TeamTag tag);
+    List<PostDocument> findAllByWriterIdAndIsSecretTrue(Long writerId);
 
 }
