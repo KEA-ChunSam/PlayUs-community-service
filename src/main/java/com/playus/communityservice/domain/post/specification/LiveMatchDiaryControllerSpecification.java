@@ -116,13 +116,21 @@ public interface LiveMatchDiaryControllerSpecification {
     @Operation(
             summary = "직관일지 삭제",
             description = "작성자가 직관일지를 삭제합니다.",
-            parameters = @Parameter(
+            parameters = {
+                    @Parameter(
+                            name = "Access",
+                            description = "JWT access token (쿠키)",
+                            in = ParameterIn.COOKIE,
+                            required = true,
+                            example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    ),
+                    @Parameter(
                     name = "postId",
                     in = ParameterIn.PATH,
                     required = true,
                     description = "삭제할 직관일지 ID",
                     example = "1"
-            )
+            )}
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -162,13 +170,21 @@ public interface LiveMatchDiaryControllerSpecification {
     @Operation(
             summary = "직관일지 수정",
             description = "작성자가 직관일지를 수정합니다.",
-            parameters = @Parameter(
+            parameters = {
+                    @Parameter(
+                            name = "Access",
+                            description = "JWT access token (쿠키)",
+                            in = ParameterIn.COOKIE,
+                            required = true,
+                            example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    ),
+                    @Parameter(
                     name = "postId",
                     in = ParameterIn.PATH,
                     required = true,
                     description = "수정할 직관일지 ID",
                     example = "1"
-            ),
+            )},
             requestBody = @RequestBody(
                     required = true,
                     content = @Content(
