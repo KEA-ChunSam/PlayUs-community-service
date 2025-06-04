@@ -16,6 +16,7 @@ import com.playus.communityservice.domain.post.service.PostService;
 import com.playus.communityservice.domain.post.specification.PostControllerSpecification;
 import com.playus.communityservice.domain.common.security.JwtUser;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -83,6 +84,13 @@ public class PostController implements PostControllerSpecification {
             @AuthenticationPrincipal JwtUser user
     ) {
         List<PostListResponse> response = postReadOnlyService.getPostsByTeam(teamName);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/writer/{writerId}")
+    public ResponseEntity<List<PostListResponse>> getPostsByWriter(@PathVariable @Min(1) Long writerId,
+                                                                   @AuthenticationPrincipal JwtUser user) {
+        List<PostListResponse> response = postReadOnlyService.getPostsByWriter(writerId);
         return ResponseEntity.ok(response);
     }
 

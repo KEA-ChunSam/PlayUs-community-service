@@ -12,5 +12,5 @@ import java.util.List;
 public interface PostReadOnlyRepository extends MongoRepository<PostDocument, Long> {
     List<PostDocument> findAllByTagAndIsSecretFalse(TeamTag tag);
     List<PostDocument> findAllByWriterIdAndIsSecretTrue(Long writerId);
-
+    List<PostDocument> findAllByWriterIdAndIsSecretFalse(Long writerId);
 }
