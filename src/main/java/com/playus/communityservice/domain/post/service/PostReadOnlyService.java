@@ -40,7 +40,7 @@ public class PostReadOnlyService {
 
         post.increaseView();
 
-        List<CommentDocument> allComments = commentRepository.findAllByPostId(post.getId());
+        List<CommentDocument> allComments = commentRepository.findAllByCommentGroup_Post_Id(post.getId());
 
         List<PostGetResponse.CommentDto> comments = allComments.stream()
                 .filter(c -> c.getCommentOrder() == 1L)
@@ -107,7 +107,7 @@ public class PostReadOnlyService {
                 .map(post -> new PostListResponse(
                         post.getId(),
                         post.getTitle(),
-                        LocalDate.now(),
+                        post.getCreatedAt().toLocalDate(),
                         getNickname(post.getWriterId()),
                         post.getImageUrl()
                 ))
@@ -142,7 +142,7 @@ public class PostReadOnlyService {
                 .map(post -> new PostListResponse(
                         post.getId(),
                         post.getTitle(),
-                        LocalDate.now(),
+                        post.getCreatedAt().toLocalDate(),
                         getNickname(post.getWriterId()),
                         post.getImageUrl()
                 ))

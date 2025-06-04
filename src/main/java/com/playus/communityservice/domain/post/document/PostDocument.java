@@ -3,10 +3,12 @@ package com.playus.communityservice.domain.post.document;
 import com.playus.communityservice.domain.post.enums.TeamTag;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -45,6 +47,10 @@ public class PostDocument {
 
     @NotNull
     private int view;
+
+    @CreatedDate
+    @Field(name = "created_at")
+    private LocalDateTime createdAt;
 
 
     @Builder
