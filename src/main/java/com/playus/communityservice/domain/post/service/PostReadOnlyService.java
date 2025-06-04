@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -45,7 +46,8 @@ public class PostReadOnlyService {
                 .filter(c -> c.getCommentOrder() == 1L)
                 .map(comment -> {
                     List<PostGetResponse.ReCommentDto> reComments = allComments.stream()
-                            .filter(reply -> reply.getCommentGroup().equals(comment.getCommentGroup()) && reply.getCommentOrder() > 1L)
+                            .filter(reply -> reply.getCommentGroup().getId().equals(comment.getCommentGroup().getId())
+                                    && reply.getCommentOrder() > 1L)
                             .map(reply -> new PostGetResponse.ReCommentDto(
                                     reply.getId(),
                                     getNickname(reply.getUserId()),
@@ -105,7 +107,7 @@ public class PostReadOnlyService {
                 .map(post -> new PostListResponse(
                         post.getId(),
                         post.getTitle(),
-                        post.getTwpDate(),
+                        post.getCreatedAt().toLocalDate(),
                         getNickname(post.getWriterId()),
                         post.getImageUrl()
                 ))
@@ -140,7 +142,7 @@ public class PostReadOnlyService {
                 .map(post -> new PostListResponse(
                         post.getId(),
                         post.getTitle(),
-                        post.getTwpDate(),
+                        post.getCreatedAt().toLocalDate(),
                         getNickname(post.getWriterId()),
                         post.getImageUrl()
                 ))
