@@ -95,10 +95,9 @@ public class PostReadOnlyService {
     }
 
 
-    public List<PostListResponse> getPostsByTeam(TeamTag tag, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<PostDocument> postPage = postRepository.findAllByTagAndIsSecretFalse(tag, pageable);
-        List<PostDocument> posts = postPage.getContent();
+    public List<PostListResponse> getPostsByTeam(TeamTag tag) {
+
+        List<PostDocument> posts = postRepository.findAllByTagAndIsSecretFalse(tag);
 
         return posts.stream()
                 .filter(PostDocument::isActivated)
@@ -112,10 +111,9 @@ public class PostReadOnlyService {
                 .toList();
     }
 
-    public List<DiaryListResponse> getMyDiaries(JwtUser user, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<PostDocument> postPage = postRepository.findAllByWriterIdAndIsSecretTrue(user.getId(), pageable);
-        List<PostDocument> posts = postPage.getContent();
+
+    public List<DiaryListResponse> getMyDiaries(JwtUser user) {
+        List<PostDocument> posts = postRepository.findAllByWriterIdAndIsSecretTrue(user.getId());
 
         return posts.stream()
                 .filter(post -> post.isActivated() && post.isSecret())
@@ -128,6 +126,7 @@ public class PostReadOnlyService {
                 ))
                 .toList();
     }
+
 
     private String getNickname(Long userId) {
         return "User#" + userId; // TODO: 유저 서비스 연동

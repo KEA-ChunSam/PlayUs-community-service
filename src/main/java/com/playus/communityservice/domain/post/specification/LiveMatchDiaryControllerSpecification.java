@@ -484,9 +484,7 @@ public interface LiveMatchDiaryControllerSpecification {
                     )
             )
     })
-    ResponseEntity<List<DiaryListResponse>> getMyDiaries(JwtUser user,
-                                                         @RequestParam(defaultValue = "0") int page,
-                                                         @RequestParam(defaultValue = "10") int size);
+    ResponseEntity<List<DiaryListResponse>> getMyDiaries(JwtUser user);
 }
 
 

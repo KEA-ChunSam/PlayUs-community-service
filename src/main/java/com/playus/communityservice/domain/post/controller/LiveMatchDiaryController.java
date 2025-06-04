@@ -72,12 +72,10 @@ public class LiveMatchDiaryController implements LiveMatchDiaryControllerSpecifi
 
     @GetMapping("/my")
     public ResponseEntity<List<DiaryListResponse>> getMyDiaries(
-            @AuthenticationPrincipal JwtUser user,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @AuthenticationPrincipal JwtUser user
 
     ) {
-        List<DiaryListResponse> response = postReadOnlyService.getMyDiaries(user, page, size);
+        List<DiaryListResponse> response = postReadOnlyService.getMyDiaries(user);
         return ResponseEntity.ok(response);
     }
 }
