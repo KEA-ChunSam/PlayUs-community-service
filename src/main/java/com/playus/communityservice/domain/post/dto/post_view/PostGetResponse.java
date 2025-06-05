@@ -1,5 +1,6 @@
 package com.playus.communityservice.domain.post.dto.post_view;
 
+import com.playus.communityservice.domain.post.enums.TeamTag;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -8,11 +9,11 @@ import java.util.List;
 @Builder
 public record PostGetResponse(
         Long postId,
+        TeamTag tag,
         String title,
         LocalDate date,
         String writerNickname,
         String writerProfileImage,
-        boolean activated,
         String image,
         String content,
         List<CommentDto> comments
@@ -21,7 +22,6 @@ public record PostGetResponse(
             Long commentId,
             String writerNickname,
             String writerProfileImage,
-            boolean activated,
             String content,
             List<ReCommentDto> reComments
     ) {}
@@ -30,7 +30,6 @@ public record PostGetResponse(
             Long reCommentId,
             String writerNickname,
             String writerProfileImage,
-            boolean activated,
             String content
     ) {}
 }

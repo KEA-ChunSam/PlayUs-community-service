@@ -59,7 +59,6 @@ public class PostReadOnlyService {
                                     reply.getId(),
                                     getNickname(reply.getUserId()),
                                     getProfileImage(reply.getUserId()),
-                                    isExpert(reply.getUserId()),
                                     reply.getContent()
                             ))
                             .toList();
@@ -68,7 +67,6 @@ public class PostReadOnlyService {
                             comment.getId(),
                             getNickname(comment.getUserId()),
                             getProfileImage(comment.getUserId()),
-                            isExpert(comment.getUserId()),
                             comment.getContent(),
                             reComments
                     );
@@ -77,11 +75,11 @@ public class PostReadOnlyService {
 
         return new PostGetResponse(
                 post.getId(),
+                post.getTag(),
                 post.getTitle(),
                 post.getTwpDate(),
                 getNickname(post.getWriterId()),
                 getProfileImage(post.getWriterId()),
-                isExpert(post.getWriterId()),
                 post.getImageUrl(),
                 post.getDescription(),
                 comments
@@ -156,6 +154,65 @@ public class PostReadOnlyService {
                 .toList();
     }
 
+    public PostGetResponse getPostById(Long writerId, Long postId, JwtUser user) {
+        PostDocument post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("게시글"));
+
+        if (!post.isActivated()) {
+            throw new EntityNotFoundException("게시글");
+        }
+
+        if (!post.getWriterId().equals(writerId)) {
+            throw new EntityNotFoundException("작성자와 게시글이 일치하지 않습니다.");
+        }
+
+        post.increaseView();
+
+        List<CommentGroupDocument> groups = commentGroupRepository.findAllByPostId(postId); // 엔티티 직접
+
+        List<Long> groupIds = groups.stream()
+                .map(CommentGroupDocument::getId)
+                .toList();
+
+        List<CommentDocument> allComments = commentRepository.findAllByCommentGroupIdIn(groupIds); // 객체 리스트로 조회
+
+
+        List<PostGetResponse.CommentDto> comments = allComments.stream()
+                .filter(c -> c.getCommentOrder() == 1L)
+                .map(comment -> {
+                    List<PostGetResponse.ReCommentDto> reComments = allComments.stream()
+                            .filter(reply -> Objects.equals(reply.getCommentGroupId(), comment.getCommentGroupId())
+                                    && reply.getCommentOrder() > 1L)
+                            .map(reply -> new PostGetResponse.ReCommentDto(
+                                    reply.getId(),
+                                    getNickname(reply.getUserId()),
+                                    getProfileImage(reply.getUserId()),
+                                    reply.getContent()
+                            ))
+                            .toList();
+
+                    return new PostGetResponse.CommentDto(
+                            comment.getId(),
+                            getNickname(comment.getUserId()),
+                            getProfileImage(comment.getUserId()),
+                            comment.getContent(),
+                            reComments
+                    );
+                })
+                .toList();
+
+        return new PostGetResponse(
+                post.getId(),
+                post.getTag(),
+                post.getTitle(),
+                post.getTwpDate(),
+                getNickname(post.getWriterId()),
+                getProfileImage(post.getWriterId()),
+                post.getImageUrl(),
+                post.getDescription(),
+                comments
+        );
+    }
 
     private String getNickname(Long userId) {
         return "User#" + userId; // TODO: 유저 서비스 연동
