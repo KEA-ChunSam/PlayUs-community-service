@@ -39,13 +39,21 @@ public interface PostControllerSpecification {
             summary = "커뮤니티 글 생성",
             description = "커뮤니티 글을 작성합니다.",
             security = @SecurityRequirement(name = "AccessCookie"),
-            parameters = @Parameter(
-                    name = "Access",
-                    description = "JWT access token (쿠키)",
-                    in = ParameterIn.COOKIE,
-                    required = true,
-                    example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-            ),
+            parameters = {
+                    @Parameter(
+                            name = "Access",
+                            description = "JWT access token (쿠키)",
+                            in = ParameterIn.COOKIE,
+                            required = true,
+                            example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    ),
+                    @Parameter(
+                            name = "tag",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "해당 팀태그",
+                            example = "KIA_TIGERS"
+                    )},
             requestBody = @RequestBody(
                     required = true,
                     content = @Content(
@@ -129,7 +137,7 @@ public interface PostControllerSpecification {
                             example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     ),
                     @Parameter(
-                    name = "postId",
+                    name = "id",
                     in = ParameterIn.PATH,
                     required = true,
                     description = "삭제할 게시글 ID",
@@ -198,7 +206,7 @@ public interface PostControllerSpecification {
                             example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     ),
                     @Parameter(
-                    name = "postId",
+                    name = "id",
                     in = ParameterIn.PATH,
                     required = true,
                     description = "수정할 게시글 ID",
@@ -212,7 +220,6 @@ public interface PostControllerSpecification {
                                     name = "게시글 수정 요청 예시",
                                     value = """
                                     {
-                                      "postId": 1,
                                       "title": "오늘 경기 재밌었어요!",
                                       "image": "post.jpg",
                                       "content": "긴장하면서 시청했네요."
@@ -411,7 +418,7 @@ public interface PostControllerSpecification {
                             example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     ),
                     @Parameter(
-                            name = "postId",
+                            name = "id",
                             in = ParameterIn.PATH,
                             description = "게시물 ID",
                             required = true,
@@ -428,24 +435,22 @@ public interface PostControllerSpecification {
                                     name = "커뮤니티 글 조회 응답 예시",
                                     value = """
                                             {
+                                            	"tag" : "KEA_TIGERS",
                                             	"title":"오늘의 승리는 LG",
                                             	"date":"2025-03-20T00:00:00",
                                             	"writerNickname":"안타날릴",
                                             	"writerProfileImage":"profile.png",
-                                            	"activated":true,
                                             	"image":"image.png",
                                             	"content":"오늘은 LG가 이겨서 너무 행복합니다.",
                                             	"comments":[
                                             		{
                                             		"writerNickname":"난리나리라",
                                             		"writerProfileImage":"profiles.png",
-                                            		"activated":true,
                                             		"content":"홈런터질때 정말 짜릿했어요",
                                             		"reComments":[
                                             			{
                                             			"writerNickname":"테스형",
                                             			"writerProfileImage":"profile_11.png",
-                                            			"activated":true,
                                             			"content":"인정입니다."
                                             			}
                                             		]
@@ -521,6 +526,134 @@ public interface PostControllerSpecification {
                                             @PathVariable("postId") Long postId,
                                             JwtUser user);
 
+    @Tag(name = "Get", description = "ID 기반 커뮤니티 글 조회")
+    @Operation(
+            summary = "ID 기반 커뮤니티 글 조회 API",
+            description = "특정 게시물에 대한 자세한 정보를 ID를 기반으로 조회합니다.",
+            parameters = {
+                    @Parameter(
+                            name = "Access",
+                            description = "JWT Access Token (쿠키)",
+                            in = ParameterIn.COOKIE,
+                            required = true,
+                            example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    ),
+                    @Parameter(
+                            name = "id",
+                            in = ParameterIn.PATH,
+                            description = "게시물 ID",
+                            required = true,
+                            example = "1"
+                    ),
+                    @Parameter(
+                            name = "writerId",
+                            in = ParameterIn.PATH,
+                            description = "작성자 ID",
+                            required = true,
+                            example = "1"
+                    )
+            }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200", description = "조회 성공",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    name = "커뮤니티 글 조회 응답 예시",
+                                    value = """
+                                            {
+                                            	"tag" : "KEA_TIGERS",
+                                            	"title":"오늘의 승리는 LG",
+                                            	"date":"2025-03-20T00:00:00",
+                                            	"writerNickname":"안타날릴",
+                                            	"writerProfileImage":"profile.png",
+                                            	"image":"image.png",
+                                            	"content":"오늘은 LG가 이겨서 너무 행복합니다.",
+                                            	"comments":[
+                                            		{
+                                            		"writerNickname":"난리나리라",
+                                            		"writerProfileImage":"profiles.png",
+                                            		"content":"홈런터질때 정말 짜릿했어요",
+                                            		"reComments":[
+                                            			{
+                                            			"writerNickname":"테스형",
+                                            			"writerProfileImage":"profile_11.png",
+                                            			"content":"인정입니다."
+                                            			}
+                                            		]
+                                            		}
+                                            	]
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400", description = "게시물 ID가 1 미만일 경우 발생",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "code": 400,
+                                              "status": "BAD_REQUEST",
+                                              "message": "게시물 ID는 1 이상이여야 합니다!"
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401", description = "인증 실패",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "code": 401,
+                                              "status": "UNAUTHORIZED",
+                                              "message": "유효하지 않은 토큰입니다."
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404", description = "게시물 ID로 게시물을 찾을 수 없는 경우 발생",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "code": 404,
+                                              "status": "NOT_FOUND",
+                                              "message": "게시물이 존재하지 않습니다!"
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500", description = "서버 내부 오류",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "code": 500,
+                                              "status": "INTERNAL_SERVER_ERROR",
+                                              "message": "서버 내부 오류가 발생했습니다. 관리자에게 문의해 주세요."
+                                            }
+                                            """
+                            )
+                    )
+            )
+    })
+    ResponseEntity<PostGetResponse> getPostById(@PathVariable("writerId") Long writerId,
+                                                @PathVariable("postId") Long postId,
+                                                JwtUser user);
+
     @Tag(name = "Get", description = "커뮤니티 글 목록 조회 API")
     @Operation(
             summary = "팀별 커뮤니티 글 목록 조회",
@@ -534,11 +667,11 @@ public interface PostControllerSpecification {
                             example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     ),
                     @Parameter(
-                            name = "teamName",
+                            name = "tag",
                             description = "구단 이름",
                             in = ParameterIn.PATH,
                             required = true,
-                            example = "LG"
+                            example = "LG_TWINS"
                     )
             }
     )
@@ -552,14 +685,14 @@ public interface PostControllerSpecification {
                                     value = """
                                         [
                                             {
-                                                "postId": 1,
+                                                "id": 1,
                                                 "title": "오늘 경기 어땠나요?",
                                                 "writerNickname": "LG팬",
                                                 "createdDate": "2025-05-20",
                                                 "image": "LG.png"
                                             },
                                             {
-                                                "postId": 2,
+                                                "id": 2,
                                                 "title": "직관팟 모집",
                                                 "writerNickname": "야구사랑",
                                                 "createdDate": "2025-05-19",
@@ -650,7 +783,7 @@ public interface PostControllerSpecification {
                                     value = """
                                             [
                                                 {
-                                            	    "postId" : 1,
+                                            	    "id" : 1,
                                             	    "title" : "오늘은 직관은 아니지만..."
                                             	    "twpDate" : "2025-06-03",
                                             	    "nickname" : "KSH"

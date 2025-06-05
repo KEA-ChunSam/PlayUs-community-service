@@ -93,13 +93,21 @@ public interface CommentControllerSpecification {
     @Operation(
             summary = "커뮤니티 댓글 삭제",
             description = "작성자가 커뮤니티 댓글을 삭제합니다.",
-            parameters = @Parameter(
+            parameters = {
+                    @Parameter(
                     name = "Access",
                     description = "JWT access token (쿠키)",
                     in = ParameterIn.COOKIE,
                     required = true,
                     example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
             ),
+                    @Parameter(
+                    name = "id",
+                    in = ParameterIn.PATH,
+                    required = true,
+                    description = "삭제할 댓글 ID",
+                    example = "1"
+            )},
             requestBody = @RequestBody(
                     required = true,
                     content = @Content(
@@ -108,7 +116,6 @@ public interface CommentControllerSpecification {
                                     name = "커뮤니티 댓글 삭제 요청 예시",
                                     value = """
                                             {
-                                                "commentId" : 1,
                                                 "commentGroupId" : 2
                                             }
                                             """
@@ -171,13 +178,21 @@ public interface CommentControllerSpecification {
     @Operation(
             summary = "커뮤니티 댓글 수정",
             description = "작성자가 게시글을 수정합니다.",
-            parameters = @Parameter(
-                    name = "Access",
-                    description = "JWT access token (쿠키)",
-                    in = ParameterIn.COOKIE,
-                    required = true,
-                    example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-            ),
+            parameters = {
+                    @Parameter(
+                            name = "Access",
+                            description = "JWT access token (쿠키)",
+                            in = ParameterIn.COOKIE,
+                            required = true,
+                            example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    ),
+                    @Parameter(
+                            name = "id",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "수정할 댓글 ID",
+                            example = "1"
+                    )},
             requestBody = @RequestBody(
                     required = true,
                     content = @Content(
@@ -186,7 +201,6 @@ public interface CommentControllerSpecification {
                                     name = "댓글/답글 수정 요청 예시",
                                     value = """
                                             {
-                                                "commentId" : 1,
                                                 "commentGroupId" : 2,
                                                 "content" : "아슬아슬하게 이겼네요!"
                                             }
