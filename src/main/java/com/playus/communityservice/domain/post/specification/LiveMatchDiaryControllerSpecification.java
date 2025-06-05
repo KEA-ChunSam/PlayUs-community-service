@@ -85,7 +85,7 @@ public interface LiveMatchDiaryControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 400,
-                                                "statue" : "BAD_REQUEST"
+                                                "statue" : "BAD_REQUEST",
                                                 "message" : "직관일지의 제목이 비어있습니다!"
                                             }
                                             """
@@ -100,7 +100,7 @@ public interface LiveMatchDiaryControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 400,
-                                                "statue" : "BAD_REQUEST"
+                                                "statue" : "BAD_REQUEST",
                                                 "message" : "직관일지의 내용을 1~500자 이내로 작성해 주세요!"
                                             }
                                             """
@@ -156,7 +156,7 @@ public interface LiveMatchDiaryControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 404,
-                                                "statue" : "NOT_FOUND"
+                                                "statue" : "NOT_FOUND",
                                                 "message" : "해당 직관일지를 찾을 수 없습니다."
                                             }
                                             """
@@ -229,7 +229,7 @@ public interface LiveMatchDiaryControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 404,
-                                                "statue" : "NOT_FOUND"
+                                                "statue" : "NOT_FOUND",
                                                 "message" : "해당 직관일지를 찾을 수 없습니다."
                                             }
                                             """
@@ -244,7 +244,7 @@ public interface LiveMatchDiaryControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 400,
-                                                "statue" : "BAD_REQUEST"
+                                                "statue" : "BAD_REQUEST",
                                                 "message" : "직관일지의 제목이 비어있습니다!"
                                             }
                                             """
@@ -259,7 +259,7 @@ public interface LiveMatchDiaryControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 400,
-                                                "statue" : "BAD_REQUEST"
+                                                "statue" : "BAD_REQUEST",
                                                 "message" : "직관일지의 내용을 1~500자 이내로 작성해 주세요!"
                                             }
                                             """

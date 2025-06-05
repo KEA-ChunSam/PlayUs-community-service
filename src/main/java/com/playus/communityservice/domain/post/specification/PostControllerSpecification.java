@@ -97,7 +97,7 @@ public interface PostControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 400,
-                                                "statue" : "BAD_REQUEST"
+                                                "statue" : "BAD_REQUEST",
                                                 "message" : "게시글의 제목이 비어있습니다!"
                                             }
                                             """
@@ -112,7 +112,7 @@ public interface PostControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 400,
-                                                "statue" : "BAD_REQUEST"
+                                                "statue" : "BAD_REQUEST",
                                                 "message" : "게시글의 내용을 1~500자 이내로 작성해 주세요!"
                                             }
                                             """
@@ -168,7 +168,7 @@ public interface PostControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 404,
-                                                "statue" : "NOT_FOUND"
+                                                "statue" : "NOT_FOUND",
                                                 "message" : "해당 게시글을 찾을 수 없습니다."
                                             }
                                             """
@@ -183,7 +183,7 @@ public interface PostControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 403,
-                                                "statue" : "FORBIDDEN"
+                                                "statue" : "FORBIDDEN",
                                                 "message" : "해당 게시글에 대한 권한이 없습니다."
                                             }
                                             """
@@ -220,9 +220,10 @@ public interface PostControllerSpecification {
                                     name = "게시글 수정 요청 예시",
                                     value = """
                                     {
+                                      "postId":1,
                                       "title": "오늘 경기 재밌었어요!",
                                       "image": "post.jpg",
-                                      "content": "긴장하면서 시청했네요."
+                                      "content": "긴장하면서 시청했네요.",
                                       "twpDate" : "2025-05-01",
                                       "isSecret": false
                                     }
@@ -255,7 +256,7 @@ public interface PostControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 404,
-                                                "statue" : "NOT_FOUND"
+                                                "statue" : "NOT_FOUND",
                                                 "message" : "해당 게시글을 찾을 수 없습니다."
                                             }
                                             """
@@ -270,7 +271,7 @@ public interface PostControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 403,
-                                                "statue" : "FORBIDDEN"
+                                                "statue" : "FORBIDDEN",
                                                 "message" : "해당 게시글에 대한 권한이 없습니다."
                                             }
                                             """
@@ -285,7 +286,7 @@ public interface PostControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 400,
-                                                "statue" : "BAD_REQUEST"
+                                                "statue" : "BAD_REQUEST",
                                                 "message" : "게시글의 제목이 비어있습니다!"
                                             }
                                             """
@@ -300,7 +301,7 @@ public interface PostControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 400,
-                                                "statue" : "BAD_REQUEST"
+                                                "statue" : "BAD_REQUEST",
                                                 "message" : "게시글의 내용을 1~500자 이내로 작성해 주세요!"
                                             }
                                             """
@@ -444,11 +445,13 @@ public interface PostControllerSpecification {
                                             	"content":"오늘은 LG가 이겨서 너무 행복합니다.",
                                             	"comments":[
                                             		{
+                                            		"commentGroupId": 1,
                                             		"writerNickname":"난리나리라",
                                             		"writerProfileImage":"profiles.png",
                                             		"content":"홈런터질때 정말 짜릿했어요",
                                             		"reComments":[
                                             			{
+                                            			"commentGroupId": 1,
                                             			"writerNickname":"테스형",
                                             			"writerProfileImage":"profile_11.png",
                                             			"content":"인정입니다."
@@ -572,11 +575,13 @@ public interface PostControllerSpecification {
                                             	"content":"오늘은 LG가 이겨서 너무 행복합니다.",
                                             	"comments":[
                                             		{
+                                            		"commentGroupId": 1,
                                             		"writerNickname":"난리나리라",
                                             		"writerProfileImage":"profiles.png",
                                             		"content":"홈런터질때 정말 짜릿했어요",
                                             		"reComments":[
                                             			{
+                                            			"commentGroupId": 1,
                                             			"writerNickname":"테스형",
                                             			"writerProfileImage":"profile_11.png",
                                             			"content":"인정입니다."

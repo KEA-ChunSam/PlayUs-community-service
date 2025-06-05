@@ -79,7 +79,7 @@ public interface CommentControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 400,
-                                                "statue" : "BAD_REQUEST"
+                                                "statue" : "BAD_REQUEST",
                                                 "message" : "댓글의 내용을 1~100자 이내로 작성해 주세요!"
                                             }
                                             """
@@ -116,6 +116,7 @@ public interface CommentControllerSpecification {
                                     name = "커뮤니티 댓글 삭제 요청 예시",
                                     value = """
                                             {
+                                                "commentId":3,
                                                 "commentGroupId" : 2
                                             }
                                             """
@@ -147,7 +148,7 @@ public interface CommentControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 404,
-                                                "statue" : "NOT_FOUND"
+                                                "statue" : "NOT_FOUND",
                                                 "message" : "해당 댓글을 찾을 수 없습니다."
                                             }
                                             """
@@ -162,7 +163,7 @@ public interface CommentControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 403,
-                                                "statue" : "FORBIDDEN"
+                                                "statue" : "FORBIDDEN",
                                                 "message" : "해당 댓글에 대한 권한이 없습니다."
                                             }
                                             """
@@ -201,6 +202,7 @@ public interface CommentControllerSpecification {
                                     name = "댓글/답글 수정 요청 예시",
                                     value = """
                                             {
+                                                "commentId":3,
                                                 "commentGroupId" : 2,
                                                 "content" : "아슬아슬하게 이겼네요!"
                                             }
@@ -233,7 +235,7 @@ public interface CommentControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 404,
-                                                "statue" : "NOT_FOUND"
+                                                "statue" : "NOT_FOUND",
                                                 "message" : "해당 댓글을 찾을 수 없습니다."
                                             }
                                             """
@@ -248,7 +250,7 @@ public interface CommentControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 403,
-                                                "statue" : "FORBIDDEN"
+                                                "statue" : "FORBIDDEN",
                                                 "message" : "해당 댓글에 대한 권한이 없습니다."
                                             }
                                             """
@@ -263,7 +265,7 @@ public interface CommentControllerSpecification {
                                     value = """
                                             {
                                                 "code" : 400,
-                                                "statue" : "BAD_REQUEST"
+                                                "statue" : "BAD_REQUEST",
                                                 "message" : "댓글의 내용을 1~100자 이내로 작성해 주세요!"
                                             }
                                             """

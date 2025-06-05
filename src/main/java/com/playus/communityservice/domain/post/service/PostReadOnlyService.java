@@ -60,13 +60,15 @@ public class PostReadOnlyService {
         List<CommentDocument> allComments = commentRepository.findAllByCommentGroupIdIn(groupIds);
 
         List<PostGetResponse.CommentDto> comments = allComments.stream()
-                .filter(c -> c.getCommentOrder() == 1L)
+                .filter(c -> c.getCommentOrder() == 1L && c.isActivated())
                 .map(comment -> {
                     List<PostGetResponse.ReCommentDto> reComments = allComments.stream()
                             .filter(reply -> Objects.equals(reply.getCommentGroupId(), comment.getCommentGroupId())
-                                    && reply.getCommentOrder() > 1L)
+                                    && reply.getCommentOrder() > 1L
+                                    && reply.isActivated())
                             .map(reply -> new PostGetResponse.ReCommentDto(
                                     reply.getId(),
+                                    reply.getCommentGroupId(),
                                     getNickname(reply.getUserId()),
                                     getProfileImage(reply.getUserId()),
                                     reply.getContent()
@@ -75,6 +77,7 @@ public class PostReadOnlyService {
 
                     return new PostGetResponse.CommentDto(
                             comment.getId(),
+                            comment.getCommentGroupId(),
                             getNickname(comment.getUserId()),
                             getProfileImage(comment.getUserId()),
                             comment.getContent(),

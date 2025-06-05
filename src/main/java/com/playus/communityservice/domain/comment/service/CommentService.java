@@ -45,12 +45,14 @@ public class CommentService {
             commentGroupRepository.save(commentGroup);
             order = 1;
         } else {
-            Comment parent = commentRepository.findById(request.commentGroupId())
-                    .orElseThrow(() -> new EntityNotFoundException("부모 댓글"));
-            if (parent.getCommentOrder() != 1L) {
-                throw new IllegalArgumentException("부모 댓글에만 답글을 작성할 수 있습니다.");
+            commentGroup = commentGroupRepository.findById(request.commentGroupId())
+                    .orElseThrow(() -> new EntityNotFoundException("댓글 그룹"));
+
+            boolean hasActiveComments = commentRepository.existsByCommentGroupAndIsActivatedTrue(commentGroup);
+            if (!hasActiveComments) {
+                throw new IllegalArgumentException("삭제된 댓글 그룹에는 답글을 작성할 수 없습니다.");
             }
-            commentGroup = parent.getCommentGroup();
+
             order = 2;
         }
 

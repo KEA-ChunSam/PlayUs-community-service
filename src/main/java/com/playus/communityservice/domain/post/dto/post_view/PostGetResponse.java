@@ -20,6 +20,7 @@ public record PostGetResponse(
 ) {
     public record CommentDto(
             Long commentId,
+            Long commentGroupId,
             String writerNickname,
             String writerProfileImage,
             String content,
@@ -28,6 +29,7 @@ public record PostGetResponse(
 
     public record ReCommentDto(
             Long reCommentId,
+            Long commentGroupId,
             String writerNickname,
             String writerProfileImage,
             String content
