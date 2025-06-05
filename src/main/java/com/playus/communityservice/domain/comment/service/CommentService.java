@@ -47,10 +47,8 @@ public class CommentService {
         } else {
             Comment parent = commentRepository.findById(request.commentGroupId())
                     .orElseThrow(() -> new EntityNotFoundException("부모 댓글"));
-            if (parent.getCommentOrder() != 1L) {
-                throw new IllegalArgumentException("부모 댓글에만 답글을 작성할 수 있습니다.");
-            }
-            commentGroup = parent.getCommentGroup();
+            commentGroup = commentGroupRepository.findById(request.commentGroupId())
+                    .orElseThrow(() -> new EntityNotFoundException("댓글 그룹"));
             order = 2;
         }
 
