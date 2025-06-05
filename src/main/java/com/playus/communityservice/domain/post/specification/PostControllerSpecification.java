@@ -137,7 +137,7 @@ public interface PostControllerSpecification {
                             example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     ),
                     @Parameter(
-                    name = "id",
+                    name = "postId",
                     in = ParameterIn.PATH,
                     required = true,
                     description = "삭제할 게시글 ID",
@@ -206,7 +206,7 @@ public interface PostControllerSpecification {
                             example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     ),
                     @Parameter(
-                    name = "id",
+                    name = "postId",
                     in = ParameterIn.PATH,
                     required = true,
                     description = "수정할 게시글 ID",
@@ -418,7 +418,7 @@ public interface PostControllerSpecification {
                             example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     ),
                     @Parameter(
-                            name = "id",
+                            name = "postId",
                             in = ParameterIn.PATH,
                             description = "게시물 ID",
                             required = true,
@@ -539,7 +539,7 @@ public interface PostControllerSpecification {
                             example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     ),
                     @Parameter(
-                            name = "id",
+                            name = "postId",
                             in = ParameterIn.PATH,
                             description = "게시물 ID",
                             required = true,
@@ -667,7 +667,7 @@ public interface PostControllerSpecification {
                             example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     ),
                     @Parameter(
-                            name = "tag",
+                            name = "teamName",
                             description = "구단 이름",
                             in = ParameterIn.PATH,
                             required = true,
@@ -784,9 +784,9 @@ public interface PostControllerSpecification {
                                             [
                                                 {
                                             	    "id" : 1,
-                                            	    "title" : "오늘은 직관은 아니지만..."
+                                            	    "title" : "오늘은 직관은 아니지만...",
                                             	    "twpDate" : "2025-06-03",
-                                            	    "nickname" : "KSH"
+                                            	    "nickname" : "KSH",
                                             	    "image" : "KSH.png"
                                                 }
                                             ]

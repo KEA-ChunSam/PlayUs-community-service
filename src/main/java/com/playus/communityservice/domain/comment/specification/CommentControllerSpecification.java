@@ -102,7 +102,7 @@ public interface CommentControllerSpecification {
                     example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
             ),
                     @Parameter(
-                    name = "id",
+                    name = "commentId",
                     in = ParameterIn.PATH,
                     required = true,
                     description = "삭제할 댓글 ID",
@@ -187,7 +187,7 @@ public interface CommentControllerSpecification {
                             example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     ),
                     @Parameter(
-                            name = "id",
+                            name = "commentId",
                             in = ParameterIn.PATH,
                             required = true,
                             description = "수정할 댓글 ID",
