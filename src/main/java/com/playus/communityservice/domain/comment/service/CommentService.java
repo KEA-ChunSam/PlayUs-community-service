@@ -48,7 +48,7 @@ public class CommentService {
             commentGroup = commentGroupRepository.findById(request.commentGroupId())
                     .orElseThrow(() -> new EntityNotFoundException("댓글 그룹"));
 
-            boolean hasActiveComments = commentRepository.existsByCommentGroupAndIsActivatedTrue(commentGroup);
+            boolean hasActiveComments = commentRepository.existsByCommentGroupAndActivatedTrue(commentGroup);
             if (!hasActiveComments) {
                 throw new IllegalArgumentException("삭제된 댓글 그룹에는 답글을 작성할 수 없습니다.");
             }
