@@ -31,6 +31,14 @@ public class PostReadOnlyService {
     private final CommentGroupReadOnlyRepository commentGroupRepository;
 
     public PostGetResponse getPost(Long postId, JwtUser user) {
+        return buildPostGetResponse(postId, null);
+    }
+
+    public PostGetResponse getPostById(Long writerId, Long postId, JwtUser user) {
+        return buildPostGetResponse(postId, writerId);
+    }
+
+    private PostGetResponse buildPostGetResponse(Long postId, Long writerId) {
         PostDocument post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("게시글"));
 
@@ -38,16 +46,18 @@ public class PostReadOnlyService {
             throw new EntityNotFoundException("게시글");
         }
 
+        if (writerId != null && !post.getWriterId().equals(writerId)) {
+            throw new EntityNotFoundException("작성자와 게시글이 일치하지 않습니다.");
+        }
+
         post.increaseView();
 
-        List<CommentGroupDocument> groups = commentGroupRepository.findAllByPostId(postId); // 엔티티 직접
-
+        List<CommentGroupDocument> groups = commentGroupRepository.findAllByPostId(postId);
         List<Long> groupIds = groups.stream()
                 .map(CommentGroupDocument::getId)
                 .toList();
 
-        List<CommentDocument> allComments = commentRepository.findAllByCommentGroupIdIn(groupIds); // 객체 리스트로 조회
-
+        List<CommentDocument> allComments = commentRepository.findAllByCommentGroupIdIn(groupIds);
 
         List<PostGetResponse.CommentDto> comments = allComments.stream()
                 .filter(c -> c.getCommentOrder() == 1L)
@@ -59,7 +69,6 @@ public class PostReadOnlyService {
                                     reply.getId(),
                                     getNickname(reply.getUserId()),
                                     getProfileImage(reply.getUserId()),
-                                    isExpert(reply.getUserId()),
                                     reply.getContent()
                             ))
                             .toList();
@@ -68,7 +77,6 @@ public class PostReadOnlyService {
                             comment.getId(),
                             getNickname(comment.getUserId()),
                             getProfileImage(comment.getUserId()),
-                            isExpert(comment.getUserId()),
                             comment.getContent(),
                             reComments
                     );
@@ -77,16 +85,17 @@ public class PostReadOnlyService {
 
         return new PostGetResponse(
                 post.getId(),
+                post.getTag(),
                 post.getTitle(),
                 post.getTwpDate(),
                 getNickname(post.getWriterId()),
                 getProfileImage(post.getWriterId()),
-                isExpert(post.getWriterId()),
                 post.getImageUrl(),
                 post.getDescription(),
                 comments
         );
     }
+
 
     public DiaryGetResponse getMyDiary(Long postId, JwtUser user) {
         PostDocument post = postRepository.findById(postId)
@@ -155,7 +164,6 @@ public class PostReadOnlyService {
                 ))
                 .toList();
     }
-
 
     private String getNickname(Long userId) {
         return "User#" + userId; // TODO: 유저 서비스 연동

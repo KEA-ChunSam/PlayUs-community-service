@@ -78,6 +78,14 @@ public class PostController implements PostControllerSpecification {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/writer/{writerId}/{postId}")
+    public ResponseEntity<PostGetResponse> getPostById(@PathVariable Long writerId,
+                                                       @PathVariable Long postId,
+                                                       @AuthenticationPrincipal JwtUser user) {
+        PostGetResponse response = postReadOnlyService.getPostById(writerId, postId, user);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/{teamName}")
     public ResponseEntity<List<PostListResponse>> getPostsByTeam(
             @PathVariable("teamName") TeamTag teamName,
@@ -88,7 +96,7 @@ public class PostController implements PostControllerSpecification {
     }
 
     @GetMapping("/writer/{writerId}")
-    public ResponseEntity<List<PostListResponse>> getPostsByWriter(@PathVariable @Min(1) Long writerId,
+    public ResponseEntity<List<PostListResponse>> getPostsByWriter(@PathVariable Long writerId,
                                                                    @AuthenticationPrincipal JwtUser user) {
         List<PostListResponse> response = postReadOnlyService.getPostsByWriter(writerId);
         return ResponseEntity.ok(response);
