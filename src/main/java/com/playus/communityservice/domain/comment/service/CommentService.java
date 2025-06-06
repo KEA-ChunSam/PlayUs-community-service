@@ -87,7 +87,9 @@ public class CommentService {
                 comment.getId(),
                 comment.getCommentGroup().getId(),
                 "댓글 생성이 완료되었습니다.",
-                comment.getContent());
+                comment.getContent(),
+                user.getNickname(),
+                user.getThumbnailURL());
     }
 
     public CommentUpdateResponse updateComment(CommentUpdateRequest request, JwtUser user) {
@@ -103,7 +105,13 @@ public class CommentService {
         }
 
         comment.updateContent(request.content());
-        return CommentUpdateResponse.of(true,"댓글이 수정되었습니다.",user.getId(),comment.getContent());
+        return CommentUpdateResponse.of(
+                true,
+                "댓글이 수정되었습니다.",
+                user.getId(),
+                comment.getContent(),
+                user.getThumbnailURL(),
+                user.getNickname());
     }
 
     public CommentDeleteResponse deleteComment(CommentDeleteRequest request, JwtUser user) {
