@@ -63,9 +63,11 @@ public interface CommentControllerSpecification {
                                     name = "커뮤니티 댓글 생성 응답 예시",
                                     value = """
                                             {
+                                                "userId": 3,
                                                 "commentId" : 3,
                                                 "commentGroupId" : 2,
-                                                "message" : "댓글 작성이 완료되었습니다."
+                                                "message" : "댓글 작성이 완료되었습니다.",
+                                                "content": "직관가신거 너무 부러워요."
                                             }
                                             """
                             )
@@ -221,7 +223,9 @@ public interface CommentControllerSpecification {
                                     value = """
                                             {
                                                 "success" : true,
-                                                "message" : "댓글이 수정되었습니다."
+                                                "message" : "댓글이 수정되었습니다.",
+                                                "userId" : 2,
+                                                "content" : "가을 야구 가보자구~"
                                             }
                                             """
                             )
