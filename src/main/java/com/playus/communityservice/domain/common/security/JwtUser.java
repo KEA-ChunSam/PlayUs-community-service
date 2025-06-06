@@ -49,4 +49,9 @@ public class JwtUser implements OAuth2User {
     public Long getId() {
         return Long.parseLong(String.valueOf(userDto.getId()));
     }
+
+    public String getThumbnailURL() { return userDto.getThumbnailURL();}
+
+    public String getNickname() { return userDto.getNickname();}
+
 }

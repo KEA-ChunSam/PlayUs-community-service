@@ -8,16 +8,21 @@ public record CommentCreateResponse(
         Long userId,
         String message,
         Long commentGroupId,
-        String content
+        String content,
+        String nickName,
+        String thumbnailURL
 ) {
 
-    public static CommentCreateResponse of(Long userId,Long commentId, Long commentGroupId, String message, String content) {
+    public static CommentCreateResponse of(Long userId,Long commentId, Long commentGroupId,
+                                           String message, String content, String nickName, String thumbnailURL) {
         return CommentCreateResponse.builder()
                 .userId(userId)
                 .commentId(commentId)
                 .commentGroupId(commentGroupId)
                 .message(message)
                 .content(content)
+                .nickName(nickName)
+                .thumbnailURL(thumbnailURL)
                 .build();
     }
 }

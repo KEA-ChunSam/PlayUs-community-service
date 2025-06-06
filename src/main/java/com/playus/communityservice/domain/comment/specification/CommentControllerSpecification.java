@@ -67,7 +67,9 @@ public interface CommentControllerSpecification {
                                                 "commentId" : 3,
                                                 "commentGroupId" : 2,
                                                 "message" : "댓글 작성이 완료되었습니다.",
-                                                "content": "직관가신거 너무 부러워요."
+                                                "content": "직관가신거 너무 부러워요.",
+                                                "nickName":"Ring",
+                                                "thumbnailURL":"image.png"
                                             }
                                             """
                             )
@@ -225,7 +227,9 @@ public interface CommentControllerSpecification {
                                                 "success" : true,
                                                 "message" : "댓글이 수정되었습니다.",
                                                 "userId" : 2,
-                                                "content" : "가을 야구 가보자구~"
+                                                "content" : "가을 야구 가보자구~",
+                                                "thumbnailURL":"image.png",
+                                                "nickName":"Ring"
                                             }
                                             """
                             )
