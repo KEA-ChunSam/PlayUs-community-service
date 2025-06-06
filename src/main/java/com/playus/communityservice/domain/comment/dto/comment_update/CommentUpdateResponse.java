@@ -9,16 +9,16 @@ public record CommentUpdateResponse(
         Long userId,
         String content,
         String image,
-        String nickName
+        String thumbnailURL
 ) {
 
-    public static CommentUpdateResponse of(boolean success, String message, Long userId, String content, String nickName, String image) {
+    public static CommentUpdateResponse of(boolean success, String message, Long userId, String content, String thumbnailURL, String image) {
         return CommentUpdateResponse.builder()
                 .success(success)
                 .message(message)
                 .userId(userId)
                 .content(content)
-                .nickName(nickName)
+                .thumbnailURL(thumbnailURL)
                 .image(image)
                 .build();
     }

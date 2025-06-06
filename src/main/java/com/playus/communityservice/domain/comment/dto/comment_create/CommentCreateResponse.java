@@ -10,11 +10,11 @@ public record CommentCreateResponse(
         Long commentGroupId,
         String content,
         String nickName,
-        String image
+        String thumbnailURL
 ) {
 
     public static CommentCreateResponse of(Long userId,Long commentId, Long commentGroupId,
-                                           String message, String content, String nickName, String image) {
+                                           String message, String content, String nickName, String thumbnailURL) {
         return CommentCreateResponse.builder()
                 .userId(userId)
                 .commentId(commentId)
@@ -22,7 +22,7 @@ public record CommentCreateResponse(
                 .message(message)
                 .content(content)
                 .nickName(nickName)
-                .image(image)
+                .thumbnailURL(thumbnailURL)
                 .build();
     }
 }
