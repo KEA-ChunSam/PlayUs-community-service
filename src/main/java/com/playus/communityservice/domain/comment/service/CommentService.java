@@ -82,7 +82,12 @@ public class CommentService {
             log.warn("댓글 알림 전송 실패: commentId={}, error={}", comment.getId(), e.getMessage());
         }
 
-        return CommentCreateResponse.of(comment.getId(),comment.getCommentGroup().getId(), "댓글 생성이 완료되었습니다.");
+        return CommentCreateResponse.of(
+                user.getId(),
+                comment.getId(),
+                comment.getCommentGroup().getId(),
+                "댓글 생성이 완료되었습니다.",
+                comment.getContent());
     }
 
     public CommentUpdateResponse updateComment(CommentUpdateRequest request, JwtUser user) {
@@ -98,7 +103,7 @@ public class CommentService {
         }
 
         comment.updateContent(request.content());
-        return CommentUpdateResponse.of(true,"댓글이 수정되었습니다.");
+        return CommentUpdateResponse.of(true,"댓글이 수정되었습니다.",user.getId(),comment.getContent());
     }
 
     public CommentDeleteResponse deleteComment(CommentDeleteRequest request, JwtUser user) {

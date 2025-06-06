@@ -788,7 +788,7 @@ public interface PostControllerSpecification {
                                     value = """
                                             [
                                                 {
-                                            	    "id" : 1,
+                                            	    "postId" : 1,
                                             	    "title" : "오늘은 직관은 아니지만...",
                                             	    "twpDate" : "2025-06-03",
                                             	    "nickname" : "KSH",
@@ -800,7 +800,7 @@ public interface PostControllerSpecification {
                     )
             ),
             @ApiResponse(
-                    responseCode = "400", description = "writerID가 1 미만일 경우 발생",
+                    responseCode = "400", description = "postID가 1 미만일 경우 발생",
                     content = @Content(
                             mediaType = APPLICATION_JSON_VALUE,
                             examples = @ExampleObject(
@@ -808,7 +808,7 @@ public interface PostControllerSpecification {
                                             {
                                               "code": 400,
                                               "status": "BAD_REQUEST",
-                                              "message": "writerID는 1 이상이여야 합니다!"
+                                              "message": "postID는 1 이상이여야 합니다!"
                                             }
                                             """
                             )
