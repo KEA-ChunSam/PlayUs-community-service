@@ -110,8 +110,8 @@ public class CommentService {
                 "댓글이 수정되었습니다.",
                 user.getId(),
                 comment.getContent(),
-                user.getThumbnailURL(),
-                user.getNickname());
+                user.getNickname(),
+                user.getThumbnailURL());
     }
 
     public CommentDeleteResponse deleteComment(CommentDeleteRequest request, JwtUser user) {
