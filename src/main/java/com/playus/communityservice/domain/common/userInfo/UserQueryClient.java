@@ -1,4 +1,4 @@
-package com.playus.communityservice.domain.post.userInfo;
+package com.playus.communityservice.domain.common.userInfo;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
