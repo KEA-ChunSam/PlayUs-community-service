@@ -1,3 +1,6 @@
+server:
+  forward-headers-strategy: framework  # ALB HTTPS 헤더 인식
+
 spring:
   application:
     name: community-service
