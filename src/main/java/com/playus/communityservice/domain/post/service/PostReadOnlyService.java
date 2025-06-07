@@ -11,6 +11,8 @@ import com.playus.communityservice.domain.post.dto.post_view.PostGetResponse;
 import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.repository.read.PostReadOnlyRepository;
+import com.playus.communityservice.domain.post.userInfo.UserInfoResponse;
+import com.playus.communityservice.domain.post.userInfo.UserReadService;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
 import com.playus.communityservice.domain.common.security.JwtUser;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,8 @@ public class PostReadOnlyService {
     private final PostReadOnlyRepository postRepository;
     private final CommentReadOnlyRepository commentRepository;
     private final CommentGroupReadOnlyRepository commentGroupRepository;
+    private final UserReadService userReadService;
+    private record UserInfo(String nickname, String profileImage) {}
 
     public PostGetResponse getPost(Long postId, JwtUser user) {
         return buildPostGetResponse(postId, null);
@@ -168,15 +172,27 @@ public class PostReadOnlyService {
                 .toList();
     }
 
+    private UserInfo getUserInfo(Long userId) {
+        try {
+            UserInfoResponse user = userReadService.getUserInfo(userId);
+            if (user == null) return new UserInfo("알 수 없음", "");
+            return new UserInfo(
+                    user.getNickname() != null ? user.getNickname() : "알 수 없음",
+                    user.getThumbnailUrl() != null ? user.getThumbnailUrl() : ""
+            );
+        } catch (Exception e) {
+            return new UserInfo("알 수 없음", "");
+        }
+    }
+
+
     private String getNickname(Long userId) {
-        return "User#" + userId; // TODO: 유저 서비스 연동
+        return getUserInfo(userId).nickname();
     }
 
     private String getProfileImage(Long userId) {
-        return "https://example.com/profile/" + userId + ".png"; // TODO: 유저 서비스 연동
+        return getUserInfo(userId).profileImage();
     }
 
-    private boolean isExpert(Long userId) {
-        return false; // TODO: 유저 서비스 연동
-    }
+
 }
