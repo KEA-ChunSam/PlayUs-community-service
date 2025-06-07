@@ -74,6 +74,7 @@ public class PostController implements PostControllerSpecification {
     public ResponseEntity<PostGetResponse> getPost(@PathVariable TeamTag tag,
                                                    @PathVariable Long postId,
                                                    @AuthenticationPrincipal JwtUser user) {
+        postService.increaseView(postId);
         PostGetResponse response = postReadOnlyService.getPost(postId, user);
         return ResponseEntity.ok(response);
     }
@@ -82,6 +83,7 @@ public class PostController implements PostControllerSpecification {
     public ResponseEntity<PostGetResponse> getPostById(@PathVariable Long writerId,
                                                        @PathVariable Long postId,
                                                        @AuthenticationPrincipal JwtUser user) {
+        postService.increaseView(postId);
         PostGetResponse response = postReadOnlyService.getPostById(writerId, postId, user);
         return ResponseEntity.ok(response);
     }

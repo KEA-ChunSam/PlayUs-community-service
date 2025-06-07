@@ -136,5 +136,12 @@ public class PostService {
     public PresignedUrlForSaveImageResponse generatePresignedUrlForSaveImage(PresignedUrlForSaveImageRequest request) {
         return new PresignedUrlForSaveImageResponse(s3Service.generatePresignedUrl(request.imageFileName()));
     }
+
+    public void increaseView(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("게시글"));
+
+        post.increaseView(); // MySQL 기반 Entity의 view 필드 증가
+    }
 }
 

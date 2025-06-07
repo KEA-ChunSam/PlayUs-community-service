@@ -82,5 +82,4 @@ public class PostDocument {
                 .build();
     }
 
-    public void increaseView() { this.view++; }
 }
