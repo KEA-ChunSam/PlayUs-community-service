@@ -55,7 +55,7 @@ logging:
 
 feign:
   user:
-    url: http://user-service:8080
+    url: ${FEIGN_USER_URL}
 
 management:
   endpoints:
@@ -69,3 +69,4 @@ management:
   endpoint:
     health:
       show-details: never
+
