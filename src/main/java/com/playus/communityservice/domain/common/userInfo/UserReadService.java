@@ -1,4 +1,4 @@
-package com.playus.communityservice.domain.post.userInfo;
+package com.playus.communityservice.domain.common.userInfo;
 
 import com.playus.communityservice.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
