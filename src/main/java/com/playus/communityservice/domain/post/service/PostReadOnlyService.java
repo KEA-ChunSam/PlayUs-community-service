@@ -11,6 +11,7 @@ import com.playus.communityservice.domain.post.dto.post_view.PostGetResponse;
 import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.repository.read.PostReadOnlyRepository;
+import com.playus.communityservice.domain.post.userInfo.UserInfoResponse;
 import com.playus.communityservice.domain.post.userInfo.UserReadService;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
 import com.playus.communityservice.domain.common.security.JwtUser;
@@ -31,6 +32,7 @@ public class PostReadOnlyService {
     private final CommentReadOnlyRepository commentRepository;
     private final CommentGroupReadOnlyRepository commentGroupRepository;
     private final UserReadService userReadService;
+    private record UserInfo(String nickname, String profileImage) {}
 
     public PostGetResponse getPost(Long postId, JwtUser user) {
         return buildPostGetResponse(postId, null);
@@ -170,12 +172,27 @@ public class PostReadOnlyService {
                 .toList();
     }
 
+    private UserInfo getUserInfo(Long userId) {
+        try {
+            UserInfoResponse user = userReadService.getUserInfo(userId);
+            if (user == null) return new UserInfo("알 수 없음", "");
+            return new UserInfo(
+                    user.getNickname() != null ? user.getNickname() : "알 수 없음",
+                    user.getThumbnailUrl() != null ? user.getThumbnailUrl() : ""
+            );
+        } catch (Exception e) {
+            return new UserInfo("알 수 없음", "");
+        }
+    }
+
+
     private String getNickname(Long userId) {
-        return userReadService.getUserInfo(userId).getNickname();
+        return getUserInfo(userId).nickname();
     }
 
     private String getProfileImage(Long userId) {
-        return userReadService.getUserInfo(userId).getThumbnailUrl();
+        return getUserInfo(userId).profileImage();
     }
+
 
 }
