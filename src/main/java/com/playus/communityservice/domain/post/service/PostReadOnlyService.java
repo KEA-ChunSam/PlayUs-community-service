@@ -53,9 +53,6 @@ public class PostReadOnlyService {
             throw new EntityNotFoundException("작성자와 게시글이 일치하지 않습니다.");
         }
 
-        post.increaseView();
-        postRepository.save(post);
-
         List<CommentGroupDocument> groups = commentGroupRepository.findAllByPostId(postId);
         List<Long> groupIds = groups.stream()
                 .map(CommentGroupDocument::getId)
