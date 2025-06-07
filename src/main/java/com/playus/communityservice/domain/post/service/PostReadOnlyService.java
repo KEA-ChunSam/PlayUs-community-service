@@ -11,8 +11,8 @@ import com.playus.communityservice.domain.post.dto.post_view.PostGetResponse;
 import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.repository.read.PostReadOnlyRepository;
-import com.playus.communityservice.domain.post.userInfo.UserInfoResponse;
-import com.playus.communityservice.domain.post.userInfo.UserReadService;
+import com.playus.communityservice.domain.common.userInfo.UserInfo;
+import com.playus.communityservice.domain.common.userInfo.UserReadService;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
 import com.playus.communityservice.domain.common.security.JwtUser;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +32,6 @@ public class PostReadOnlyService {
     private final CommentReadOnlyRepository commentRepository;
     private final CommentGroupReadOnlyRepository commentGroupRepository;
     private final UserReadService userReadService;
-    private record UserInfo(String nickname, String profileImage) {}
 
     public PostGetResponse getPost(Long postId, JwtUser user) {
         return buildPostGetResponse(postId, null);
@@ -55,6 +54,7 @@ public class PostReadOnlyService {
         }
 
         post.increaseView();
+        postRepository.save(post);
 
         List<CommentGroupDocument> groups = commentGroupRepository.findAllByPostId(postId);
         List<Long> groupIds = groups.stream()
@@ -66,37 +66,44 @@ public class PostReadOnlyService {
         List<PostGetResponse.CommentDto> comments = allComments.stream()
                 .filter(c -> c.getCommentOrder() == 1L && c.isActivated())
                 .map(comment -> {
+                    UserInfo userInfo = UserInfo.from(userReadService, comment.getUserId());
+
                     List<PostGetResponse.ReCommentDto> reComments = allComments.stream()
                             .filter(reply -> Objects.equals(reply.getCommentGroupId(), comment.getCommentGroupId())
                                     && reply.getCommentOrder() > 1L
                                     && reply.isActivated())
-                            .map(reply -> new PostGetResponse.ReCommentDto(
-                                    reply.getId(),
-                                    reply.getCommentGroupId(),
-                                    getNickname(reply.getUserId()),
-                                    getProfileImage(reply.getUserId()),
-                                    reply.getContent()
-                            ))
+                            .map(reply -> {
+                                UserInfo replyUser = UserInfo.from(userReadService, reply.getUserId());
+                                return new PostGetResponse.ReCommentDto(
+                                        reply.getId(),
+                                        reply.getCommentGroupId(),
+                                        replyUser.nickname(),
+                                        replyUser.profileImage(),
+                                        reply.getContent()
+                                );
+                            })
                             .toList();
 
                     return new PostGetResponse.CommentDto(
                             comment.getId(),
                             comment.getCommentGroupId(),
-                            getNickname(comment.getUserId()),
-                            getProfileImage(comment.getUserId()),
+                            userInfo.nickname(),
+                            userInfo.profileImage(),
                             comment.getContent(),
                             reComments
                     );
                 })
                 .toList();
 
+        UserInfo writerInfo = UserInfo.from(userReadService, post.getWriterId());
+
         return new PostGetResponse(
                 post.getId(),
                 post.getTag(),
                 post.getTitle(),
                 post.getTwpDate(),
-                getNickname(post.getWriterId()),
-                getProfileImage(post.getWriterId()),
+                writerInfo.nickname(),
+                writerInfo.profileImage(),
                 post.getImageUrl(),
                 post.getDescription(),
                 comments
@@ -127,13 +134,16 @@ public class PostReadOnlyService {
 
         return posts.stream()
                 .filter(PostDocument::isActivated)
-                .map(post -> new PostListResponse(
-                        post.getId(),
-                        post.getTitle(),
-                        post.getCreatedAt().toLocalDate(),
-                        getNickname(post.getWriterId()),
-                        post.getImageUrl()
-                ))
+                .map(post -> {
+                    UserInfo writerInfo = UserInfo.from(userReadService, post.getWriterId());
+                    return new PostListResponse(
+                            post.getId(),
+                            post.getTitle(),
+                            post.getCreatedAt().toLocalDate(),
+                            writerInfo.nickname(),
+                            post.getImageUrl()
+                    );
+                })
                 .toList();
     }
 
@@ -162,37 +172,17 @@ public class PostReadOnlyService {
 
         return posts.stream()
                 .filter(PostDocument::isActivated)
-                .map(post -> new PostListResponse(
-                        post.getId(),
-                        post.getTitle(),
-                        post.getCreatedAt().toLocalDate(),
-                        getNickname(post.getWriterId()),
-                        post.getImageUrl()
-                ))
+                .map(post -> {
+                    UserInfo writerInfo = UserInfo.from(userReadService, post.getWriterId());
+                    return new PostListResponse(
+                            post.getId(),
+                            post.getTitle(),
+                            post.getCreatedAt().toLocalDate(),
+                            writerInfo.nickname(),
+                            post.getImageUrl()
+                    );
+                })
                 .toList();
     }
-
-    private UserInfo getUserInfo(Long userId) {
-        try {
-            UserInfoResponse user = userReadService.getUserInfo(userId);
-            if (user == null) return new UserInfo("알 수 없음", "");
-            return new UserInfo(
-                    user.getNickname() != null ? user.getNickname() : "알 수 없음",
-                    user.getThumbnailUrl() != null ? user.getThumbnailUrl() : ""
-            );
-        } catch (Exception e) {
-            return new UserInfo("알 수 없음", "");
-        }
-    }
-
-
-    private String getNickname(Long userId) {
-        return getUserInfo(userId).nickname();
-    }
-
-    private String getProfileImage(Long userId) {
-        return getUserInfo(userId).profileImage();
-    }
-
 
 }
