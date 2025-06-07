@@ -12,6 +12,8 @@ import com.playus.communityservice.domain.comment.repository.write.CommentGroupR
 import com.playus.communityservice.domain.comment.repository.write.CommentRepository;
 import com.playus.communityservice.domain.post.entity.Post;
 import com.playus.communityservice.domain.post.repository.write.PostRepository;
+import com.playus.communityservice.domain.common.userInfo.UserInfo;
+import com.playus.communityservice.domain.common.userInfo.UserReadService;
 import com.playus.communityservice.global.client.CommentNotificationEvent;
 import com.playus.communityservice.global.client.UserNotificationClient;
 import com.playus.communityservice.domain.common.security.JwtUser;
@@ -32,6 +34,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentGroupRepository commentGroupRepository;
     private final UserNotificationClient userNotificationClient;
+    private final UserReadService userReadService; // ✅ 추가
 
     public CommentCreateResponse createComment(CommentCreateRequest request, JwtUser user) {
         Post post = postRepository.findById(request.postId())
@@ -69,6 +72,7 @@ public class CommentService {
 
         commentRepository.save(comment);
 
+        // 알림 전송
         CommentNotificationEvent event = CommentNotificationEvent.of(
                 comment.getId(),
                 post.getId(),
@@ -82,14 +86,18 @@ public class CommentService {
             log.warn("댓글 알림 전송 실패: commentId={}, error={}", comment.getId(), e.getMessage());
         }
 
+        // ✅ 작성자 정보 가져오기
+        UserInfo userInfo = UserInfo.from(userReadService, user.getId());
+
         return CommentCreateResponse.of(
                 user.getId(),
                 comment.getId(),
                 comment.getCommentGroup().getId(),
                 "댓글 생성이 완료되었습니다.",
                 comment.getContent(),
-                user.getNickname(),
-                user.getThumbnailURL());
+                userInfo.nickname(),
+                userInfo.profileImage()
+        );
     }
 
     public CommentUpdateResponse updateComment(CommentUpdateRequest request, JwtUser user) {
@@ -105,13 +113,18 @@ public class CommentService {
         }
 
         comment.updateContent(request.content());
+
+        // ✅ 작성자 정보 가져오기
+        UserInfo userInfo = UserInfo.from(userReadService, user.getId());
+
         return CommentUpdateResponse.of(
                 true,
                 "댓글이 수정되었습니다.",
                 user.getId(),
                 comment.getContent(),
-                user.getNickname(),
-                user.getThumbnailURL());
+                userInfo.nickname(),
+                userInfo.profileImage()
+        );
     }
 
     public CommentDeleteResponse deleteComment(CommentDeleteRequest request, JwtUser user) {
