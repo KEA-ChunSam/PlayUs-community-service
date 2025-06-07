@@ -11,6 +11,7 @@ import com.playus.communityservice.domain.post.dto.post_view.PostGetResponse;
 import com.playus.communityservice.domain.post.dto.post_view.PostListResponse;
 import com.playus.communityservice.domain.post.enums.TeamTag;
 import com.playus.communityservice.domain.post.repository.read.PostReadOnlyRepository;
+import com.playus.communityservice.domain.post.userInfo.UserReadService;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
 import com.playus.communityservice.domain.common.security.JwtUser;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,7 @@ public class PostReadOnlyService {
     private final PostReadOnlyRepository postRepository;
     private final CommentReadOnlyRepository commentRepository;
     private final CommentGroupReadOnlyRepository commentGroupRepository;
+    private final UserReadService userReadService;
 
     public PostGetResponse getPost(Long postId, JwtUser user) {
         return buildPostGetResponse(postId, null);
@@ -169,14 +171,11 @@ public class PostReadOnlyService {
     }
 
     private String getNickname(Long userId) {
-        return "User#" + userId; // TODO: 유저 서비스 연동
+        return userReadService.getUserInfo(userId).getNickname();
     }
 
     private String getProfileImage(Long userId) {
-        return "https://example.com/profile/" + userId + ".png"; // TODO: 유저 서비스 연동
+        return userReadService.getUserInfo(userId).getThumbnailUrl();
     }
 
-    private boolean isExpert(Long userId) {
-        return false; // TODO: 유저 서비스 연동
-    }
 }

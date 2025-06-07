@@ -55,7 +55,7 @@ server:
 
 feign:
   user:
-    url: http://user-service:8080
+    url: http://localhost:8080
 
 management:
   endpoints:
