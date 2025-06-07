@@ -84,5 +84,7 @@ public class Post extends BaseTimeEntity {
     public void delete() {
         this.activated = false;
     }
+
+    public void increaseView() { this.view++; }
 }
 
