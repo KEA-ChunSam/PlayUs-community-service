@@ -72,11 +72,15 @@ public class CommentService {
 
         commentRepository.save(comment);
 
+
         // 알림 전송
         CommentNotificationEvent event = CommentNotificationEvent.of(
                 comment.getId(),
                 post.getId(),
                 comment.getUserId(),
+                order == 1? post.getWriterId() : commentRepository.findByCommentOrderAndCommentGroup(1,commentGroup)
+                        .orElseThrow(() -> new EntityNotFoundException("댓글"))
+                        .getUserId(),
                 comment.getContent(),
                 comment.isActivated()
         );
