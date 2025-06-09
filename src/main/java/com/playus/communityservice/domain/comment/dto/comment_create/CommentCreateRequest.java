@@ -18,7 +18,7 @@ public record CommentCreateRequest(
         String content
 ) {
 
-    public static CommentCreateRequest of(Long postId, Long commentId, Long commentGroupId, String content) {
+    public static CommentCreateRequest of(Long postId, Long commentGroupId, String content) {
         return CommentCreateRequest.builder()
                 .postId(postId)
                 .commentGroupId(commentGroupId)
