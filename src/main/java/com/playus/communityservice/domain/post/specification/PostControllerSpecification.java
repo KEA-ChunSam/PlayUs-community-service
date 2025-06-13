@@ -755,6 +755,8 @@ public interface PostControllerSpecification {
             )
     })
     ResponseEntity<List<PostListResponse>> getPostsByTeam(@PathVariable("teamName") TeamTag teamName,
+                                                          @RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "8") int size,
                                                           JwtUser user);
 
     @Tag(name = "Get", description = "다른 유저 게시글 조회")

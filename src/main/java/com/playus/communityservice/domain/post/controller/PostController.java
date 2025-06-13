@@ -91,9 +91,11 @@ public class PostController implements PostControllerSpecification {
     @GetMapping("/{teamName}")
     public ResponseEntity<List<PostListResponse>> getPostsByTeam(
             @PathVariable("teamName") TeamTag teamName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size,
             @AuthenticationPrincipal JwtUser user
     ) {
-        List<PostListResponse> response = postReadOnlyService.getPostsByTeam(teamName);
+        List<PostListResponse> response = postReadOnlyService.getPostsByTeam(teamName, page, size);
         return ResponseEntity.ok(response);
     }
 

@@ -15,6 +15,9 @@ import com.playus.communityservice.domain.common.userInfo.UserInfo;
 import com.playus.communityservice.domain.common.userInfo.UserReadService;
 import com.playus.communityservice.global.exception.EntityNotFoundException;
 import com.playus.communityservice.domain.common.security.JwtUser;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -125,12 +128,11 @@ public class PostReadOnlyService {
     }
 
 
-    public List<PostListResponse> getPostsByTeam(TeamTag tag) {
-
-        List<PostDocument> posts = postRepository.findAllByTagAndIsSecretFalse(tag);
+    public List<PostListResponse> getPostsByTeam(TeamTag tag, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<PostDocument> posts = postRepository.findByTagWithPaging(tag, pageable);
 
         return posts.stream()
-                .filter(PostDocument::isActivated)
                 .map(post -> {
                     UserInfo writerInfo = UserInfo.from(userReadService, post.getWriterId());
                     return new PostListResponse(
